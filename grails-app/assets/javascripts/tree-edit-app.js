@@ -1,6 +1,8 @@
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', []);
 
 var TreeEditAppController = function ($scope, $http, $element) {
+    $scope.footer = "this is a footer"
+    $scope.rightpanel_select = "fav";
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];

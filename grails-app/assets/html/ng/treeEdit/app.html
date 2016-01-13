@@ -1,3 +1,31 @@
 <div id="tree-edit-app-pane">
-This is the tree edit app html. servicesUrl is {{servicesUrl}}.
+    <div id="tree-edit-app-nav">
+    </div>
+    <div id="tree-edit-app-main">
+        <div id="tree-edit-app-working">
+            App body
+        </div>
+        <div id="tree-edit-app-rightpanel">
+            <div style="position: absolute; left: 0; right: 0; top: 0; height: 38px; border: thin solid green; padding: 2px;">
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='fav' ? 'active' : ''"
+                   ng-click="rightpanel_select='fav'">Fav</a>
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
+                   ng-click="rightpanel_select='sch'">Sch</a>
+            </div>
+
+            <div style="position: absolute; left: 0; right: 0; top: 38px; bottom: 0; margin:0; padding: 0;">
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;  border: thin solid red; "
+                     ng-class="rightpanel_select=='fav' ? '' : 'hidden'">
+                    Favourites
+                </div>
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;  border: thin solid blue; "
+                     ng-class="rightpanel_select=='sch' ? '' : 'hidden'">
+                    Search results
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tree-edit-app-footer">{{footer}}</div>
+
 </div>
+

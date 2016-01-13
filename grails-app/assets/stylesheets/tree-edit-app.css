@@ -1,9 +1,42 @@
+/*
+ * require bootstrap
+ */
 
 #tree-edit-app-container {
-    margin:0; padding:5px; position: absolute; top: 5px; bottom: 5px; left:5px; right:5px; border: thick double darkblue; background-color: lightblue;
+    margin: 10px; padding: 0; position: absolute; top: 0; bottom: 0; left:0; right:0;
+    color: #202020;
 }
 
 #tree-edit-app-pane {
-    margin:0; padding:5px; position: absolute; top: 5px; bottom: 5px; left:5px; right:5px; border: thick double darkmagenta; background-color: orchid;
+    margin:0; padding:1em; position: absolute; top: 0; bottom: 0; left:0; right:0;
+    background-color: #FCFCFC;
+    border: 2px dashed red;
 }
 
+#tree-edit-app-nav {
+    margin: 0; padding:.5em; position: absolute; top: 0; left:0; right:0; height: 2.5em;
+    border: 2px dashed green;
+}
+
+#tree-edit-app-footer {
+    margin:0; padding:.5em; position: absolute; bottom: 0; left:0; right:0; height: 2em;
+    border: 2px dashed blue;
+}
+
+#tree-edit-app-main {
+    margin:0; padding:1em; position: absolute; top: 2.5em; bottom: 2em; left:0; right:0;
+    border: 2px dashed black;
+
+}
+
+#tree-edit-app-working {
+    margin:0 0; padding:1em; position: absolute; top: 0; bottom: 0; left:0; width:62%;
+    border: 2px dashed orange;
+
+}
+
+#tree-edit-app-rightpanel {
+    margin:0 0; padding:1em; position: absolute; top: 0; bottom: 0; right:0; width:38%;
+    border: 2px dashed aqua;
+
+}
