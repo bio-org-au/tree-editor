@@ -7,25 +7,65 @@
         </div>
         <div id="tree-edit-app-rightpanel">
             <div style="position: absolute; left: 0; right: 0; top: 0; height: 30px; padding: 2px;">
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='wrk' ? 'active' : ''"
+                   ng-click="rightpanel_select='wrk'">Workspaces</a>
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
+                   ng-click="rightpanel_select='sch'">Search</a>
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='fav' ? 'active' : ''"
                    ng-click="rightpanel_select='fav'">Favourites</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
-                   ng-click="rightpanel_select='sch'">Search Results</a>
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='prf' ? 'active' : ''"
                    ng-click="rightpanel_select='prf'">Profile</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='val' ? 'active' : ''"
                    ng-click="rightpanel_select='val'">Validation</a>
             </div>
-            <div style="position: absolute; left: 0; right: 0; top: 30px; bottom: 0; margin: 2px;">
-                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
+            <div style="position: absolute; left: 0; right: 0; top: 35px; bottom: 0; margin: 2px;">
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
+                     ng-class="rightpanel_select=='wrk' ? '' : 'hidden'">
+                    Workspaces
+                </div>
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
                      ng-class="rightpanel_select=='fav' ? '' : 'hidden'">
                     Favourites
                 </div>
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
+                     class="container-fluid"
                      ng-class="rightpanel_select=='sch' ? '' : 'hidden'">
-                    Search
+                    <row class="input-group" >
+                        <input type="text" class="form-control" placeholder="Name (etc.) &hellip;">
+                        <a class="input-group-addon btn btn-primary">Search</a>
+                    </row>
+
+                    <row style="position: absolute; left: 0; right: 0; top: 40px; bottom: 0; overflow-x: hidden; overflow-y: scroll;">
+                        Search results lkh aslkfg alskdjfklajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdjg lajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdfg kajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskjfg klsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdjfg kajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alkdjfg kljsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg askdjfg kljsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdjfg kajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfgalskdjfg klajsdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkf alskdjfg klasdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkg alskdjfg klajdh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslfg alskdjfg klajsh flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh askfg alskdjfg klajsd flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh alkfg alskdjfg klajsd flkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh slkfg alskdjfg klajsdhflkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkhaslkfg alskdjfg klajsdh lkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdjfg klajsdh lkjasdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lh aslkfg alskdjfg klajsdh fljsdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results kh aslkfg alskdjfg klajsdh flkjsdh fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search resultslkh aslkfg alskdjfg klajsdh flkjash fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search result lkh aslkfg alskdjfg klajsdh flkjasd fkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search resuls lkh aslkfg alskdjfg klajsdh flkjasdhfkljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search resuts lkh aslkfg alskdjfg klajsdh flkjasdh kljahs dfkljhas jklfh asdkjlfh <br/>
+                        Search reslts lkh aslkfg alskdjfg klajsdh flkjasdh fkjahs dfkljhas jklfh asdkjlfh <br/>
+                        Search reults lkh aslkfg alskdjfg klajsdh flkjasdh fklahs dfkljhas jklfh asdkjlfh <br/>
+                        Search results lkh aslkfg alskdjfg klajsdh flkjasdh fklahs dfkljhas jklfh asdkjlfh <br/>
+                        Search reults lkh aslkfg alskdjfg klajsdh flkjasdh fkljas dfkljhas jklfh asdkjlfh <br/>
+                    </row>
                 </div>
-                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-y: scroll;"
                      ng-class="rightpanel_select=='prf' ? '' : 'hidden'">
                     Profile
                 </div>
@@ -33,7 +73,6 @@
                      ng-class="rightpanel_select=='val' ? '' : 'hidden'">
                     Validation
                 </div>
-
             </div>
 
         </div>
