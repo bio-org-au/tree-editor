@@ -6,23 +6,36 @@
             App body
         </div>
         <div id="tree-edit-app-rightpanel">
-            <div style="position: absolute; left: 0; right: 0; top: 0; height: 38px; border: thin solid green; padding: 2px;">
+            <div style="position: absolute; left: 0; right: 0; top: 0; height: 30px; padding: 2px;">
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='fav' ? 'active' : ''"
-                   ng-click="rightpanel_select='fav'">Fav</a>
+                   ng-click="rightpanel_select='fav'">Favourites</a>
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
-                   ng-click="rightpanel_select='sch'">Sch</a>
+                   ng-click="rightpanel_select='sch'">Search Results</a>
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='prf' ? 'active' : ''"
+                   ng-click="rightpanel_select='prf'">Profile</a>
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
+                   ng-click="rightpanel_select='val'">Validation</a>
             </div>
-
-            <div style="position: absolute; left: 0; right: 0; top: 38px; bottom: 0; margin:0; padding: 0;">
-                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;  border: thin solid red; "
+            <div style="position: absolute; left: 0; right: 0; top: 30px; bottom: 0; margin: 2px;">
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
                      ng-class="rightpanel_select=='fav' ? '' : 'hidden'">
                     Favourites
                 </div>
-                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;  border: thin solid blue; "
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
                      ng-class="rightpanel_select=='sch' ? '' : 'hidden'">
-                    Search results
+                    Search
                 </div>
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
+                     ng-class="rightpanel_select=='prf' ? '' : 'hidden'">
+                    Profile
+                </div>
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
+                     ng-class="rightpanel_select=='val' ? '' : 'hidden'">
+                    Validation
+                </div>
+
             </div>
+
         </div>
     </div>
     <div id="tree-edit-app-footer">{{footer}}</div>
