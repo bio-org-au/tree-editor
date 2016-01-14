@@ -1,0 +1,21 @@
+<div class="tree-edit-classifcations-pane container-fluid">
+    <row>
+        <span class="col-sm-12">
+            <span class="pull-right"><a class="btn btn-default btn-sm" ng-class="loading ? 'disabled' : ''"
+                                        ng-click="reload()"><i class="fa fa-refresh"
+                                                               ng-class="loading ? 'fa-spin' : ''"></i></a></span>
+            <h4>Classifications</h4>
+        </span>
+    </row>
+    <row>
+        <span class="col-sm-3">
+            services url
+        </span>
+        <span class="col-sm-9">
+            [{{servicesUrl}}]
+        </span>
+    </row>
+    <div ng-if="loaded" ng-repeat="i in classifications">
+        <item uri="{{i}}"/>
+    </div>
+</div>

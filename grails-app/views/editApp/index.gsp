@@ -14,9 +14,8 @@
     <asset:javascript src="tree-edit-app.js"/>
 </head>
 
-<body>
+<body ng-app="au.org.biodiversity.nsl.tree-edit-app">
 <div
-        ng-app="au.org.biodiversity.nsl.tree-edit-app"
         id="tree-edit-app-container"
         app
         data-services-url="http://localhost:8080/services"

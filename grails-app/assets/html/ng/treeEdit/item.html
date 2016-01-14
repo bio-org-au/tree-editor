@@ -1,0 +1,26 @@
+<span class="pull-right"><a class="btn btn-default btn-sm" ng-class="loading ? 'disabled' : ''"
+                            ng-click="reload()"><i class="fa fa-refresh"
+                                                   ng-class="loading ? 'fa-spin' : ''"></i></a></span>
+<row ng-if="loading">
+    <span class="col-sm-12">
+        {{uri}}
+    </span>
+</row>
+<row ng-if="!loading && !loaded">
+    <span class="col-sm-3">
+        {{response.status}} - {{response.statusText}}
+    </span>
+    <span class="col-sm-9">
+        {{uri}}
+    </span>
+</row>
+<row >
+    <span class="col-sm-12">
+        {{response}}
+    </span>
+</row>
+<row ng-if="loaded">
+    <span class="col-sm-12">
+        need to display the object here
+    </span>
+</row>

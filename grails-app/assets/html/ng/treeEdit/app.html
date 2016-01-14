@@ -22,8 +22,8 @@
             </div>
             <div style="position: absolute; left: 0; right: 0; top: 35px; bottom: 0; margin: 2px;">
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
-                     ng-class="rightpanel_select=='cls' ? '' : 'hidden'">
-                    Classifications
+                        ng-class="rightpanel_select=='cls' ? '' : 'hidden'" >
+                    <classifications-list services-url="{{servicesUrl}}"/>
                 </div>
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
                      ng-class="rightpanel_select=='wrk' ? '' : 'hidden'">
