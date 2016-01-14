@@ -36,6 +36,7 @@ var ClassificationsListController = function ($scope, $http, $element) {
     $scope.reload = function() {
         $scope.loading = true;
         $scope.response = "fetching";
+        $scope.classifications = [];
 
         $http({
             method: 'GET',
@@ -79,7 +80,9 @@ var ItemController = function ($scope, $http, $element) {
 
     $scope.reload = function() {
         $scope.loading = true;
-        $scope.response = "fetching";
+        $scope.loaded = false;
+        $scope.data = null;
+        $scope.response = null;
 
         $http({
             method: 'GET',

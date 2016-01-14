@@ -36,8 +36,7 @@
 }
 
 .tree-edit-classifcations-pane {
-    margin: 5px;
-    padding: 5px;
-    background: #F8F8F0;
-    border: 2px dashed #C8C8C0;
+    margin: 0;
+    padding: 2px;
+    background: #FCFCFC;
 }

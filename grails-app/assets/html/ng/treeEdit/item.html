@@ -1,26 +1,40 @@
-<span class="pull-right"><a class="btn btn-default btn-sm" ng-class="loading ? 'disabled' : ''"
-                            ng-click="reload()"><i class="fa fa-refresh"
-                                                   ng-class="loading ? 'fa-spin' : ''"></i></a></span>
-<row ng-if="loading">
-    <span class="col-sm-12">
-        {{uri}}
-    </span>
-</row>
-<row ng-if="!loading && !loaded">
-    <span class="col-sm-3">
-        {{response.status}} - {{response.statusText}}
-    </span>
-    <span class="col-sm-9">
-        {{uri}}
-    </span>
-</row>
-<row >
-    <span class="col-sm-12">
-        {{response}}
-    </span>
-</row>
-<row ng-if="loaded">
-    <span class="col-sm-12">
-        need to display the object here
-    </span>
-</row>
+<div class="container-fluid">
+    <span class="pull-right"><a class="btn btn-default btn-sm" ng-class="loading ? 'disabled' : ''"
+                                ng-click="reload()"><i class="fa fa-refresh"
+                                                       ng-class="loading ? 'fa-spin' : ''"></i></a></span>
+    <row ng-if="loading">
+        <span class="col-sm-11">
+            <a href="{{uri}}">{{uri}}</a><br/>
+        </span>
+    </row>
+    <row ng-if="!loading && !loaded">
+        <span class="col-sm-3">
+            {{response.status}} - {{response.statusText}}
+        </span>
+        <span class="col-sm-8">
+            <a href="{{uri}}">{{uri}}</a>
+        </span>
+    </row>
+    <div ng-if="loaded">
+        <span ng-switch="data.class">
+            <span ng-switch-when="au.org.biodiversity.nsl.Arrangement">
+                <span ng-switch="data.arrangementType.name">
+                    <row ng-switch-when="P">
+                        <span class="col-sm-2"><a href="{{uri}}">{{data.label}}</a></span>
+                        <span class="col-sm-9">{{data.description}}</span>
+                    </row>
+                    <row ng-switch-default>
+                        dont know how to render a {{data.arrangementType.name}} arrangement<br/>
+                        <a href="{{uri}}">{{uri}}</a><br/>
+                        {{data}}
+                    </row>
+                </span>
+            </span>
+            <row ng-switch-default>
+                dont know how to render a {{data.class}}<br/>
+                <a href="{{uri}}">{{uri}}</a><br/>
+                {{data}}
+            </row>
+        </span>
+    </div>
+</div>
