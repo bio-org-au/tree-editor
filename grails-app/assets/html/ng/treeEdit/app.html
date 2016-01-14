@@ -7,6 +7,8 @@
         </div>
         <div id="tree-edit-app-rightpanel">
             <div style="position: absolute; left: 0; right: 0; top: 0; height: 30px; padding: 2px;">
+                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='cls' ? 'active' : ''"
+                   ng-click="rightpanel_select='cls'">Classifications</a>
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='wrk' ? 'active' : ''"
                    ng-click="rightpanel_select='wrk'">Workspaces</a>
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
@@ -19,6 +21,10 @@
                    ng-click="rightpanel_select='val'">Validation</a>
             </div>
             <div style="position: absolute; left: 0; right: 0; top: 35px; bottom: 0; margin: 2px;">
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
+                     ng-class="rightpanel_select=='cls' ? '' : 'hidden'">
+                    Classifications
+                </div>
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
                      ng-class="rightpanel_select=='wrk' ? '' : 'hidden'">
                     Workspaces
