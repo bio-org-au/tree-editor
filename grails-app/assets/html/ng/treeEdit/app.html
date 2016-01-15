@@ -6,11 +6,10 @@
             <div id="tree-edit-app-working-header" style="display: table; width: 100%; ">
                 <div style="display: table-row; ">
                     <div id="tree-edit-app-working-left-header"
-                         style="display: table-cell; width: 50%;">left header<br/>with a extra line</div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{leftUri}}"></div>
                     <div id="tree-edit-app-working-right-header"
-                         style="display: table-cell; width: 50%;">right header right header right header right header right header right header right header </div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{rightUri}}"></div>
                 </div>
-
 <script type="application/javascript">
 
 
@@ -28,33 +27,16 @@
 
     $(function(){
        $(window).resize(adjust_working_body_height);
-       adjust_working_body_height(); // initial ajdustment
+       setTimeout(adjust_working_body_height, 500); // this is hideous, but its the only thing that works
     });
 </script>
-
             </div>
             <div id="tree-edit-app-working-body"
                  style="position: absolute; left:0; right: 0; bottom: 0; height:0; display:none;">
-                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;">
-                    some left text
+                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;" itembody uri="{{leftUri}}">
+
                 </div>
-                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;">
-                    right body
-
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With som  e scroll With som  e scroll With som  e scroll With som  e scroll With som  e scroll With som  e scroll
-                    <br/>With some scroll
-
-                    <br/>With some secroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
-                    <br/>With some scroll
+                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;" itembody uri="{{rightUri}}">
                 </div>
             </div>
         </div>
