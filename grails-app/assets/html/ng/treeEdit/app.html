@@ -3,7 +3,60 @@
     </div>
     <div id="tree-edit-app-main">
         <div id="tree-edit-app-working">
-            App body
+            <div id="tree-edit-app-working-header" style="display: table; width: 100%; ">
+                <div style="display: table-row; ">
+                    <div id="tree-edit-app-working-left-header"
+                         style="display: table-cell; width: 50%;">left header<br/>with a extra line</div>
+                    <div id="tree-edit-app-working-right-header"
+                         style="display: table-cell; width: 50%;">right header right header right header right header right header right header right header </div>
+                </div>
+
+<script type="application/javascript">
+
+
+
+    function adjust_working_body_height() {
+        var h = $("#tree-edit-app-working").height() - $('#tree-edit-app-working-header').height();
+        if(h<=0) {
+            $('#tree-edit-app-working-body').hide();
+        }
+        else {
+            $('#tree-edit-app-working-body').height(h);
+            $('#tree-edit-app-working-body').show();
+        }
+    }
+
+    $(function(){
+       $(window).resize(adjust_working_body_height);
+       adjust_working_body_height(); // initial ajdustment
+    });
+</script>
+
+            </div>
+            <div id="tree-edit-app-working-body"
+                 style="position: absolute; left:0; right: 0; bottom: 0; height:0; display:none;">
+                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;">
+                    some left text
+                </div>
+                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;">
+                    right body
+
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With som  e scroll With som  e scroll With som  e scroll With som  e scroll With som  e scroll With som  e scroll
+                    <br/>With some scroll
+
+                    <br/>With some secroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                    <br/>With some scroll
+                </div>
+            </div>
         </div>
         <div id="tree-edit-app-rightpanel">
             <div style="position: absolute; left: 0; right: 0; top: 0; height: 30px; padding: 2px;">

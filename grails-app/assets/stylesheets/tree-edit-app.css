@@ -26,7 +26,29 @@
 }
 
 #tree-edit-app-working {
-    margin:0 0; padding:1em; position: absolute; top: 0; bottom: 0; left:0; width:62%;
+    padding: 0; position: absolute; top: 0; height:100%; left:0; width:62%;
+}
+
+#tree-edit-app-working-header {
+}
+
+#tree-edit-app-working-left-header {
+    border: thin solid black;
+}
+
+#tree-edit-app-working-right-header {
+    border: thin solid black;
+}
+
+#tree-edit-app-working-body {
+}
+
+#tree-edit-app-working-body-left {
+    border: thin solid black;
+}
+
+#tree-edit-app-working-body-right {
+    border: thin solid black;
 }
 
 #tree-edit-app-rightpanel {
