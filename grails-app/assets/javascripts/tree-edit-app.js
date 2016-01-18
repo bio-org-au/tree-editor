@@ -2,6 +2,18 @@ var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', []);
 
 ////////////////////////////////////////////////////////////
 
+function adjust_working_body_height () {
+    var h = $("#tree-edit-app-working").height() - $('#tree-edit-app-working-header').height();
+    if(h<=0) {
+        $('#tree-edit-app-working-body').hide();
+    }
+    else {
+        $('#tree-edit-app-working-body').height(h);
+        $('#tree-edit-app-working-body').show();
+    }
+};
+
+$(window).resize(adjust_working_body_height);
 
 var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
@@ -11,6 +23,15 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.rightUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
 
     $scope.appScope = $scope;
+
+    $scope.postdigestNotify = function() {
+        $scope.$root.$$postDigest(adjust_working_body_height);
+    };
+
+    $scope.$watch('leftUri', $scope.postdigestNotify);
+    $scope.$watch('rightUri', $scope.postdigestNotify);
+    $scope.postdigestNotify();
+
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];
@@ -52,9 +73,11 @@ var ClassificationsListController = function ($scope, $http, $element) {
             $scope.loaded = true;
             $scope.classifications = response.data;
             $scope.response = response;
+            $scope.appScope.postdigestNotify();
         }, function errorCallback(response) {
             $scope.loading = false;
             $scope.response = response;
+            $scope.appScope.postdigestNotify();
         });
     };
 
@@ -97,27 +120,39 @@ var ItemController = function ($scope, $http, $element) {
     $scope.data = null;
 
     $scope.reload = function() {
-        $scope.loading = true;
-        $scope.loaded = false;
-        $scope.data = null;
-        $scope.response = null;
+        if($scope.uri) {
+            $scope.loading = true;
+            $scope.loaded = false;
+            $scope.data = null;
+            $scope.response = null;
 
-        $http({
-            method: 'GET',
-            url: $scope.uri
-        }).then(function successCallback(response) {
+            $http({
+                method: 'GET',
+                url: $scope.uri
+            }).then(function successCallback(response) {
+                $scope.loading = false;
+                $scope.loaded = true;
+                $scope.response = response;
+                $scope.data = response.data;
+                $scope.appScope.postdigestNotify();
+            }, function errorCallback(response) {
+                $scope.loading = false;
+                $scope.loaded = false;
+                $scope.response = response;
+                $scope.appScope.postdigestNotify();
+            });
+        }
+        else {
             $scope.loading = false;
             $scope.loaded = true;
-            $scope.response = response;
-            $scope.data = response.data;
-        }, function errorCallback(response) {
-            $scope.loading = false;
-            $scope.loaded = false;
-            $scope.response = response;
-        });
+            $scope.data = "--null--";
+            $scope.response = null;
+        }
     };
 
-    $scope.reload();
+    $scope.$watch('uri', $scope.reload);
+
+//    $scope.reload();
 };
 
 ItemController.$inject = ['$scope', '$http', '$element'];

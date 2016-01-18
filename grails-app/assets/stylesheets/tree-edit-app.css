@@ -26,7 +26,7 @@
 }
 
 #tree-edit-app-working {
-    padding: 0; position: absolute; top: 0; height:100%; left:0; width:62%;
+    padding: 0; position: absolute; top: 0; height:100%; right:0; width:62%;
 }
 
 #tree-edit-app-working-header {
@@ -52,7 +52,7 @@
 }
 
 #tree-edit-app-rightpanel {
-    margin:0 0; padding:1em; position: absolute; top: 0; bottom: 0; right:0; width:38%;
+    margin:0 0; padding:1em; position: absolute; top: 0; bottom: 0; left:0; width:38%;
     border: thin solid darkslategrey;
     background-color: lightslategrey;
 }

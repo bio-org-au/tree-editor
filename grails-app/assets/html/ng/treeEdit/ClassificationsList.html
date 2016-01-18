@@ -9,15 +9,14 @@
     </row>
     <div ng-if="loaded" ng-repeat="i in classifications" class="container-fluid">
         <row>
-        <span class="pull-left">
+        <span class="pull-right">
             <a class="badge" ng-click="loadLeft(i)"><i class="fa fa-arrow-circle-left"></i></a>
             <a class="badge" ng-click="loadRight(i)"><i class="fa fa-arrow-circle-right"></i></a>
-        </span>
-        <span class="col-sm-1">
         </span>
         <span class="col-sm-11">
             <item uri="{{i}}"/>
         </span>
+        <span class="col-sm-1"></span>
         </row>
     </div>
 </div>

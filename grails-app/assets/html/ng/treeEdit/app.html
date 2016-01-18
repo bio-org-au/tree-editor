@@ -10,22 +10,6 @@
                     <div id="tree-edit-app-working-right-header"
                          style="display: table-cell; width: 50%;" itemheader uri="{{appScope.rightUri}}"></div>
                 </div>
-<script type="application/javascript">
-    function adjust_working_body_height() {
-        var h = $("#tree-edit-app-working").height() - $('#tree-edit-app-working-header').height();
-        if(h<=0) {
-            $('#tree-edit-app-working-body').hide();
-        }
-        else {
-            $('#tree-edit-app-working-body').height(h);
-            $('#tree-edit-app-working-body').show();
-        }
-    }
-
-    $(function(){
-       $(window).resize(adjust_working_body_height);
-    });
-</script>
             </div>
             <div id="tree-edit-app-working-body"
                  style="position: absolute; left:0; right: 0; bottom: 0; height:0; display:none;">
