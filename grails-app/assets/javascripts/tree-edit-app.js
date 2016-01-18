@@ -7,11 +7,14 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
     $scope.rightpanel_select = "cls";
 
-    $scope.leftUri = "http://localhost:7070/nsl-mapper/boa/tree/apni/1019";
-    $scope.rightUri = "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
+    $scope.leftUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/1019";
+    $scope.rightUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
+
+    $scope.appScope = $scope;
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];
+
 app.controller('TreeEditAppController', TreeEditAppController);
 
 function TreeEditAppDirective() {
@@ -29,12 +32,12 @@ app.directive('app', TreeEditAppDirective);
 ////////////////////////////////////////////////////////////
 
 var ClassificationsListController = function ($scope, $http, $element) {
+    $scope.appScope = $scope.$parent.appScope;
+
     $scope.loading = false;
     $scope.loaded = false;
     $scope.response = "init";
-    $scope.classifications = ['foo','bar'];
-
-    $scope.foo = $scope;
+    $scope.classifications = [];
 
     $scope.reload = function() {
         $scope.loading = true;
@@ -55,6 +58,14 @@ var ClassificationsListController = function ($scope, $http, $element) {
         });
     };
 
+    $scope.loadLeft = function(uri) {
+        $scope.appScope.leftUri = uri;
+    };
+
+    $scope.loadRight = function(uri) {
+        $scope.appScope.rightUri = uri;
+    };
+
     $scope.reload();
 };
 
@@ -67,6 +78,7 @@ function ClassificationsListDirective() {
         templateUrl: "/tree-editor/assets/ng/treeEdit/ClassificationsList.html",
         scope: {
             servicesUrl: '@',
+            appScope: '&appScope',
         },
         controller: ClassificationsListController
     };
@@ -77,6 +89,9 @@ app.directive('classificationsList', ClassificationsListDirective);
 ////////////////////////////////////////////////////////////
 
 var ItemController = function ($scope, $http, $element) {
+    $scope.appScope = $scope.$parent.appScope;
+    $scope.itemScope = $scope;
+
     $scope.loading = true;
     $scope.loaded = false;
     $scope.data = null;
@@ -102,9 +117,6 @@ var ItemController = function ($scope, $http, $element) {
         });
     };
 
-    $scope.loadLeft = function() { alert("move to left pane");}
-    $scope.loadRight = function() { alert("move to right pane");}
-
     $scope.reload();
 };
 
@@ -127,8 +139,15 @@ app.directive('item', ItemDirective);
 
 ////////////////////////////////////////////////////////////
 
-var ItemHeaderController = function ($scope, $http, $element) {
+var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
+    $scope.appScope = $scope.$parent.appScope;
+    $scope.itemScope = $scope;
+//    $scope.itemScope.watch("uri", function() { console.log($scope.itemScope.uri ? 'loaded' : 'empty') } );
+
+    $rootScope.$$postDigest(function(){adjust_working_body_height()});
 }
+
+ItemHeaderController.$inject = ['$scope', '$http', '$element', '$rootScope'];
 
 app.controller('ItemHeaderController', ItemHeaderController);
 
@@ -147,8 +166,11 @@ app.directive('itemheader', itemHeaderDirective);
 ////////////////////////////////////////////////////////////
 
 var ItemBodyController = function ($scope, $http, $element) {
-    $scope.uri = 'http://localhost:7070/nsl-mapper/boa/tree/apni/3029293';
+    $scope.appScope = $scope.$parent.appScope;
+    $scope.itemScope = $scope;
 }
+
+ItemBodyController.$inject = ['$scope', '$http', '$element'];
 
 app.controller('ItemBodyController', ItemBodyController);
 

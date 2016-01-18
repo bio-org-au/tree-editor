@@ -6,14 +6,11 @@
             <div id="tree-edit-app-working-header" style="display: table; width: 100%; ">
                 <div style="display: table-row; ">
                     <div id="tree-edit-app-working-left-header"
-                         style="display: table-cell; width: 50%;" itemheader uri="{{leftUri}}"></div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.leftUri}}"></div>
                     <div id="tree-edit-app-working-right-header"
-                         style="display: table-cell; width: 50%;" itemheader uri="{{rightUri}}"></div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.rightUri}}"></div>
                 </div>
 <script type="application/javascript">
-
-
-
     function adjust_working_body_height() {
         var h = $("#tree-edit-app-working").height() - $('#tree-edit-app-working-header').height();
         if(h<=0) {
@@ -27,16 +24,15 @@
 
     $(function(){
        $(window).resize(adjust_working_body_height);
-       setTimeout(adjust_working_body_height, 500); // this is hideous, but its the only thing that works
     });
 </script>
             </div>
             <div id="tree-edit-app-working-body"
                  style="position: absolute; left:0; right: 0; bottom: 0; height:0; display:none;">
-                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;" itembody uri="{{leftUri}}">
+                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.leftUri}}">
 
                 </div>
-                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;" itembody uri="{{rightUri}}">
+                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.rightUri}}">
                 </div>
             </div>
         </div>

@@ -7,7 +7,15 @@
             <h4>Classifications</h4>
         </span>
     </row>
-    <div ng-if="loaded" ng-repeat="i in classifications">
-        <item uri="{{i}}"/>
+    <div ng-if="loaded" ng-repeat="i in classifications" class="container-fluid">
+        <row>
+        <span class="col-sm-2">
+            <a class="btn btn-default btn-sm" ng-click="loadLeft(i)"><i class="fa fa-arrow-circle-left"></i></a>
+            <a class="btn btn-default btn-sm" ng-click="loadRight(i)"><i class="fa fa-arrow-circle-right"></i></a>
+        </span>
+        <span class="col-sm-10">
+            <item uri="{{i}}"/>
+        </span>
+        </row>
     </div>
 </div>

@@ -1,46 +1,39 @@
 <div class="container-fluid">
     <row>
-        <span class="col-sm-2">
-            <a class="btn btn-default btn-sm" ng-click="loadLeft()"><i class="fa fa-arrow-circle-left"></i></a>
-            <a class="btn btn-default btn-sm" ng-click="loadRight()"><i class="fa fa-arrow-circle-right"></i></a>
-
+        <span ng-if="loading">
+            <span class="col-sm-11">
+                <a href="{{uri}}">{{uri}}</a><br/>
+            </span>
         </span>
-        <span class="col-sm-9 container-fluid">
-            <row ng-if="loading">
-                <span class="col-sm-11">
-                    <a href="{{uri}}">{{uri}}</a><br/>
-                </span>
-            </row>
-            <row ng-if="!loading && !loaded">
-                <span class="col-sm-3">
-                    {{response.status}} - {{response.statusText}}
-                </span>
-                <span class="col-sm-8">
-                    <a href="{{uri}}">{{uri}}</a>
-                </span>
-            </row>
-            <div ng-if="loaded">
-                <span ng-switch="data.class">
-                    <span ng-switch-when="au.org.biodiversity.nsl.Arrangement">
-                        <span ng-switch="data.arrangementType.name">
-                            <row ng-switch-when="P">
-                                <span class="col-sm-2"><a href="{{uri}}">{{data.label}}</a></span>
-                                <span class="col-sm-9">{{data.description}}</span>
-                            </row>
-                            <row ng-switch-default>
-                                dont know how to render a {{data.arrangementType.name}} arrangement<br/>
-                                <a href="{{uri}}">{{uri}}</a><br/>
-                                {{data}}
-                            </row>
-                        </span>
+        <span ng-if="!loading && !loaded">
+            <span class="col-sm-3">
+                {{response.status}} - {{response.statusText}}
+            </span>
+            <span class="col-sm-8">
+                <a href="{{uri}}">{{uri}}</a>
+            </span>
+        </span>
+        <span ng-if="loaded">
+            <span ng-switch="data.class">
+                <span ng-switch-when="au.org.biodiversity.nsl.Arrangement">
+                    <span ng-switch="data.arrangementType.name">
+                        <row ng-switch-when="P">
+                            <span class="col-sm-2"><a href="{{uri}}">{{data.label}}</a></span>
+                            <span class="col-sm-9">{{data.description}}</span>
+                        </row>
+                        <row ng-switch-default>
+                            dont know how to render a {{data.arrangementType.name}} arrangement<br/>
+                            <a href="{{uri}}">{{uri}}</a><br/>
+                            {{data}}
+                        </row>
                     </span>
-                    <row ng-switch-default>
-                        dont know how to render a {{data.class}}<br/>
-                        <a href="{{uri}}">{{uri}}</a><br/>
-                        {{data}}
-                    </row>
                 </span>
-            </div>
+                <row ng-switch-default>
+                    dont know how to render a {{data.class}}<br/>
+                    <a href="{{uri}}">{{uri}}</a><br/>
+                    {{data}}
+                </row>
+            </span>
         </span>
         <span class="col-sm-1">
             <a class="btn btn-default btn-sm" ng-class="loading ? 'disabled' : ''"
