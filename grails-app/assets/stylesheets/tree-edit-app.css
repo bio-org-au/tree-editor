@@ -63,13 +63,24 @@
     background: #FCFCFC;
 }
 
+.item-body {
+    margin: 0;
+    padding: 0;
+}
+
+.item-body-tree-handle {
+    cursor: pointer;
+    width: 1em;
+}
+
+.item-body-sublist {
+    margin-left: 1em;
+}
+
 .item-body-sublist-open {
     display: block;
-    border: thin solid black;
-    padding: 1px 0 1px 2em;
 }
 
 .item-body-sublist-closed {
     display: none;
-    border: thin solid red;
 }

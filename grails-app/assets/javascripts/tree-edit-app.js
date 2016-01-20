@@ -157,7 +157,18 @@ var ItemController = function ($scope, $http, $element) {
                 $scope.appScope.postdigestNotify();
 
                 if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
-                    $scope.readySubitems = [ $scope.data.node._links.permalink.link ];
+                    $scope.readySubitems = [ { contextType: 'arrangement', uri: $scope.data.node._links.permalink.link } ];
+                }
+
+                if($scope.data.class == 'au.org.biodiversity.nsl.Node') {
+                    $scope.readySubitems = [];
+                    for(var link in $scope.data.subnodes) {
+                        console.log(link);
+                        $scope.readySubitems.push( {contextType: 'subnode', contextId: link, uri:$scope.data.subnodes[link].subNode._links.permalink.link} );
+                    }
+                    if($scope.readySubitems.length == 0) {
+                        $scope.readySubitems = null;
+                    }
                 }
 
             }, function errorCallback(response) {
@@ -241,6 +252,8 @@ function itemBodyDirective(RecursionHelper) {
         templateUrl: "/tree-editor/assets/ng/treeEdit/ItemBody.html",
         scope: {
             uri: '@uri',
+            contextType: '@contextType',
+            contextId: '@contextId',
         },
         controller: ItemController,
         compile: function(element) {
