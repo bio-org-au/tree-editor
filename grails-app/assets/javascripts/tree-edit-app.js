@@ -1,4 +1,8 @@
-var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', []);
+//= require angular
+//= require recursionhelper
+//= require angular-sanitize
+
+var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
 ////////////////////////////////////////////////////////////
 
@@ -119,12 +123,28 @@ var ItemController = function ($scope, $http, $element) {
     $scope.loaded = false;
     $scope.data = null;
 
+    // readySubitems and subitems is a list of uris.
+    // the subitems are not loaded from readySubitems into subitems until the first 'open' event.
+
+    // so there are four states
+    // 1) !readySubitems
+    // 2) readySubitems && !subitems
+    // 3) readySubitems && subitems && !open
+    // 4) readySubitems && subitems && open
+
+    $scope.readySubitems = null;
+    $scope.subitems = null;
+    $scope.open = false;
+
     $scope.reload = function() {
         if($scope.uri) {
             $scope.loading = true;
             $scope.loaded = false;
             $scope.data = null;
             $scope.response = null;
+            $scope.readySubitems = false;
+            $scope.subitems = null;
+            $scope.isOpen = false;
 
             $http({
                 method: 'GET',
@@ -135,6 +155,11 @@ var ItemController = function ($scope, $http, $element) {
                 $scope.response = response;
                 $scope.data = response.data;
                 $scope.appScope.postdigestNotify();
+
+                if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
+                    $scope.readySubitems = [ $scope.data.node._links.permalink.link ];
+                }
+
             }, function errorCallback(response) {
                 $scope.loading = false;
                 $scope.loaded = false;
@@ -145,14 +170,25 @@ var ItemController = function ($scope, $http, $element) {
         else {
             $scope.loading = false;
             $scope.loaded = true;
-            $scope.data = "--null--";
+            $scope.data = null;
             $scope.response = null;
         }
     };
 
-    $scope.$watch('uri', $scope.reload);
+    $scope.open = function() {
+        console.log("open !");
+        $scope.subitems = $scope.readySubitems;
+        $scope.isOpen = true;
+    };
+    $scope.close = function() {
+        console.log("close !");
+        $scope.isOpen = false;
+    };
 
-//    $scope.reload();
+
+
+
+    $scope.$watch('uri', $scope.reload);
 };
 
 ItemController.$inject = ['$scope', '$http', '$element'];
@@ -177,7 +213,6 @@ app.directive('item', ItemDirective);
 var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
     $scope.appScope = $scope.$parent.appScope;
     $scope.itemScope = $scope;
-//    $scope.itemScope.watch("uri", function() { console.log($scope.itemScope.uri ? 'loaded' : 'empty') } );
 
     $rootScope.$$postDigest(function(){adjust_working_body_height()});
 }
@@ -200,22 +235,22 @@ app.directive('itemheader', itemHeaderDirective);
 
 ////////////////////////////////////////////////////////////
 
-var ItemBodyController = function ($scope, $http, $element) {
-    $scope.appScope = $scope.$parent.appScope;
-    $scope.itemScope = $scope;
-}
 
-ItemBodyController.$inject = ['$scope', '$http', '$element'];
-
-app.controller('ItemBodyController', ItemBodyController);
-
-function itemBodyDirective() {
+function itemBodyDirective(RecursionHelper) {
     return {
         templateUrl: "/tree-editor/assets/ng/treeEdit/ItemBody.html",
         scope: {
             uri: '@uri',
         },
-        controller: ItemBodyController
+        controller: ItemController,
+        compile: function(element) {
+            return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
+                // Define your normal link function here.
+                // Alternative: instead of passing a function,
+                // you can also pass an object with
+                // a 'pre'- and 'post'-link function.
+            });
+        },
     };
 }
 

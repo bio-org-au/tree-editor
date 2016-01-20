@@ -10,7 +10,6 @@
     <asset:stylesheet src="tree-edit-app.css"/>
 
     <asset:javascript src="application.js"/>
-    <asset:javascript src="angular.js"/>
     <asset:javascript src="tree-edit-app.js"/>
 </head>
 

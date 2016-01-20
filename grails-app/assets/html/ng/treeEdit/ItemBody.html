@@ -1,4 +1,44 @@
-<div ng-if="itemScope.uri">
-  item body<br/>
-  uri is -:{{itemScope.uri}}:-
+<div class="container-fluid">
+    <row ng-if="uri">
+        <span class="col-sm-1">
+            <span ng-if="loaded && readySubitems && !isOpen">
+<a class="badge" ng-click="open()"><i class="fa fa-caret-right"></i></a>
+            </span>
+            <span ng-if="loaded && readySubitems && isOpen">
+<a class="badge" ng-click="close()"><i class="fa fa-caret-down"></i></a>
+            </span>
+        </span>
+
+        <span ng-if="loading">
+            <span class="col-sm-10">
+                <a href="{{uri}}">{{uri}}</a><br/>
+            </span>
+        </span>
+        <span ng-if="!loading && !loaded">
+            <span class="col-sm-3">
+                {{response.status}} - {{response.statusText}}
+            </span>
+            <span class="col-sm-7">
+                <a href="{{uri}}">{{uri}}</a>
+            </span>
+        </span>
+        <span ng-if="loaded">
+            <span ng-switch="data.class">
+                <span ng-switch-when="au.org.biodiversity.nsl.Arrangement" class="col-sm-10">
+                    This is an arrangement item
+                </span>
+                <row ng-switch-default class="col-sm-10">
+                    This is a {{data.class}} item<br/>
+                </row>
+            </span>
+        </span>
+        <span class="col-sm-1">
+            <a class="badge" ng-class="loading ? 'disabled' : ''"
+               ng-click="reload()"><i class="fa fa-refresh"
+                                      ng-class="loading ? 'fa-spin' : ''"></i></a>
+        </span>
+    </row>
+    <row ng-if="loaded && subitems" class="container-fluid" ng-class="isOpen ? 'item-body-sublist-open' : 'item-body-sublist-closed'">
+        <div ng-repeat="i in subitems" class="col-sm-12" itembody uri="{{i}}"/>
+    </row>
 </div>
