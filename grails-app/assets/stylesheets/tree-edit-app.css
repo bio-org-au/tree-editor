@@ -84,3 +84,11 @@
 .item-body-sublist-closed {
     display: none;
 }
+
+.apc-voc.declared-bt {
+    color: darkgrey;
+}
+
+.apc-voc.apc-excluded {
+    color: red;
+}
