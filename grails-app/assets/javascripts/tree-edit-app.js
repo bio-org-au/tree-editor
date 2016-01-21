@@ -1,6 +1,7 @@
 //= require angular
 //= require recursionhelper
 //= require angular-sanitize
+//= require get-preferred-link
 
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
@@ -146,6 +147,9 @@ var ItemController = function ($scope, $http, $element) {
             $scope.subitems = null;
             $scope.isOpen = false;
 
+            // dataextract is the processed, digested data. What gets put into it depends on the data type
+            $scope.dataExtract = null;
+
             $http({
                 method: 'GET',
                 url: $scope.uri
@@ -157,18 +161,23 @@ var ItemController = function ($scope, $http, $element) {
                 $scope.appScope.postdigestNotify();
 
                 if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
-                    $scope.readySubitems = [ { contextType: 'arrangement', uri: $scope.data.node._links.permalink.link } ];
+                    $scope.readySubitems = [ { contextType: 'arrangement', uri: getPreferredLink($scope.data.node) } ];
                 }
 
                 if($scope.data.class == 'au.org.biodiversity.nsl.Node') {
                     $scope.readySubitems = [];
                     for(var link in $scope.data.subnodes) {
-                        console.log(link);
-                        $scope.readySubitems.push( {contextType: 'subnode', contextId: link, uri:$scope.data.subnodes[link].subNode._links.permalink.link} );
+                        $scope.readySubitems.push( {contextType: 'subnode', contextId: link, uri: getPreferredLink($scope.data.subnodes[link].subNode)} );
                     }
                     if($scope.readySubitems.length == 0) {
                         $scope.readySubitems = null;
                     }
+
+                    $scope.dataExtract = {
+                        nameUri: $scope.data.name ? getPreferredLink($scope.data.name.name) : null,
+                        instanceUri: $scope.data.instance ? getPreferredLink($scope.data.instance.instance) : null,
+                    };
+
                 }
 
             }, function errorCallback(response) {
@@ -187,17 +196,12 @@ var ItemController = function ($scope, $http, $element) {
     };
 
     $scope.open = function() {
-        console.log("open !");
         $scope.subitems = $scope.readySubitems;
         $scope.isOpen = true;
     };
     $scope.close = function() {
-        console.log("close !");
         $scope.isOpen = false;
     };
-
-
-
 
     $scope.$watch('uri', $scope.reload);
 };
@@ -268,3 +272,4 @@ function itemBodyDirective(RecursionHelper) {
 }
 
 app.directive('itembody', itemBodyDirective);
+
