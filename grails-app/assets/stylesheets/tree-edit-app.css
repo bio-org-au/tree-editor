@@ -73,6 +73,14 @@
     width: 1em;
 }
 
+.item-body-content {
+    cursor: pointer;
+}
+
+.item-body-content-selected {
+    background-color: lightyellow;
+}
+
 .item-body-sublist {
     margin-left: 1em;
 }

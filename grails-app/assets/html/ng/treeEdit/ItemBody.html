@@ -1,5 +1,5 @@
 <div class="item-body">
-    <div ng-if="uri">
+    <div ng-if="uri" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''">
         <span class="item-body-tree-handle">
             <span ng-if="loading">
                 <i class="fa fa-refresh fa-spin"></i>
@@ -21,67 +21,69 @@
                                       ng-class="loading ? 'fa-spin' : ''"></i></a>
         </span>
 
-        <span ng-if="loading">
-            <span>
-                {{contextType}}/{{contextId}}: <a href="{{uri}}">{{uri}}</a><br/>
+        <span>
+            <span ng-if="loading">
+                <span>
+                    {{contextType}}/{{contextId}}: <a href="{{uri}}">{{uri}}</a><br/>
+                </span>
             </span>
-        </span>
-        <span ng-if="!loading && !loaded">
-            <span>
-                {{response.status}} - {{response.statusText}}
+            <span ng-if="!loading && !loaded">
+                <span>
+                    {{response.status}} - {{response.statusText}}
+                </span>
+                <span>
+                    <a href="{{uri}}">{{uri}}</a>
+                </span>
             </span>
-            <span>
-                <a href="{{uri}}">{{uri}}</a>
-            </span>
-        </span>
-        <span ng-if="loaded">
-            <span ng-switch="data.class">
-                <span ng-switch-when="au.org.biodiversity.nsl.Arrangement">
-                    <span ng-switch="data.arrangementType.name">
-                        <span ng-switch-when="P">
-                            {{data.label}}
-                            <span ng-if="data.title">- {{data.title}}</span>
-                            <span class="small" ng-if="data.description" >: {{data.description}}</span>
-                        </span>
-                        <span ng-switch-when="U">
-                            Workspace
-                        </span>
-                        <span ng-switch-default>
-                            Arrangement type {{data.arrangementType.name}}
+            <span ng-if="loaded">
+                <span ng-switch="data.class">
+                    <span ng-switch-when="au.org.biodiversity.nsl.Arrangement">
+                        <span ng-switch="data.arrangementType.name">
+                            <span ng-switch-when="P">
+                                {{data.label}}
+                                <span ng-if="data.title">- {{data.title}}</span>
+                                <span class="small" ng-if="data.description" >: {{data.description}}</span>
+                            </span>
+                            <span ng-switch-when="U">
+                                Workspace
+                            </span>
+                            <span ng-switch-default>
+                                Arrangement type {{data.arrangementType.name}}
+                            </span>
                         </span>
                     </span>
-                </span>
-                <span ng-switch-when="au.org.biodiversity.nsl.Node" ng-class="data.typeUri.css">
-                    <span ng-switch="data.type">
-                        <span ng-switch-when="T">
-                            <span ng-switch="data.typeUri.uri">
-                                <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">
-                                    {{data.checkedInAt.timeStamp}}
+                    <span ng-switch-when="au.org.biodiversity.nsl.Node" ng-class="data.typeUri.css">
+                        <span ng-switch="data.type">
+                            <span ng-switch-when="T">
+                                <span ng-switch="data.typeUri.uri">
+                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">
+                                        {{data.checkedInAt.timeStamp}}
+                                    </span>
+                                    <span ng-switch-default>
+                                        <span ng-bind-html="data.name.fullNameHtml"/>
+                                    </span>
                                 </span>
-                                <span ng-switch-default>
-                                    <span ng-bind-html="data.name.fullNameHtml"/>
-                                </span>
-                            </span>
 
-                        </span>
-                        <span ng-switch-when="S">
-                            <span ng-switch="data.typeUri.uri">
-                                <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-node">
-                                    {{data.arrangement.label}} persistent top node
-                                </span>
-                                <span ng-switch-default>
-                                    {{data.typeUri.idPart}}
+                            </span>
+                            <span ng-switch-when="S">
+                                <span ng-switch="data.typeUri.uri">
+                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-node">
+                                        {{data.arrangement.label}} persistent top node
+                                    </span>
+                                    <span ng-switch-default>
+                                        {{data.typeUri.idPart}}
+                                    </span>
                                 </span>
                             </span>
+                            <div ng-switch-default>
+                                {{data.typeUri.idPart}} {{contextId}}
+                            </div>
                         </span>
-                        <div ng-switch-default>
-                            {{data.typeUri.idPart}} {{contextId}}
-                        </div>
                     </span>
+                    <div ng-switch-default>
+                        This is a {{data.class}} item<br/>
+                    </div>
                 </span>
-                <div ng-switch-default>
-                    This is a {{data.class}} item<br/>
-                </div>
             </span>
         </span>
     </div>

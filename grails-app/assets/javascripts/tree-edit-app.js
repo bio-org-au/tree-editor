@@ -118,7 +118,7 @@ app.directive('classificationsList', ClassificationsListDirective);
 
 var ItemController = function ($scope, $http, $element) {
     $scope.appScope = $scope.$parent.appScope;
-    $scope.itemScope = $scope;
+    $scope.itemScope = $scope.$parent.itemScope ? $scope.$parent.itemScope : $scope;
 
     $scope.loading = true;
     $scope.loaded = false;
@@ -250,6 +250,27 @@ app.directive('itemheader', itemHeaderDirective);
 
 ////////////////////////////////////////////////////////////
 
+var ItemBodyController = function ($scope, $http, $element) {
+    // inherit the gear from itemcontroller
+    ItemController($scope, $http, $element);
+
+    if($scope == $scope.itemScope) {
+      $scope.itemScope.selectedUri = null;
+    }
+
+    $scope.selectItem = function() {
+        $scope.itemScope.selectedUri = $scope.uri;
+    };
+
+    $scope.isSelected = function() {
+        return $scope.itemScope.selectedUri == $scope.uri;
+    };
+};
+
+ItemBodyController.$inject = ['$scope', '$http', '$element'];
+
+app.controller('ItemBodyController', ItemBodyController);
+
 
 function itemBodyDirective(RecursionHelper) {
     return {
@@ -259,7 +280,7 @@ function itemBodyDirective(RecursionHelper) {
             contextType: '@contextType',
             contextId: '@contextId',
         },
-        controller: ItemController,
+        controller: ItemBodyController,
         compile: function(element) {
             return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
                 // Define your normal link function here.
