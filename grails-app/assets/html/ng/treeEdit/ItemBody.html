@@ -21,7 +21,7 @@
                                       ng-class="loading ? 'fa-spin' : ''"></i></a>
         </span>
 
-        <span>
+        <span class="item-body-content-text">
             <span ng-if="loading">
                 <span>
                     {{contextType}}/{{contextId}}: <a href="{{uri}}">{{uri}}</a><br/>
@@ -61,6 +61,9 @@
                                     </span>
                                     <span ng-switch-default>
                                         <span ng-bind-html="data.name.fullNameHtml"/>
+                                        <span ng-if="appScope.view_refs && data.instance">
+                                            s. <span ng-bind-html="data.instance.citationHtml"/>
+                                        </span>
                                     </span>
                                 </span>
 

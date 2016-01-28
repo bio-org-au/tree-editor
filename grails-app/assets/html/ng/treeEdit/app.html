@@ -35,7 +35,11 @@
                 <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='val' ? 'active' : ''"
                    ng-click="rightpanel_select='val'">Validation</a>
             </div>
-            <div style="position: absolute; left: 0; right: 0; top: 35px; bottom: 0; margin: 2px;">
+            <div style="position: absolute; left: 0; right: 0; top: 30px; height: 30px; padding: 2px;">
+                <a class="btn btn-default btn-sm" ng-click="view_refs = !view_refs" ng-class="view_refs ? 'active' : ''"
+                   ng-click="">View refs</a>
+            </div>
+            <div style="position: absolute; left: 0; right: 0; top: 65px; bottom: 0; margin: 2px;">
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
                         ng-class="rightpanel_select=='cls' ? '' : 'hidden'" >
                     <classifications-list services-url="{{servicesUrl}}"/>
