@@ -180,6 +180,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     $scope.classifications = [];
     $scope.msg = [];
 
+    $scope.newWorkspace = { description: null};
+
     $scope.reload = function() {
         $scope.loading = true;
         $scope.response = "fetching";
@@ -218,6 +220,9 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $scope.appScope.getJwt()
             },
+            params: {
+                'description': $scope.newWorkspace.description,
+            }
         }).then(function successCallback(response) {
             $scope.msg = response.data.msg;
             $scope.foo = response.data;
