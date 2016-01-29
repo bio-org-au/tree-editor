@@ -25,15 +25,10 @@ $(window).resize(adjust_working_body_height)
 //        function() {
 //            return {
 //                'request': function(config) {
-//                  console.log('http request');
-//                  console.log(config.headers);
 //                  config = config || {};
 //                  config.headers = config.headers || { };
-//                  // I have no idea wha "bearer" means
-//                  // config.headers['nsl-jwt'] = 'Bearer p';
 //                  config.headers['nsl-jwt'] = 'p';
 //                  config.headers['Access-Control-Request-Headers'] = 'nsl-jwt';
-//                  console.log(config);
 //
 //                  return config;
 //            }
@@ -215,20 +210,26 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.createWorkspace = function() {
-        console.log($scope.appScope);
-        console.log($scope.appScope.user);
-        console.log($scope.appScope.user.loginResult);
-        console.log($scope.appScope.user.loginResult.jwt);
         $scope.msg = [];
         $http({
             method: 'POST',
-            url: $scope.servicesUrl + '/TreeJsonEdit/createWorkspace'
+            url: $scope.servicesUrl + '/TreeJsonEdit/createWorkspace',
+            headers: {
+                'Access-Control-Request-Headers': 'nsl-jwt',
+                'nsl-jwt': $scope.appScope.getJwt()
+            },
         }).then(function successCallback(response) {
             $scope.msg = response.data.msg;
             $scope.foo = response.data;
             $scope.reload();
         }, function errorCallback(response) {
-            $scope.msg = response.data.msg;
+            $scope.msg = [
+                {
+                    msg: response.data.status,
+                    body: response.data.reason,
+                    status: 'warning',
+                }
+            ];
             $scope.foo = response.data;
         });
     };
@@ -293,9 +294,6 @@ var ItemController = function ($scope, $http, $element) {
                 method: 'GET',
                 url: $scope.uri
             }).then(function successCallback(response) {
-                console.log('success ' + $scope.uri);
-                console.log(response);
-
                 $scope.loading = false;
                 $scope.loaded = true;
                 $scope.response = response;
@@ -323,8 +321,6 @@ var ItemController = function ($scope, $http, $element) {
                 }
 
             }, function errorCallback(response) {
-                console.log('FAIL ' + $scope.uri);
-                console.log(response);
                 $scope.loading = false;
                 $scope.loaded = false;
                 $scope.response = response;

@@ -1,17 +1,17 @@
 <div id="tree-edit-app-pane">
     <div id="tree-edit-app-nav">
+        <span class="pull-right">
+            <span ng-if="isLoggedIn()">
+                Logged in as {{getUser()}}. JWT is {{getJwt()}}.
+                <a class="btn btn-default btn-sm" ng-click="logout()">Logout</a>
+            </span>
+            <span ng-if="!isLoggedIn()">
+                <input ng-model="user.name" />
+                <input ng-model="user.password" />
+                <a class="btn btn-default btn-sm" ng-click="login()" >Login</a>
+            </span>
+        </span>
         <a class="btn btn-default btn-sm" ng-click="view_refs = !view_refs" ng-class="view_refs ? 'active' : ''">View refs</a>
-
-        <span ng-if="isLoggedIn()">
-            Logged in as {{getUser()}}.
-            <a class="btn btn-default btn-sm" ng-click="logout()">Logout</a>
-        </span>
-        <span ng-if="!isLoggedIn()">
-            <input ng-model="user.name" />
-            <input ng-model="user.password" />
-            <a class="btn btn-default btn-sm" ng-click="login()" >Login</a>
-        </span>
-        {{user.loginResult}}
     </div>
     <div id="tree-edit-app-main">
         <div id="tree-edit-app-working">
