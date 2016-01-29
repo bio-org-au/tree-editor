@@ -18,7 +18,31 @@ function adjust_working_body_height () {
     }
 };
 
-$(window).resize(adjust_working_body_height);
+$(window).resize(adjust_working_body_height)
+
+//app.config(['$httpProvider', function($httpProvider) {
+//    $httpProvider.interceptors.push(
+//        function() {
+//            return {
+//                'request': function(config) {
+//                  console.log('http request');
+//                  console.log(config.headers);
+//                  config = config || {};
+//                  config.headers = config.headers || { };
+//                  // I have no idea wha "bearer" means
+//                  // config.headers['nsl-jwt'] = 'Bearer p';
+//                  config.headers['nsl-jwt'] = 'p';
+//                  config.headers['Access-Control-Request-Headers'] = 'nsl-jwt';
+//                  console.log(config);
+//
+//                  return config;
+//            }
+//        };
+//    });
+//}]);
+
+
+
 
 var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
@@ -37,6 +61,42 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.$watch('rightUri', $scope.postdigestNotify);
     $scope.postdigestNotify();
 
+    $scope.user = {};
+
+    $scope.login = function() {
+        $http({
+            method: 'GET',
+            url: $scope.servicesUrl + '/auth/signInJson',
+            params: { username: $scope.user.name, password: $scope.user.password}
+        }).then(function successCallback(response) {
+            $scope.appScope.user.loginResult = response.data;
+        }, function errorCallback(response) {
+            $scope.appScope.user.loginResult = response.data;
+        });
+    }
+
+    $scope.logout = function() {
+        $http({
+            method: 'GET',
+            url: $scope.servicesUrl + '/auth/signOutJson',
+        }).then(function successCallback(response) {
+            $scope.appScope.user.loginResult = response.data;
+        }, function errorCallback(response) {
+            $scope.appScope.user.loginResult = response.data;
+        });
+    }
+
+    $scope.isLoggedIn = function() {
+        return $scope.user && $scope.user.loginResult && $scope.user.loginResult.principal;
+    };
+
+    $scope.getUser = function() {
+        return $scope.user && $scope.user.loginResult && $scope.user.loginResult.principal;
+    };
+
+    $scope.getJwt = function() {
+        return $scope.user && $scope.user.loginResult && $scope.user.loginResult.jwt;
+    };
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];
@@ -116,6 +176,85 @@ app.directive('classificationsList', ClassificationsListDirective);
 
 ////////////////////////////////////////////////////////////
 
+var WorkspacesPaneController = function ($scope, $http, $element) {
+    $scope.appScope = $scope.$parent.appScope;
+
+    $scope.loading = false;
+    $scope.loaded = false;
+    $scope.response = "init";
+    $scope.classifications = [];
+    $scope.msg = [];
+
+    $scope.reload = function() {
+        $scope.loading = true;
+        $scope.response = "fetching";
+        $scope.classifications = [];
+
+        $http({
+            method: 'GET',
+            url: $scope.servicesUrl + '/TreeJsonView/listClassifications'
+        }).then(function successCallback(response) {
+            $scope.loading = false;
+            $scope.loaded = true;
+            $scope.classifications = response.data;
+            $scope.response = response;
+            $scope.appScope.postdigestNotify();
+        }, function errorCallback(response) {
+            $scope.loading = false;
+            $scope.response = response;
+            $scope.appScope.postdigestNotify();
+        });
+    };
+
+    $scope.loadLeft = function(uri) {
+        $scope.appScope.leftUri = uri;
+    };
+
+    $scope.loadRight = function(uri) {
+        $scope.appScope.rightUri = uri;
+    };
+
+    $scope.createWorkspace = function() {
+        console.log($scope.appScope);
+        console.log($scope.appScope.user);
+        console.log($scope.appScope.user.loginResult);
+        console.log($scope.appScope.user.loginResult.jwt);
+        $scope.msg = [];
+        $http({
+            method: 'POST',
+            url: $scope.servicesUrl + '/TreeJsonEdit/createWorkspace'
+        }).then(function successCallback(response) {
+            $scope.msg = response.data.msg;
+            $scope.foo = response.data;
+            $scope.reload();
+        }, function errorCallback(response) {
+            $scope.msg = response.data.msg;
+            $scope.foo = response.data;
+        });
+    };
+
+    $scope.reload();
+};
+
+WorkspacesPaneController.$inject = ['$scope', '$http', '$element'];
+
+app.controller('WorkspacesPaneController', WorkspacesPaneController);
+
+function WorkspacesPaneDirective() {
+    return {
+        templateUrl: "/tree-editor/assets/ng/treeEdit/appWorkspacePane.html",
+        scope: {
+            servicesUrl: '@',
+            appScope: '&appScope',
+        },
+        controller: WorkspacesPaneController
+    };
+}
+
+app.directive('workspacesPane', WorkspacesPaneDirective);
+
+////////////////////////////////////////////////////////////
+
 var ItemController = function ($scope, $http, $element) {
     $scope.appScope = $scope.$parent.appScope;
     $scope.itemScope = $scope.$parent.itemScope ? $scope.$parent.itemScope : $scope;
@@ -154,6 +293,9 @@ var ItemController = function ($scope, $http, $element) {
                 method: 'GET',
                 url: $scope.uri
             }).then(function successCallback(response) {
+                console.log('success ' + $scope.uri);
+                console.log(response);
+
                 $scope.loading = false;
                 $scope.loaded = true;
                 $scope.response = response;
@@ -181,6 +323,8 @@ var ItemController = function ($scope, $http, $element) {
                 }
 
             }, function errorCallback(response) {
+                console.log('FAIL ' + $scope.uri);
+                console.log(response);
                 $scope.loading = false;
                 $scope.loaded = false;
                 $scope.response = response;

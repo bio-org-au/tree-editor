@@ -1,4 +1,4 @@
-<div class="tree-edit-classifcations-pane container-fluid">
+<div class="tree-edit-classifications-pane tree-edit-control-pane container-fluid">
     <row>
         <span class="col-sm-12">
             <span class="pull-right"><a class="badge" ng-class="loading ? 'disabled' : ''"
@@ -7,7 +7,7 @@
             <h4>Classifications</h4>
         </span>
     </row>
-    <div ng-if="loaded" ng-repeat="i in classifications" class="container-fluid">
+    <div ng-if="loaded" ng-repeat="i in classifications track by $index" class="container-fluid">
         <row>
         <span class="pull-right">
             <a class="badge" ng-click="loadLeft(i)"><i class="fa fa-arrow-circle-left"></i></a>
