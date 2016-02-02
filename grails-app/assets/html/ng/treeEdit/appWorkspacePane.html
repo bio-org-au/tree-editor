@@ -1,9 +1,4 @@
 <div class="tree-edit-workspace-pane tree-edit-control-pane container-fluid">
-    <row ng-repeat="i in msg">
-        <div class="alert" ng-class="'alert-' + i.status"role="alert">
-            <strong>{{i.msg}}</strong><span ng-if="i.body"><strong>:</strong> {{i.body}}</span>
-        </div>
-    </row>
     <row>
         <span class="col-sm-12">
             <span class="pull-right"><a class="badge" ng-class="loading ? 'disabled' : ''"
@@ -12,8 +7,12 @@
             <h4>Workspaces</h4>
         </span>
     </row>
+    <row>
+        <messages class="col-sm-12"/>
+    </row>
+
     <div ng-if="appScope.isLoggedIn()">
-        <input ng-model="newWorkspace.description" />
-        <button class="btn btn-primary" ng-click="createWorkspace()"><i class="fa fa-plus"></i> New Workspace</button></div>
-    <div>{{foo}}</div>
+        <input ng-model="newWorkspace.description"/>
+        <button class="btn btn-primary" ng-click="createWorkspace()"><i class="fa fa-plus"></i> New Workspace</button>
+    </div>
 </div>

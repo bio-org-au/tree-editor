@@ -18,7 +18,13 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" ng-class="namespaceDropdown_visible ? 'display-block' : 'display-none'">
-                <li ng-repeat="ns in namespaces track by ns.name" ng-click="appScope.namespace = ns.name">
+                <li>
+                    <span class="pull-right"><a class="badge" ng-class="loading ? 'disabled' : ''"
+                                                ng-click="reloadNamespaces()"><i class="fa fa-refresh"
+                                                                       ng-class="loadingNamespaces ? 'fa-spin' : ''"></i></a></span>
+                </li>
+
+                <li ng-repeat="ns in namespaces track by ns.name" ng-click="namespaceDropdown_click(ns)">
                     <a href="#">{{ns.name}} <span ng-bind-html="ns.descriptionHtml"/></a>
                 </li>
             </ul>
@@ -123,7 +129,9 @@
 
         </div>
     </div>
-    <div id="tree-edit-app-footer">{{footer}}</div>
+    <div id="tree-edit-app-footer">
+        {{footer}}
+    </div>
 
 </div>
 

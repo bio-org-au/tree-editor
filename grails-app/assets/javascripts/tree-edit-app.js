@@ -80,6 +80,10 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.namespaceDropdown_toggle = function() {
         $scope.namespaceDropdown_visible = ! $scope.namespaceDropdown_visible;
     };
+    $scope.namespaceDropdown_click = function(ns) {
+        $scope.appScope.namespace = ns.name;
+        $scope.namespaceDropdown_visible = false;
+    };
     $scope.namespaceDropdown_visible = false;
     $scope.namespaces = [];
     $scope.appScope.namespace = null;
@@ -233,6 +237,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     $scope.classifications = [];
     $scope.msg = [];
 
+    $scope.clearMessages = function() { $scope.msg = []; };
+
     $scope.newWorkspace = { description: null};
 
     $scope.reload = function() {
@@ -265,6 +271,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.createWorkspace = function() {
+        console.log("creaiting a workspace");
+
         $scope.msg = [];
         $http({
             method: 'POST',
@@ -274,11 +282,11 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
                 'nsl-jwt': $scope.appScope.getJwt()
             },
             params: {
+                'namespace': $scope.appScope.namespace,
                 'description': $scope.newWorkspace.description,
             }
         }).then(function successCallback(response) {
             $scope.msg = response.data.msg;
-            $scope.foo = response.data;
             $scope.reload();
         }, function errorCallback(response) {
             $scope.msg = [
@@ -288,7 +296,6 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
                     status: 'warning',
                 }
             ];
-            $scope.foo = response.data;
         });
     };
 
@@ -493,4 +500,34 @@ function itemBodyDirective(RecursionHelper) {
 }
 
 app.directive('itembody', itemBodyDirective);
+
+////////////////////////////////////////////////////////////
+
+var MessagesController = function ($scope) {
+    $scope.appScope = $scope.$parent.appScope;
+    $scope.itemScope = $scope.$parent.itemScope;
+};
+
+MessagesController.$inject = ['$scope'];
+
+app.controller('MessagesController', MessagesController);
+
+
+function messagesDirective(RecursionHelper) {
+    return {
+        templateUrl: "/tree-editor/assets/ng/treeEdit/messages.html",
+        controller: MessagesController,
+        compile: function(element) {
+            return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
+                // Define your normal link function here.
+                // Alternative: instead of passing a function,
+                // you can also pass an object with
+                // a 'pre'- and 'post'-link function.
+            });
+        },
+    };
+}
+
+app.directive('messages', messagesDirective);
+
 
