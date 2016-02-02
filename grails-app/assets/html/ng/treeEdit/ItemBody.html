@@ -59,6 +59,9 @@
                                     <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">
                                         {{data.checkedInAt.timeStamp}}
                                     </span>
+                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">
+                                        {{data.checkedInAt.timeStamp}}
+                                    </span>
                                     <span ng-switch-default>
                                         <span ng-bind-html="data.name.fullNameHtml"/>
                                         <span ng-if="appScope.view_refs && data.instance">

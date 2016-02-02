@@ -234,28 +234,39 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.response = "init";
-    $scope.classifications = [];
+    $scope.workspaces = [];
     $scope.msg = [];
+
+    $scope.pane = "list";
 
     $scope.clearMessages = function() { $scope.msg = []; };
 
-    $scope.newWorkspace = { description: null};
+    $scope.editForm = { uri: null, owner: null, title: null, description: null};
 
     $scope.reload = function() {
+
         $scope.loading = true;
         $scope.response = "fetching";
-        $scope.classifications = [];
+        $scope.workspaces = [];
+
+        console.log('attempting to reload workspaces');
 
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/TreeJsonView/listClassifications'
+            url: $scope.servicesUrl + '/TreeJsonView/listWorkspaces',
+            params: {
+                namespace: $scope.appScope.namespace
+            }
+
         }).then(function successCallback(response) {
+            console.log(response);
             $scope.loading = false;
             $scope.loaded = true;
-            $scope.classifications = response.data;
+            $scope.workspaces = response.data;
             $scope.response = response;
             $scope.appScope.postdigestNotify();
         }, function errorCallback(response) {
+            console.log(response);
             $scope.loading = false;
             $scope.response = response;
             $scope.appScope.postdigestNotify();
@@ -271,8 +282,6 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.createWorkspace = function() {
-        console.log("creaiting a workspace");
-
         $scope.msg = [];
         $http({
             method: 'POST',
@@ -283,10 +292,12 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             },
             params: {
                 'namespace': $scope.appScope.namespace,
-                'description': $scope.newWorkspace.description,
+                'title': $scope.editForm.title,
+                'description': $scope.editForm.description,
             }
         }).then(function successCallback(response) {
             $scope.msg = response.data.msg;
+            $scope.pane = "list";
             $scope.reload();
         }, function errorCallback(response) {
             $scope.msg = [
@@ -297,6 +308,62 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
                 }
             ];
         });
+    };
+
+    $scope.saveWorkspace = function() {
+        $scope.msg = [
+            {
+                msg: 'todo',
+                body: 'implement save',
+                status: 'info',
+            }
+        ];
+    };
+
+    $scope.deleteWorkspace = function() {
+        $scope.msg = [
+            {
+                msg: 'todo',
+                body: 'implement delete',
+                status: 'info',
+            }
+        ];
+    };
+
+    $scope.editWorkspace = function(wsUri){
+        console.log('editWorkspace');
+        $scope.editForm = { uri: wsUri, loaded: false, owner: null, title: null, description: null};
+        $scope.pane = "edit";
+
+        $http({
+            method: 'GET',
+            url: wsUri
+        }).then(function successCallback(response) {
+            $scope.editForm.owner = response.data.owner;
+            $scope.editForm.title = response.data.title;
+            $scope.editForm.description = response.data.description;
+            $scope.editForm.loaded = true;
+
+        }, function errorCallback(response) {
+            $scope.msg = [
+                {
+                    msg: response.data.status,
+                    body: response.data.reason,
+                    status: 'warning',
+                }
+            ];
+        });
+    };
+
+    $scope.editNewWorkspace = function(){
+        $scope.editForm = { uri: null, owner: $scope.appScope.getUser(), title: null, description: null};
+        $scope.editForm.loaded = true;
+        $scope.pane = "edit";
+    };
+
+    $scope.backToList = function(){
+        $scope.pane = "list";
+        $scope.msg = [];
     };
 
     $scope.appScope.$watch('namespace', $scope.reload);
