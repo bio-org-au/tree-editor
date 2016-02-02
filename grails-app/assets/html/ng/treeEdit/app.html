@@ -11,6 +11,19 @@
                 <a class="btn btn-default btn-sm" ng-click="login()" >Login</a>
             </span>
         </span>
+
+        <span class="dropdown" ng-mouseleave="namespaceDropdown_visible = false">
+            <button class="btn btn-default dropdown-toggle" ng-click="namespaceDropdown_visible = !namespaceDropdown_visible">
+                {{appScope.namespace ? appScope.namespace : 'no namespace'}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" ng-class="namespaceDropdown_visible ? 'display-block' : 'display-none'">
+                <li ng-repeat="ns in namespaces track by ns.name" ng-click="appScope.namespace = ns.name">
+                    <a href="#">{{ns.name}} <span ng-bind-html="ns.descriptionHtml"/></a>
+                </li>
+            </ul>
+        </span>
+
         <a class="btn btn-default btn-sm" ng-click="view_refs = !view_refs" ng-class="view_refs ? 'active' : ''">View refs</a>
     </div>
     <div id="tree-edit-app-main">

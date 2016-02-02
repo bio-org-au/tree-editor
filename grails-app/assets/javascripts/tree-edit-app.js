@@ -20,25 +20,6 @@ function adjust_working_body_height () {
 
 $(window).resize(adjust_working_body_height)
 
-//app.config(['$httpProvider', function($httpProvider) {
-//    $httpProvider.interceptors.push(
-//        function() {
-//            return {
-//                'request': function(config) {
-//                  config = config || {};
-//                  config.headers = config.headers || { };
-//                  config.headers['nsl-jwt'] = 'p';
-//                  config.headers['Access-Control-Request-Headers'] = 'nsl-jwt';
-//
-//                  return config;
-//            }
-//        };
-//    });
-//}]);
-
-
-
-
 var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
     $scope.rightpanel_select = "cls";
@@ -92,6 +73,28 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.getJwt = function() {
         return $scope.user && $scope.user.loginResult && $scope.user.loginResult.jwt;
     };
+
+    $scope.namespaceDropdown_toggle = function() {
+        $scope.namespaceDropdown_visible = ! $scope.namespaceDropdown_visible;
+    };
+
+    $scope.namespaceDropdown_visible = false;
+
+    $scope.namespaces =
+        [{
+            "class": "au.org.biodiversity.nsl.Namespace",
+            "name": "AMANI",
+            "descriptionHtml": "(description of <b>AMANI<\u002fb>)"
+        }, {
+            "class": "au.org.biodiversity.nsl.Namespace",
+            "name": "ANHSIR",
+            "descriptionHtml": "(description of <b>ANHSIR<\u002fb>)"
+        }, {
+            "class": "au.org.biodiversity.nsl.Namespace",
+            "name": "APNI",
+            "descriptionHtml": "(description of <b>APNI<\u002fb>)"
+        }];
+
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];
