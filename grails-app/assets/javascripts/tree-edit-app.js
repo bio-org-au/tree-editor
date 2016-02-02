@@ -16,9 +16,9 @@ function adjust_working_body_height () {
         $('#tree-edit-app-working-body').height(h);
         $('#tree-edit-app-working-body').show();
     }
-};
+}
 
-$(window).resize(adjust_working_body_height)
+$(window).resize(adjust_working_body_height);
 
 var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
@@ -49,7 +49,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
         }, function errorCallback(response) {
             $scope.appScope.user.loginResult = response.data;
         });
-    }
+    };
 
     $scope.logout = function() {
         $http({
@@ -60,7 +60,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
         }, function errorCallback(response) {
             $scope.appScope.user.loginResult = response.data;
         });
-    }
+    };
 
     $scope.isLoggedIn = function() {
         return $scope.user && $scope.user.loginResult && $scope.user.loginResult.principal;
@@ -74,13 +74,16 @@ var TreeEditAppController = function ($scope, $http, $element) {
         return $scope.user && $scope.user.loginResult && $scope.user.loginResult.jwt;
     };
 
+
+    /// NAMESPACE gear
+
     $scope.namespaceDropdown_toggle = function() {
         $scope.namespaceDropdown_visible = ! $scope.namespaceDropdown_visible;
     };
-
     $scope.namespaceDropdown_visible = false;
-
-    $scope.namespaces =
+    $scope.namespaces = [];
+    $scope.appScope.namespace = null;
+    /*
         [{
             "class": "au.org.biodiversity.nsl.Namespace",
             "name": "AMANI",
@@ -94,7 +97,44 @@ var TreeEditAppController = function ($scope, $http, $element) {
             "name": "APNI",
             "descriptionHtml": "(description of <b>APNI<\u002fb>)"
         }];
+        */
 
+    $scope.reloadNamespaces = function() {
+        $scope.loadingNamespaces = true;
+        $scope.namespaces = [];
+
+        $http({
+            method: 'GET',
+            url: $scope.servicesUrl + '/TreeJsonView/listNamespaces'
+        }).then(function successCallback(response) {
+            $scope.loadingNamespaces = false;
+            $scope.namespaces = response.data;
+
+            // if the current scope namespace is not in the new namespaces, set it to the first one
+
+            if($scope.namespaces.length == 0) {
+                $scope.appScope.namespace = null;
+            }
+            else {
+                var found = false;
+                for(var i in $scope.namespaces) {
+                    if($scope.namespaces[i].name == $scope.appScope.namespace) {
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
+                    $scope.appScope.namespace = $scope.namespaces[0].name;
+                }
+            }
+        }, function errorCallback(response) {
+            $scope.loadingNamespaces = false;
+        });
+    };
+
+    $scope.appScope.$watch('namespace', function() { $scope.leftUri = null; $scope.rightUri = null;} );
+
+    $scope.reloadNamespaces();
 };
 
 TreeEditAppController.$inject = ['$scope', '$http', '$element'];
@@ -124,13 +164,21 @@ var ClassificationsListController = function ($scope, $http, $element) {
     $scope.classifications = [];
 
     $scope.reload = function() {
+        if(! $scope.appScope.namespace) {
+            $scope.classifications = [];
+            return;
+        }
+
         $scope.loading = true;
         $scope.response = "fetching";
         $scope.classifications = [];
 
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/TreeJsonView/listClassifications'
+            url: $scope.servicesUrl + '/TreeJsonView/listClassifications',
+            params: {
+                namespace: $scope.appScope.namespace
+            }
         }).then(function successCallback(response) {
             $scope.loading = false;
             $scope.loaded = true;
@@ -151,6 +199,8 @@ var ClassificationsListController = function ($scope, $http, $element) {
     $scope.loadRight = function(uri) {
         $scope.appScope.rightUri = uri;
     };
+
+    $scope.appScope.$watch('namespace', $scope.reload);
 
     $scope.reload();
 };
@@ -241,6 +291,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             $scope.foo = response.data;
         });
     };
+
+    $scope.appScope.$watch('namespace', $scope.reload);
 
     $scope.reload();
 };
@@ -378,7 +430,7 @@ var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
     $scope.itemScope = $scope;
 
     $rootScope.$$postDigest(function(){adjust_working_body_height()});
-}
+};
 
 ItemHeaderController.$inject = ['$scope', '$http', '$element', '$rootScope'];
 
