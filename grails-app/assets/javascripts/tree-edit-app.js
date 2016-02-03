@@ -318,13 +318,39 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.saveWorkspace = function() {
-        $scope.msg = [
-            {
-                msg: 'todo',
-                body: 'implement save',
-                status: 'info',
+        $scope.msg = [];
+        $http({
+            method: 'POST',
+            url: $scope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
+            headers: {
+                'Access-Control-Request-Headers': 'nsl-jwt',
+                'nsl-jwt': $scope.appScope.getJwt()
+            },
+            params: {
+                'uri': $scope.editForm.uri,
+                'title': $scope.editForm.title,
+                'description': $scope.editForm.description,
             }
-        ];
+        }).then(function successCallback(response) {
+            $scope.msg = response.data.msg;
+            if(response.data.success) {
+                $scope.pane = "list";
+            }
+            $scope.reload();
+        }, function errorCallback(response) {
+            if(response.data && response.data.msg) {
+                $scope.msg = response.data.msg;
+            }
+            else {
+                $scope.msg = [
+                    {
+                        msg: response.data.status,
+                        body: response.data.reason,
+                        status: 'danger', // we use danger because we got no JSON back at all
+                    }
+                ];
+            }
+        });
     };
 
     $scope.deleteWorkspace = function(ws) {
