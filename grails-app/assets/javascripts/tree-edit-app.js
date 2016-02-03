@@ -297,16 +297,23 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             }
         }).then(function successCallback(response) {
             $scope.msg = response.data.msg;
-            $scope.pane = "list";
+            if(response.data.success) {
+                $scope.pane = "list";
+            }
             $scope.reload();
         }, function errorCallback(response) {
-            $scope.msg = [
-                {
-                    msg: response.data.status,
-                    body: response.data.reason,
-                    status: 'warning',
-                }
-            ];
+            if(response.data && response.data.msg) {
+                $scope.msg = response.data.msg;
+            }
+            else {
+                $scope.msg = [
+                    {
+                        msg: response.data.status,
+                        body: response.data.reason,
+                        status: 'danger',  // we use danger because we got no JSON back at all
+                    }
+                ];
+            }
         });
     };
 
@@ -320,14 +327,38 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
         ];
     };
 
-    $scope.deleteWorkspace = function() {
-        $scope.msg = [
-            {
-                msg: 'todo',
-                body: 'implement delete',
-                status: 'info',
+    $scope.deleteWorkspace = function(ws) {
+        $scope.msg = [];
+        $http({
+            method: 'POST',
+            url: $scope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
+            headers: {
+                'Access-Control-Request-Headers': 'nsl-jwt',
+                'nsl-jwt': $scope.appScope.getJwt()
+            },
+            params: {
+                'uri': $scope.editForm.uri,
             }
-        ];
+        }).then(function successCallback(response) {
+            $scope.msg = response.data.msg;
+            if(response.data.success) {
+                $scope.pane = "list";
+            }
+            $scope.reload();
+        }, function errorCallback(response) {
+            if(response.data && response.data.msg) {
+                $scope.msg = response.data.msg;
+            }
+            else {
+                $scope.msg = [
+                    {
+                        msg: response.data.status,
+                        body: response.data.reason,
+                        status: 'danger', // we use danger because we got no JSON back at all
+                    }
+                ];
+            }
+        });
     };
 
     $scope.editWorkspace = function(wsUri){
