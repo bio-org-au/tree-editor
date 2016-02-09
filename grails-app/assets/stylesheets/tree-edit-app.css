@@ -84,6 +84,12 @@
 .item-body-content-text {
 }
 
+.item-body-context-menu {
+    border: thin solid darkgrey;
+    padding: 2px;
+    margin: 2px;
+}
+
 .item-body-sublist {
     margin-left: 1em;
 }
@@ -104,5 +110,12 @@
     color: red;
 }
 
+.fabutton {
+    cursor: pointer;
+}
+
 .display-none { display: none; }
 .display-block {  display: block; }
+
+.flag-on { color: green; }
+.flag-off { color: lightgray;}

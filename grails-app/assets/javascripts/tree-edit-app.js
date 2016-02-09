@@ -616,8 +616,15 @@ var ItemBodyController = function ($scope, $http, $element) {
         $scope.body_context_menu = false;
     };
 
+    $scope.toggle_flag = function() {
+      // todo: make this function talk to the tree scope, somehow
+        $scope.flagged = !$scope.flagged;
+    };
+
     $scope.body_content_hover = false;
     $scope.body_context_menu = false;
+    $scope.flagged = false;
+
 };
 
 ItemBodyController.$inject = ['$scope', '$http', '$element'];

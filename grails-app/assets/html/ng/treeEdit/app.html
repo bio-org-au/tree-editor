@@ -19,9 +19,9 @@
             </button>
             <ul class="dropdown-menu" ng-class="namespaceDropdown_visible ? 'display-block' : 'display-none'">
                 <li>
-                    <span class="pull-right"><a class="badge" ng-class="loading ? 'disabled' : ''"
-                                                ng-click="reloadNamespaces()"><i class="fa fa-refresh"
-                                                                       ng-class="loadingNamespaces ? 'fa-spin' : ''"></i></a></span>
+                    <span class="pull-right"><i ng-class="loading ? 'disabled' : ''"
+                                                ng-click="reloadNamespaces()" class="fa fa-refresh fabutton"
+                                                                       ng-class="loadingNamespaces ? 'fa-spin' : ''"></i></span>
                 </li>
 
                 <li ng-repeat="ns in namespaces track by ns.name" ng-click="namespaceDropdown_click(ns)">

@@ -1,38 +1,44 @@
 <div class="item-body">
     <div ng-if="uri" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''"
          ng-mouseover="item_body_content_mouseover()" ng-mouseleave="item_body_content_mouseleave()">
+
         <span class="item-body-tree-handle">
             <span ng-if="loading">
-                <i class="fa fa-refresh fa-spin"></i>
+                <i class="fa fa-refresh fa-spin fabutton"></i>
             </span>
             <span ng-if="loaded && !readySubitems">
-                <i class="fa fa-circle-o"></i>
+                <i class="fa fa-circle-o fabutton"></i>
             </span>
             <span ng-if="loaded && readySubitems && !isOpen" ng-click="open()">
-                <i class="fa fa-chevron-circle-right"></i>
+                <i class="fa fa-chevron-circle-right fabutton"></i>
             </span>
             <span ng-if="loaded && readySubitems && isOpen" ng-click="close()">
-                <i class="fa fa-chevron-circle-down"></i>
+                <i class="fa fa-chevron-circle-down fabutton"></i>
             </span>
         </span>
 
         <span ng-if="!loading && body_content_hover">
-            {{body_context_menu}}
             <span ng-if="!body_context_menu" class="pull-right">
-                <a class="badge"  ng-click="reload()"><i class="fa fa-refresh"></i></a>
-                <a class="badge"  ng-click="open_context_menu()"><i class="fa fa-edit"></i></a>
+                <i ng-click="reload()" class="fa fa-refresh fabutton"></i>
+                <i ng-click="open_context_menu()" class="fa fa-edit fabutton"></i>
+                <i ng-click="toggle_flag()" class="fa fa-flag fabutton" ng-class="flagged ? 'flag-on' : 'flag-off'"></i>
             </span>
 
-            <div ng-if="body_context_menu" class="pull-right" style="position: relative; top: 0; right: 0;">
-                <div>
-                    <a class="badge pull-right"  ng-click="close_context_menu()"><i class="fa fa-close"></i></a>
-                </div>
+            <div ng-if="body_context_menu" class="pull-right item-body-context-menu" style="position: relative; top: 0; right: 0;">
+                <span class="pull-right">
+                    <i class="fa fa-close fabutton"  ng-click="close_context_menu()"></i>
+                </span>
                 <div>
                     context menu goes here
 
                 </div>
             </div>
         </span>
+
+        <span class="pull-right" ng-if="loading || !body_content_hover">
+            <i ng-click="toggle_flag()" class="fa fa-flag fabutton" ng-class="flagged ? 'flag-on' : 'hidden'"></i>
+        </span>
+
 
         <span class="item-body-content-text">
             <span ng-if="loading">

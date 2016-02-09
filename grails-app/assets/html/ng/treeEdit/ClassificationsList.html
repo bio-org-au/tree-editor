@@ -1,17 +1,17 @@
 <div class="tree-edit-classifications-pane tree-edit-control-pane container-fluid">
     <row>
         <span class="col-sm-12">
-            <span class="pull-right"><a class="badge" ng-class="loading ? 'disabled' : ''"
-                                        ng-click="reload()"><i class="fa fa-refresh"
-                                                               ng-class="loading ? 'fa-spin' : ''"></i></a></span>
+            <span class="pull-right"><i ng-class="loading ? 'disabled' : ''"
+                                        ng-click="reload()" class="fa fa-refresh fabutton"
+                                                               ng-class="loading ? 'fa-spin' : ''"></i></span>
             <h4>Classifications</h4>
         </span>
     </row>
     <div ng-if="loaded" ng-repeat="i in classifications track by $index" class="container-fluid">
         <row>
         <span class="pull-right">
-            <a class="badge" ng-click="loadLeft(i)"><i class="fa fa-arrow-circle-left"></i></a>
-            <a class="badge" ng-click="loadRight(i)"><i class="fa fa-arrow-circle-right"></i></a>
+            <i ng-click="loadLeft(i)" class="fa fa-arrow-circle-left fabutton"></i>
+            <i ng-click="loadRight(i)"class="fa fa-arrow-circle-right fabutton"></i>
         </span>
         <span class="col-sm-11">
             <item uri="{{i}}"/>
