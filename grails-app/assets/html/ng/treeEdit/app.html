@@ -53,17 +53,19 @@
         </div>
         <div id="tree-edit-app-rightpanel">
             <div style="position: absolute; left: 0; right: 0; top: 0; height: 30px; padding: 2px;">
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='cls' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='cls' ? 'active' : ''"
                    ng-click="rightpanel_select='cls'">Classifications</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='wrk' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='wrk' ? 'active' : ''"
                    ng-click="rightpanel_select='wrk'">Workspaces</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='sch' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='flagged' ? 'active' : ''"
+                   ng-click="rightpanel_select='flagged'">Flagged</a>
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='sch' ? 'active' : ''"
                    ng-click="rightpanel_select='sch'">Search</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='fav' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='fav' ? 'active' : ''"
                    ng-click="rightpanel_select='fav'">Favourites</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='prf' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='prf' ? 'active' : ''"
                    ng-click="rightpanel_select='prf'">Profile</a>
-                <a class="btn btn-default btn-sm" ng-class="rightpanel_select=='val' ? 'active' : ''"
+                <a class="btn btn-default btn-xs" ng-class="rightpanel_select=='val' ? 'active' : ''"
                    ng-click="rightpanel_select='val'">Validation</a>
             </div>
             <div style="position: absolute; left: 0; right: 0; top: 35px; bottom: 0; margin: 2px;">
@@ -78,6 +80,10 @@
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
                      ng-class="rightpanel_select=='fav' ? '' : 'hidden'">
                     Favourites
+                </div>
+                <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow-x: hidden; overflow-y: scroll;"
+                     ng-class="rightpanel_select=='flagged' ? '' : 'hidden'">
+                    <div flagged-items/>
                 </div>
                 <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;"
                      class="container-fluid"

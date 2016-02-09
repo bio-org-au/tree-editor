@@ -136,7 +136,32 @@ var TreeEditAppController = function ($scope, $http, $element) {
         });
     };
 
-    $scope.appScope.$watch('namespace', function() { $scope.leftUri = null; $scope.rightUri = null;} );
+    $scope.flagged = {};
+
+    $scope.toggleFlagged = function(uri) {
+        if($scope.flagged[uri])
+            $scope.flagged[uri] = false;
+        else
+            $scope.flagged[uri] = true;
+    };
+
+    $scope.removeUnflagged = function() {
+        var x = [];
+        for(var uri in $scope.flagged) {
+            if(!$scope.flagged[uri]) {
+                x.push(uri);
+            }
+        }
+        for(var i in x) {
+            delete $scope.flagged[x[i]]
+        }
+    };
+
+    $scope.appScope.$watch('namespace', function() {
+        $scope.leftUri = null;
+        $scope.rightUri = null;
+        $scope.flagged = {};
+    } );
 
     $scope.reloadNamespaces();
 };
@@ -617,14 +642,19 @@ var ItemBodyController = function ($scope, $http, $element) {
     };
 
     $scope.toggle_flag = function() {
-      // todo: make this function talk to the tree scope, somehow
+        $scope.appScope.toggleFlagged($scope.uri);
         $scope.flagged = !$scope.flagged;
     };
 
     $scope.body_content_hover = false;
     $scope.body_context_menu = false;
-    $scope.flagged = false;
 
+    $scope.updateFlag = function() {
+        $scope.flagged = $scope.appScope.flagged[$scope.uri] ? true : false;
+    };
+
+    $scope.updateFlag();
+    $scope.appScope.$watch('flagged["'+$scope.uri+'"]', $scope.updateFlag);
 };
 
 ItemBodyController.$inject = ['$scope', '$http', '$element'];
@@ -656,6 +686,26 @@ app.directive('itembody', itemBodyDirective);
 
 ////////////////////////////////////////////////////////////
 
+var FlaggedItemsController = function ($scope) {
+};
+
+FlaggedItemsController.$inject = ['$scope'];
+
+app.controller('FlaggedItemsController', FlaggedItemsController);
+
+
+function flaggedItemsDirective() {
+    return {
+        templateUrl: "/tree-editor/assets/ng/treeEdit/flaggedPane.html",
+        controller: FlaggedItemsController,
+    };
+}
+
+app.directive('flaggedItems', flaggedItemsDirective);
+
+
+////////////////////////////////////////////////////////////
+
 var MessagesController = function ($scope) {
     $scope.appScope = $scope.$parent.appScope;
     $scope.itemScope = $scope.$parent.itemScope;
@@ -666,21 +716,11 @@ MessagesController.$inject = ['$scope'];
 app.controller('MessagesController', MessagesController);
 
 
-function messagesDirective(RecursionHelper) {
+function messagesDirective() {
     return {
         templateUrl: "/tree-editor/assets/ng/treeEdit/messages.html",
         controller: MessagesController,
-        compile: function(element) {
-            return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
-                // Define your normal link function here.
-                // Alternative: instead of passing a function,
-                // you can also pass an object with
-                // a 'pre'- and 'post'-link function.
-            });
-        },
     };
 }
 
 app.directive('messages', messagesDirective);
-
-
