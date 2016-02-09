@@ -21,6 +21,15 @@
                             <span class="col-sm-2"><a href="{{uri}}">{{data.label}}</a></span>
                             <span class="col-sm-9">{{data.description}}</span>
                         </row>
+                        <div ng-switch-when="U">
+                            <row>
+                                <span class="col-sm-10"><a href="{{uri}}">{{data.title}}</a></span>
+                                <span class="col-sm-2">{{data.owner}}</span>
+                            </row>
+                            <row ng-if="data.description">
+                                <span class="col-sm-12">{{data.description}}</span>
+                            </row>
+                        </div>
                         <row ng-switch-default>
                             {{data.arrangementType.name}} arrangement<br/>
                             <a href="{{uri}}">{{uri}}</a><br/>

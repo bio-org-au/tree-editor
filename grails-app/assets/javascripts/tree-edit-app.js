@@ -389,6 +389,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
 
     $scope.editWorkspace = function(wsUri){
         console.log('editWorkspace');
+        $scope.msg = [];
         $scope.editForm = { uri: wsUri, loaded: false, owner: null, title: null, description: null};
         $scope.pane = "edit";
 
@@ -413,6 +414,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.editNewWorkspace = function(){
+        $scope.msg = [];
         $scope.editForm = { uri: null, owner: $scope.appScope.getUser(), title: null, description: null};
         $scope.editForm.loaded = true;
         $scope.pane = "edit";
@@ -596,6 +598,26 @@ var ItemBodyController = function ($scope, $http, $element) {
     $scope.isSelected = function() {
         return $scope.itemScope.selectedUri == $scope.uri;
     };
+
+    $scope.item_body_content_mouseover = function() {
+        $scope.body_content_hover = true;
+    };
+
+    $scope.item_body_content_mouseleave = function() {
+        $scope.body_content_hover = false;
+        $scope.body_context_menu = false;
+    };
+
+    $scope.open_context_menu = function() {
+        $scope.body_context_menu = true;
+    };
+
+    $scope.close_context_menu = function() {
+        $scope.body_context_menu = false;
+    };
+
+    $scope.body_content_hover = false;
+    $scope.body_context_menu = false;
 };
 
 ItemBodyController.$inject = ['$scope', '$http', '$element'];

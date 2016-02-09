@@ -1,5 +1,6 @@
 <div class="item-body">
-    <div ng-if="uri" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''">
+    <div ng-if="uri" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''"
+         ng-mouseover="item_body_content_mouseover()" ng-mouseleave="item_body_content_mouseleave()">
         <span class="item-body-tree-handle">
             <span ng-if="loading">
                 <i class="fa fa-refresh fa-spin"></i>
@@ -15,10 +16,22 @@
             </span>
         </span>
 
-        <span ng-if="!loading" class="pull-right">
-            <a class="badge" ng-class="loading ? 'disabled' : ''"
-               ng-click="reload()"><i class="fa fa-refresh"
-                                      ng-class="loading ? 'fa-spin' : ''"></i></a>
+        <span ng-if="!loading && body_content_hover">
+            {{body_context_menu}}
+            <span ng-if="!body_context_menu" class="pull-right">
+                <a class="badge"  ng-click="reload()"><i class="fa fa-refresh"></i></a>
+                <a class="badge"  ng-click="open_context_menu()"><i class="fa fa-edit"></i></a>
+            </span>
+
+            <div ng-if="body_context_menu" class="pull-right" style="position: relative; top: 0; right: 0;">
+                <div>
+                    <a class="badge pull-right"  ng-click="close_context_menu()"><i class="fa fa-close"></i></a>
+                </div>
+                <div>
+                    context menu goes here
+
+                </div>
+            </div>
         </span>
 
         <span class="item-body-content-text">
@@ -45,7 +58,7 @@
                                 <span class="small" ng-if="data.description" >: {{data.description}}</span>
                             </span>
                             <span ng-switch-when="U">
-                                Workspace
+                                Workspace: {{data.title}} ({{data.owner}})
                             </span>
                             <span ng-switch-default>
                                 Arrangement type {{data.arrangementType.name}}
@@ -57,9 +70,6 @@
                             <span ng-switch-when="T">
                                 <span ng-switch="data.typeUri.uri">
                                     <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">
-                                        {{data.checkedInAt.timeStamp}}
-                                    </span>
-                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">
                                         {{data.checkedInAt.timeStamp}}
                                     </span>
                                     <span ng-switch-default>
@@ -75,6 +85,12 @@
                                 <span ng-switch="data.typeUri.uri">
                                     <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-node">
                                         {{data.arrangement.label}} persistent top node
+                                    </span>
+                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-node">
+                                        Workspace persistent top node
+                                    </span>
+                                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">
+                                        {{data.checkedInAt.timeStamp}}
                                     </span>
                                     <span ng-switch-default>
                                         {{data.typeUri.idPart}}
