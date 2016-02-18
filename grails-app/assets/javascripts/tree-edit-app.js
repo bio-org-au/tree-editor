@@ -485,16 +485,6 @@ var ItemController = function ($scope, $http, $element) {
     // readySubitems and subitems is a list of uris.
     // the subitems are not loaded from readySubitems into subitems until the first 'open' event.
 
-    // so there are four states
-    // 1) !readySubitems
-    // 2) readySubitems && !subitems
-    // 3) readySubitems && subitems && !open
-    // 4) readySubitems && subitems && open
-
-    $scope.readySubitems = null;
-    $scope.subitems = null;
-    $scope.open = false;
-
     $scope.reload = function() {
         if($scope.uri) {
             $scope.loading = true;
@@ -505,8 +495,9 @@ var ItemController = function ($scope, $http, $element) {
             $scope.subitems = null;
             $scope.isOpen = false;
 
-            // dataextract is the processed, digested data. What gets put into it depends on the data type
-            $scope.dataExtract = null;
+            if($scope.preReload) {
+                $scope.preReload();
+            }
 
             $http({
                 method: 'GET',
@@ -518,31 +509,19 @@ var ItemController = function ($scope, $http, $element) {
                 $scope.data = response.data;
                 $scope.appScope.postdigestNotify();
 
-                if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
-                    $scope.readySubitems = [ { contextType: 'arrangement', uri: getPreferredLink($scope.data.node) } ];
+                if($scope.postReload) {
+                    $scope.postReload();
                 }
-
-                if($scope.data.class == 'au.org.biodiversity.nsl.Node') {
-                    $scope.readySubitems = [];
-                    for(var link in $scope.data.subnodes) {
-                        $scope.readySubitems.push( {contextType: 'subnode', contextId: link, uri: getPreferredLink($scope.data.subnodes[link].subNode)} );
-                    }
-                    if($scope.readySubitems.length == 0) {
-                        $scope.readySubitems = null;
-                    }
-
-                    $scope.dataExtract = {
-                        nameUri: $scope.data.name ? getPreferredLink($scope.data.name.name) : null,
-                        instanceUri: $scope.data.instance ? getPreferredLink($scope.data.instance.instance) : null,
-                    };
-
-                }
-
             }, function errorCallback(response) {
                 $scope.loading = false;
                 $scope.loaded = false;
                 $scope.response = response;
                 $scope.appScope.postdigestNotify();
+
+                if($scope.postReload) {
+                    $scope.postReload();
+                }
+
             });
         }
         else {
@@ -551,14 +530,6 @@ var ItemController = function ($scope, $http, $element) {
             $scope.data = null;
             $scope.response = null;
         }
-    };
-
-    $scope.open = function() {
-        $scope.subitems = $scope.readySubitems;
-        $scope.isOpen = true;
-    };
-    $scope.close = function() {
-        $scope.isOpen = false;
     };
 
     $scope.$watch('uri', $scope.reload);
@@ -655,6 +626,53 @@ var ItemBodyController = function ($scope, $http, $element) {
 
     $scope.updateFlag();
     $scope.appScope.$watch('flagged["'+$scope.uri+'"]', $scope.updateFlag);
+
+    $scope.readySubitems = null;
+    $scope.subitems = null;
+    $scope.isOpen = false;
+
+    $scope.open = function() {
+        $scope.subitems = $scope.readySubitems;
+        $scope.isOpen = true;
+    };
+
+    $scope.close = function() {
+        $scope.isOpen = false;
+    };
+
+    $scope.preReload = function() {
+        console.log("pre reload");
+        // so there are four states
+        // 1) !readySubitems
+        // 2) readySubitems && !subitems
+        // 3) readySubitems && subitems && !open
+        // 4) readySubitems && subitems && open
+
+        $scope.readySubitems = null;
+        $scope.subitems = null;
+        $scope.isOpen = false;
+
+    };
+
+    $scope.postReload = function() {
+        console.log("post reload");
+
+        if(!$scope.data) return;
+
+        if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
+            $scope.readySubitems = [ { contextType: 'arrangement', uri: getPreferredLink($scope.data.node) } ];
+        }
+
+        if($scope.data.class == 'au.org.biodiversity.nsl.Node') {
+            $scope.readySubitems = [];
+            for(var link in $scope.data.subnodes) {
+                $scope.readySubitems.push( {contextType: 'subnode', contextId: link, uri: getPreferredLink($scope.data.subnodes[link].subNode)} );
+            }
+            if($scope.readySubitems.length == 0) {
+                $scope.readySubitems = null;
+            }
+        }
+    };
 };
 
 ItemBodyController.$inject = ['$scope', '$http', '$element'];
