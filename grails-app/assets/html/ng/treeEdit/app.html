@@ -37,17 +37,16 @@
             <div id="tree-edit-app-working-header" style="display: table; width: 100%; ">
                 <div style="display: table-row; ">
                     <div id="tree-edit-app-working-left-header"
-                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.leftUri}}"></div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.leftHeaderUri}}" panelabel="left"></div>
                     <div id="tree-edit-app-working-right-header"
-                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.rightUri}}"></div>
+                         style="display: table-cell; width: 50%;" itemheader uri="{{appScope.rightHeaderUri}}" panelabel="right"></div>
                 </div>
             </div>
             <div id="tree-edit-app-working-body"
                  style="position: absolute; left:0; right: 0; bottom: 0; height:0; display:none;">
-                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.leftUri}}">
-
+                <div id="tree-edit-app-working-body-left"  style="height: 100%; width: 50%; display:inline-block; float:left; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.leftBodyUri}}">
                 </div>
-                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.rightUri}}">
+                <div id="tree-edit-app-working-body-right" style="height: 100%; width: 50%; display:inline-block; float:right; overflow-y: auto; overflow-x: wrap;" itembody uri="{{appScope.rightBodyUri}}">
                 </div>
             </div>
         </div>

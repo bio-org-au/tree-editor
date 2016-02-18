@@ -1,8 +1,8 @@
 <div class="item-body">
-    <div ng-if="uri" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''"
+    <div ng-if="uri && !hideItem" class="item-body-content" ng-click="selectItem()" ng-class="isSelected() ? 'item-body-content-selected' : ''"
          ng-mouseover="item_body_content_mouseover()" ng-mouseleave="item_body_content_mouseleave()">
 
-        <span class="item-body-tree-handle">
+        <span ng-if="!hideHandle" class="item-body-tree-handle">
             <span ng-if="loading">
                 <i class="fa fa-refresh fa-spin fabutton"></i>
             </span>
@@ -120,7 +120,7 @@
             </span>
         </span>
     </div>
-    <div ng-if="loaded && subitems" class="item-body-sublist" ng-class="isOpen ? 'item-body-sublist-open' : 'item-body-sublist-closed'">
+    <div ng-if="loaded && subitems" class="item-body-sublist" ng-class="(isOpen ? 'item-body-sublist-open' : 'item-body-sublist-closed') + (hideIndent ? ' no-indent' : '')">
         <div ng-repeat="i in subitems" itembody uri="{{i.uri}}" context-type="{{i.contextType}}" context-id="{{i.contextId}}"/>
     </div>
 </div>

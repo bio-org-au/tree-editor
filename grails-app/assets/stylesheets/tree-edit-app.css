@@ -94,6 +94,10 @@
     margin-left: 1em;
 }
 
+.item-body-sublist.no-indent {
+    margin-left: 0em;
+}
+
 .item-body-sublist-open {
     display: block;
 }

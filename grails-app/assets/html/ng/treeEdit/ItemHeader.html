@@ -1,7 +1,5 @@
-<div ng-if="itemScope.uri">
-    <div class="container-fluid">
-        <row><div class="col-sm-12">Uri is {{uri}}</div></row>
-        <item uri="{{itemScope.uri}}"/>
-        <row><div class="col-sm-12">here is some more stuff about the item you have selected.</div></row>
+<div ng-if="itemScope.uri" class="container-fluid">
+    <item uri="{{itemScope.uri}}"/>
+    <div style="height: 1em; background-color: skyblue;" ng-click="selectHistory()">&nbsp;</div>
     </div>
 </div>

@@ -24,8 +24,27 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.footer = "this is a footer";
     $scope.rightpanel_select = "cls";
 
-    $scope.leftUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/1019";
-    $scope.rightUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
+    $scope.leftHeaderUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/1019";
+    $scope.rightHeaderUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
+    $scope.leftBodyUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/1019";
+    $scope.rightBodyUri = null; // "http://localhost:7070/nsl-mapper/boa/tree/apni/3029293";
+
+    // TODO: we should load the header uri and ask the header to point the tree at the current root.
+
+    $scope.loadLeft = function(uri) {
+        $scope.appScope.leftHeaderUri = uri;
+        $scope.appScope.leftBodyUri = uri;
+    };
+
+    $scope.loadRight = function(uri) {
+        $scope.appScope.rightHeaderUri = uri;
+        $scope.appScope.rightBodyUri = uri;
+    };
+
+    $scope.$on('headerRootSelection', function(event, pane, uri) {
+        console.log("I have recieved a headerRootSelection on " + pane + ", uri: " + uri);
+    });
+
 
     $scope.appScope = $scope;
 
@@ -33,9 +52,11 @@ var TreeEditAppController = function ($scope, $http, $element) {
         $scope.$root.$$postDigest(adjust_working_body_height);
     };
 
-    $scope.$watch('leftUri', $scope.postdigestNotify);
-    $scope.$watch('rightUri', $scope.postdigestNotify);
+    $scope.$watch('leftHeaderUri', $scope.postdigestNotify);
+    $scope.$watch('rightHeaderUri', $scope.postdigestNotify);
     $scope.postdigestNotify();
+
+    // LOGION/LOGOUT GEAR
 
     $scope.user = {};
 
@@ -158,8 +179,10 @@ var TreeEditAppController = function ($scope, $http, $element) {
     };
 
     $scope.appScope.$watch('namespace', function() {
-        $scope.leftUri = null;
-        $scope.rightUri = null;
+        $scope.leftHeaderUri = null;
+        $scope.rightHeaderUri = null;
+        $scope.leftBodyUri = null;
+        $scope.rightBodyUri = null;
         $scope.flagged = {};
     } );
 
@@ -222,11 +245,11 @@ var ClassificationsListController = function ($scope, $http, $element) {
     };
 
     $scope.loadLeft = function(uri) {
-        $scope.appScope.leftUri = uri;
+        $scope.appScope.loadLeft(uri);
     };
 
     $scope.loadRight = function(uri) {
-        $scope.appScope.rightUri = uri;
+        $scope.appScope.loadRight(uri);
     };
 
     $scope.appScope.$watch('namespace', $scope.reload);
@@ -299,11 +322,11 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
     };
 
     $scope.loadLeft = function(uri) {
-        $scope.appScope.leftUri = uri;
+        $scope.appScope.loadLeft(uri);
     };
 
     $scope.loadRight = function(uri) {
-        $scope.appScope.rightUri = uri;
+        $scope.appScope.loadRight(uri);
     };
 
     $scope.createWorkspace = function() {
@@ -559,6 +582,14 @@ var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
     $scope.itemScope = $scope;
 
     $rootScope.$$postDigest(function(){adjust_working_body_height()});
+
+    // fetch the history array from the services.
+
+
+    $scope.selectHistory = function() {
+      $scope.$emit('headerRootSelection', $scope.panelabel, 'some uri');
+    };
+
 };
 
 ItemHeaderController.$inject = ['$scope', '$http', '$element', '$rootScope'];
@@ -570,6 +601,7 @@ function itemHeaderDirective() {
         templateUrl: "/tree-editor/assets/ng/treeEdit/ItemHeader.html",
         scope: {
             uri: '@uri',
+            panelabel: '@panelabel',
         },
         controller: ItemHeaderController
     };
@@ -627,6 +659,9 @@ var ItemBodyController = function ($scope, $http, $element) {
     $scope.updateFlag();
     $scope.appScope.$watch('flagged["'+$scope.uri+'"]', $scope.updateFlag);
 
+    $scope.hideItem = false;
+    $scope.hideHandle = false;
+    $scope.hideIndent = false;
     $scope.readySubitems = null;
     $scope.subitems = null;
     $scope.isOpen = false;
@@ -641,7 +676,6 @@ var ItemBodyController = function ($scope, $http, $element) {
     };
 
     $scope.preReload = function() {
-        console.log("pre reload");
         // so there are four states
         // 1) !readySubitems
         // 2) readySubitems && !subitems
@@ -655,12 +689,15 @@ var ItemBodyController = function ($scope, $http, $element) {
     };
 
     $scope.postReload = function() {
-        console.log("post reload");
-
         if(!$scope.data) return;
 
         if($scope.data.class == 'au.org.biodiversity.nsl.Arrangement') {
             $scope.readySubitems = [ { contextType: 'arrangement', uri: getPreferredLink($scope.data.node) } ];
+
+            $scope.hideItem = true;
+            $scope.hideHandle = true;
+            $scope.hideIndent = true;
+            $scope.open();
         }
 
         if($scope.data.class == 'au.org.biodiversity.nsl.Node') {
@@ -671,6 +708,25 @@ var ItemBodyController = function ($scope, $http, $element) {
             if($scope.readySubitems.length == 0) {
                 $scope.readySubitems = null;
             }
+
+            if($scope.data.typeUri.uri == "http://biodiversity.org.au/voc/boatree/BOATREE#classification-node"
+                || $scope.data.typeUri.uri == "http://biodiversity.org.au/voc/boatree/BOATREE#workspace-node"
+            ) {
+                $scope.hideItem = true;
+                $scope.hideHandle = true;
+                $scope.hideIndent = true;
+                $scope.open();
+            }
+
+            if($scope.data.typeUri.uri == "http://biodiversity.org.au/voc/boatree/BOATREE#classification-root"
+                || $scope.data.typeUri.uri == "http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root"
+            ) {
+                $scope.hideItem = false;
+                $scope.hideHandle = true;
+                $scope.hideIndent = true;
+                $scope.open();
+            }
+
         }
     };
 };
