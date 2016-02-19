@@ -63,7 +63,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.login = function() {
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/auth/signInJson',
+            url: $scope.appScope.servicesUrl + '/auth/signInJson',
             params: { username: $scope.user.name, password: $scope.user.password}
         }).then(function successCallback(response) {
             $scope.appScope.user.loginResult = response.data;
@@ -75,7 +75,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.logout = function() {
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/auth/signOutJson',
+            url: $scope.appScope.servicesUrl + '/auth/signOutJson',
         }).then(function successCallback(response) {
             $scope.appScope.user.loginResult = response.data;
         }, function errorCallback(response) {
@@ -130,7 +130,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
 
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/TreeJsonView/listNamespaces'
+            url: $scope.appScope.servicesUrl + '/TreeJsonView/listNamespaces'
         }).then(function successCallback(response) {
             $scope.loadingNamespaces = false;
             $scope.namespaces = response.data;
@@ -227,7 +227,7 @@ var ClassificationsListController = function ($scope, $http, $element) {
 
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/TreeJsonView/listClassifications',
+            url: $scope.appScope.servicesUrl + '/TreeJsonView/listClassifications',
             params: {
                 namespace: $scope.appScope.namespace
             }
@@ -265,8 +265,6 @@ function ClassificationsListDirective() {
     return {
         templateUrl: "/tree-editor/assets/ng/treeEdit/ClassificationsList.html",
         scope: {
-            servicesUrl: '@',
-            appScope: '&appScope',
         },
         controller: ClassificationsListController
     };
@@ -301,7 +299,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
 
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/TreeJsonView/listWorkspaces',
+            url: $scope.appScope.servicesUrl + '/TreeJsonView/listWorkspaces',
             params: {
                 namespace: $scope.appScope.namespace
             }
@@ -333,7 +331,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
         $scope.msg = [];
         $http({
             method: 'POST',
-            url: $scope.servicesUrl + '/TreeJsonEdit/createWorkspace',
+            url: $scope.appScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $scope.appScope.getJwt()
@@ -369,7 +367,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
         $scope.msg = [];
         $http({
             method: 'POST',
-            url: $scope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
+            url: $scope.appScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $scope.appScope.getJwt()
@@ -405,7 +403,7 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
         $scope.msg = [];
         $http({
             method: 'POST',
-            url: $scope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
+            url: $scope.appScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $scope.appScope.getJwt()
@@ -486,8 +484,6 @@ function WorkspacesPaneDirective() {
     return {
         templateUrl: "/tree-editor/assets/ng/treeEdit/appWorkspacePane.html",
         scope: {
-            servicesUrl: '@',
-            appScope: '&appScope',
         },
         controller: WorkspacesPaneController
     };
@@ -586,9 +582,103 @@ var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
     // fetch the history array from the services.
 
 
-    $scope.selectHistory = function() {
-      $scope.$emit('headerRootSelection', $scope.panelabel, 'some uri');
+    $scope.selectHistory = function(uri) {
+        console.log('selectHistory');
+        console.log(uri);
+      $scope.$emit('headerRootSelection', $scope.panelabel, uri);
     };
+
+
+    $scope.dataHistory = null;
+    $scope.historyWindow = null;
+
+    $scope.reloadHistory = function() {
+        if($scope.uri) {
+            $scope.loadingHistory = true;
+            $scope.loadedHistory = false;
+            $scope.dataHistory = null;
+            $scope.historyWindow = null;
+            $scope.historyWindowIndex = null;
+            $scope.historyMoreRecent = false;
+            $scope.historyLessRecent = false;
+            $scope.responseHistory = null;
+
+            if($scope.preReload) {
+                $scope.preReload();
+            }
+
+            console.log('fetching history for ' + $scope.uri);
+            console.log('uri ' + $scope.uri);
+
+            $http({
+                method: 'GET',
+                url: $scope.appScope.servicesUrl + '/TreeJsonView/getTreeHistory',
+                params: {
+                    uri: $scope.uri
+                }
+            }).then(function successCallback(response) {
+                console.log('got history ok');
+                console.log(response);
+                $scope.loadingHistory = false;
+                $scope.loadedHistory = true;
+                $scope.dataHistory = response.data;
+                $scope.appScope.postdigestNotify();
+
+                $scope.setHistoryWindowIndex(0);
+
+                if($scope.postReload) {
+                    $scope.postReload();
+                }
+            }, function errorCallback(response) {
+                console.log('failed to get history');
+                console.log(response);
+                $scope.loadingHistory = false;
+                $scope.loadedHistory = false;
+                $scope.responseHistory = response;
+                $scope.appScope.postdigestNotify();
+
+                if($scope.postReload) {
+                    $scope.postReload();
+                }
+
+            });
+        }
+        else {
+            $scope.loadingHistory = false;
+            $scope.loadedHistory = true;
+            $scope.dataHistory = null;
+        }
+    };
+
+    $scope.setHistoryWindowIndex = function(n) {
+        if($scope.dataHistory) {
+            $scope.historyWindowIndex = n;
+            if(n+5 > $scope.dataHistory.length) {
+                n = $scope.dataHistory.length - 5;
+            }
+            if(n < 0) {
+                n = 0;
+            }
+            $scope.historyWindowIndex = n;
+            $scope.historyWindow = $scope.dataHistory.slice(n, n+5);
+            $scope.historyMoreRecent = n > 0;
+            $scope.historyLessRecent = n < $scope.dataHistory.length - 5;
+
+        }
+        else {
+            $scope.historyWindow = null;
+            $scope.historyWindowIndex = null;
+            $scope.historyMoreRecent = false;
+            $scope.historyLessRecent = false;
+        }
+    };
+
+    $scope.historyMoreRecentClick = function() { $scope.setHistoryWindowIndex($scope.historyWindowIndex-5); }
+    $scope.historyLessRecentClick = function() { $scope.setHistoryWindowIndex($scope.historyWindowIndex+5); }
+
+    $scope.$watch('uri', $scope.reloadHistory);
+
+    $scope.reloadHistory();
 
 };
 

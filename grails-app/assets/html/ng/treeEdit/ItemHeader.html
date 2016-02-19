@@ -1,5 +1,13 @@
 <div ng-if="itemScope.uri" class="container-fluid">
     <item uri="{{itemScope.uri}}"/>
-    <div style="height: 1em; background-color: skyblue;" ng-click="selectHistory()">&nbsp;</div>
+    <div ng-if="loadedHistory" style="font-size: smaller;">
+        <i class="fa fa-chevron-left fabutton"  ng-if="historyMoreRecent" ng-click="historyMoreRecentClick()"></i>
+        <span class="fabutton" ng-repeat="h in historyWindow track by $index" ng-click="selectHistory(h.uri)">
+            {{h.date}}
+        </span>
+        <i class="fa fa-chevron-right fabutton" ng-if="historyLessRecent" ng-click="historyLessRecentClick()"></i>
+    </div>
+    <div ng-if="loadingHistory">
+        <i class="fa fa-refresh fabutton fa-spin"></i>
     </div>
 </div>
