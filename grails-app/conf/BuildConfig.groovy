@@ -75,6 +75,7 @@ grails.project.dependency.resolution = {
 
 
         compile "org.grails.plugins:twitter-bootstrap:3.3.4"
+        runtime "org.grails.plugins:font-awesome-resources:4.3.0.2"
 
     }
 }

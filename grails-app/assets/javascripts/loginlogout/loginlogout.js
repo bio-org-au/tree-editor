@@ -1,6 +1,3 @@
-//= require angular
-//= require app
-
 var LoginlogoutController = function ($scope, $rootScope, $http) {
     $scope.login = function() {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
@@ -33,7 +30,7 @@ var LoginlogoutController = function ($scope, $rootScope, $http) {
     $scope.isLoggedIn = $rootScope.isLoggedIn;
     $scope.getUser = $rootScope.getUser;
     $scope.getJwt = $rootScope.getJwt;
-    
+
     $scope.form = {name: $scope.isLoggedIn() ? $scope.getUser() : '', password: ''};
 };
 
@@ -41,8 +38,8 @@ LoginlogoutController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Loginlogout', LoginlogoutController);
 
-
 function loginlogoutDirective() {
+    console.log("we have a loginlogout directive");
     return {
         templateUrl: "/tree-editor/assets/ng/loginlogout/loginlogout.html",
         controller: LoginlogoutController,
@@ -53,3 +50,5 @@ function loginlogoutDirective() {
 }
 
 app.directive('loginlogout', loginlogoutDirective);
+
+console.log("loginlogout is set up");

@@ -1,9 +1,8 @@
 <span ng-if="isLoggedIn()" class="text-info">
-Logged in as <strong>{{getUser()}}</strong> <small class="text-muted">{{getJwt()}}<small>
-<a class="btn btn-default btn-sm" ng-click="logout()">Logout</a>
+Logged in as <strong>{{getUser()}}</strong>
+<a class="btn btn-default btn-sm" ng-click="logout()"><i class="fa fa-user-times"></i></a>
 </span>
 <span ng-if="!isLoggedIn()">
-<input ng-model="form.name"/>
-<input ng-model="form.password"/>
-<a class="btn btn-primary btn-sm" ng-click="login()">Login</a>
+Login: <input ng-model="form.name"/> <input ng-model="form.password"/>
+<a class="btn btn-primary btn-sm" ng-click="login()"><i class="fa fa-user-plus"></i></a>
 </span>

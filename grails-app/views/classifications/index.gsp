@@ -9,9 +9,13 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
+    <asset:javascript src="classifications/classifications.js"/>
 </head>
 
 <body>
     <h1>Classifications</h1>
+    <div classificationslist>
+
+    </div>
 </body>
 </html>

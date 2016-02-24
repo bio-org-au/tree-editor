@@ -5,6 +5,7 @@
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
 var AppbodyController = function ($rootScope, $element) {
+    // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
 
     $rootScope.isLoggedIn = function() {
@@ -18,7 +19,6 @@ var AppbodyController = function ($rootScope, $element) {
     $rootScope.getJwt = function() {
         return localStorage.getItem('nsl-tree-editor.loginlogout.jwt');
     };
-
 };
 
 AppbodyController.$inject = ['$rootScope', '$element'];
