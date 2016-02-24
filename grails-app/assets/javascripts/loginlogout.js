@@ -1,14 +1,14 @@
 //= require angular
 //= require app
 
-var LoginlogoutController = function ($scope, $http) {
+var LoginlogoutController = function ($scope, $rootScope, $http) {
     $scope.login = function() {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
         localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
         localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/auth/signInJson',
+            url: $rootScope.servicesUrl + '/auth/signInJson',
             params: { username: $scope.form.name, password: $scope.form.password}
         }).then(function successCallback(response) {
             localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'Y');
@@ -24,28 +24,20 @@ var LoginlogoutController = function ($scope, $http) {
         localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
         $http({
             method: 'GET',
-            url: $scope.servicesUrl + '/auth/signOutJson',
+            url: $rootScope.servicesUrl + '/auth/signOutJson',
         }).then(function successCallback(response) {
         }, function errorCallback(response) {
         });
     };
 
-    $scope.isLoggedIn = function() {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn')=='Y';
-    };
-
-    $scope.getUser = function() {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.principal');
-    };
-
-    $scope.getJwt = function() {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.jwt');
-    };
-
+    $scope.isLoggedIn = $rootScope.isLoggedIn;
+    $scope.getUser = $rootScope.getUser;
+    $scope.getJwt = $rootScope.getJwt;
+    
     $scope.form = {name: $scope.isLoggedIn() ? $scope.getUser() : '', password: ''};
 };
 
-LoginlogoutController.$inject = ['$scope', '$http'];
+LoginlogoutController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Loginlogout', LoginlogoutController);
 

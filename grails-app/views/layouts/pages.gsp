@@ -29,11 +29,11 @@
     <g:layoutHead/>
 </head>
 
-<body ng-app="au.org.biodiversity.nsl.tree-edit-app">
+<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="http://localhost:8080/services" ng-controller="appbody" >
 
 <div class="container-fluid">
     <ul class="nav nav-pills">
-        <span class="pull-right" loginlogout data-services-url="http://localhost:8080/services"></span>
+        <span class="pull-right" loginlogout></span>
 
 
         <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>

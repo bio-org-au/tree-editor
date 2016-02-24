@@ -1,5 +1,5 @@
-<span ng-if="isLoggedIn()">
-Logged in as {{getUser()}}. JWT is {{getJwt()}}.
+<span ng-if="isLoggedIn()" class="text-info">
+Logged in as <strong>{{getUser()}}</strong> <small class="text-muted">{{getJwt()}}<small>
 <a class="btn btn-default btn-sm" ng-click="logout()">Logout</a>
 </span>
 <span ng-if="!isLoggedIn()">
