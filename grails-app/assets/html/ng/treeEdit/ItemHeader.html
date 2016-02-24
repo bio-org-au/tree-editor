@@ -2,8 +2,11 @@
     <item uri="{{itemScope.uri}}"/>
     <div ng-if="loadedHistory" style="font-size: smaller;">
         <i class="fa fa-chevron-left fabutton"  ng-if="historyMoreRecent" ng-click="historyMoreRecentClick()"></i>
-        <span class="fabutton" ng-repeat="h in historyWindow track by $index" ng-click="selectHistory(h.uri)">
-            {{h.date}}
+        <span ng-repeat="h in historyWindow track by $index" >
+            <span class="fabutton" ng-click="selectHistory(h.uri)"
+                  ng-class="h.uri == selected ? 'bg-primary' : ''">
+                {{h.date}}
+            </span>
         </span>
         <i class="fa fa-chevron-right fabutton" ng-if="historyLessRecent" ng-click="historyLessRecentClick()"></i>
     </div>

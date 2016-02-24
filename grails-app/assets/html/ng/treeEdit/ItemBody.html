@@ -81,7 +81,7 @@
                             <span ng-switch-when="T">
                                 <span ng-switch="data.typeUri.uri">
                                     <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">
-                                        {{data.checkedInAt.timeStamp}}
+                                        {{data.checkedInAt ? data.checkedInAt.timeStamp : 'CHECKOUT'}}
                                     </span>
                                     <span ng-switch-default>
                                         <span ng-bind-html="data.name.fullNameHtml"/>

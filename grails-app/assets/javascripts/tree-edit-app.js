@@ -2,8 +2,7 @@
 //= require recursionhelper
 //= require angular-sanitize
 //= require get-preferred-link
-
-var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
+//= require app
 
 ////////////////////////////////////////////////////////////
 
@@ -32,17 +31,24 @@ var TreeEditAppController = function ($scope, $http, $element) {
     // TODO: we should load the header uri and ask the header to point the tree at the current root.
 
     $scope.loadLeft = function(uri) {
+        console.log("left uri is now " + uri);
         $scope.appScope.leftHeaderUri = uri;
-        $scope.appScope.leftBodyUri = uri;
+        $scope.appScope.leftBodyUri = null;
     };
 
     $scope.loadRight = function(uri) {
+        console.log("right uri is now " + uri);
         $scope.appScope.rightHeaderUri = uri;
-        $scope.appScope.rightBodyUri = uri;
+        $scope.appScope.rightBodyUri = null;
     };
 
     $scope.$on('headerRootSelection', function(event, pane, uri) {
-        console.log("I have recieved a headerRootSelection on " + pane + ", uri: " + uri);
+        if(pane == 'left') {
+            $scope.appScope.leftBodyUri = uri;
+        }
+        else if(pane == 'right') {
+            $scope.appScope.rightBodyUri = uri;
+        }
     });
 
 
@@ -108,21 +114,6 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.namespaceDropdown_visible = false;
     $scope.namespaces = [];
     $scope.appScope.namespace = null;
-    /*
-        [{
-            "class": "au.org.biodiversity.nsl.Namespace",
-            "name": "AMANI",
-            "descriptionHtml": "(description of <b>AMANI<\u002fb>)"
-        }, {
-            "class": "au.org.biodiversity.nsl.Namespace",
-            "name": "ANHSIR",
-            "descriptionHtml": "(description of <b>ANHSIR<\u002fb>)"
-        }, {
-            "class": "au.org.biodiversity.nsl.Namespace",
-            "name": "APNI",
-            "descriptionHtml": "(description of <b>APNI<\u002fb>)"
-        }];
-        */
 
     $scope.reloadNamespaces = function() {
         $scope.loadingNamespaces = true;
@@ -574,6 +565,8 @@ app.directive('item', ItemDirective);
 ////////////////////////////////////////////////////////////
 
 var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
+    console.log('item header controller');
+
     $scope.appScope = $scope.$parent.appScope;
     $scope.itemScope = $scope;
 
@@ -583,16 +576,18 @@ var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
 
 
     $scope.selectHistory = function(uri) {
-        console.log('selectHistory');
-        console.log(uri);
+      $scope.selected = uri;
       $scope.$emit('headerRootSelection', $scope.panelabel, uri);
     };
 
 
     $scope.dataHistory = null;
     $scope.historyWindow = null;
+    $scope.selected = null;
 
     $scope.reloadHistory = function() {
+        console.log('reload history');
+        console.log('uri is ' + $scope.uri);
         if($scope.uri) {
             $scope.loadingHistory = true;
             $scope.loadedHistory = false;
@@ -625,6 +620,9 @@ var ItemHeaderController = function ($scope, $http, $element, $rootScope) {
                 $scope.appScope.postdigestNotify();
 
                 $scope.setHistoryWindowIndex(0);
+                if($scope.dataHistory.length > 0) {
+                    $scope.selectHistory($scope.dataHistory[0].uri);
+                }
 
                 if($scope.postReload) {
                     $scope.postReload();
