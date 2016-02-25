@@ -35,12 +35,12 @@
 <div class="container-fluid">
     <ul class="nav nav-pills" >
         <span class="pull-right" loginlogout></span>
-
-
+        <li role="presentation" namespacesdropdown></li>
         <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>
         <li role="presentation"><a href="${createLink(controller: 'Classifications', action: 'index')}">Classifications</a></li>
         <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
     </ul>
+
     <g:layoutBody/>
 </div>
 </body>
