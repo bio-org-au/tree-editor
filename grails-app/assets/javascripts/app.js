@@ -7,6 +7,8 @@ var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendi
 var AppbodyController = function ($rootScope, $element) {
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
+    $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
+
 
     $rootScope.isLoggedIn = function() {
         return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn')=='Y';

@@ -9,13 +9,15 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="workspaces/workspaces.js"/>
+    <asset:javascript src="workspaces/workspace.js"/>
 </head>
 
 <body>
-    <h1>Workspaces</h1>
-    <div workspaceslist>
-    </div>
-    <a class="pull-right" href="edit">New Workspace</a>
+<h1>${!params['uri'] ? 'New' : 'Edit'} Workspace</h1>
+
+<div workspaceform uri="${params['uri']}"></div>
+
+<a class="pull-right" href="index">Back</a>
+
 </body>
 </html>

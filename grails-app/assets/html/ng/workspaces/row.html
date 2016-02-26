@@ -1,0 +1,11 @@
+<td ng-if="loaded">{{data.title}}</td>
+<td ng-if="loaded">{{data.owner}}</td>
+<td ng-if="loaded" ng-bind-html="data.description"></td>
+<td ng-if="loading" colspan="3"><i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small></td>
+<td colspan="3" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
+<td>
+    <span class="pull-right">
+        <span ng-if="can_edit" ><a href="edit?uri={{uri}}">Edit</a> | </span>
+        <a href="checklist?workspace={{uri}}">Checklist</a>
+    </span>
+</td>

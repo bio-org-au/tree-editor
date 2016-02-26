@@ -1,0 +1,24 @@
+<div ng-if="loading">
+   <i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small>
+</div>
+<form ng-if="loaded">
+    <div class="form-group">
+        <label for="formTitle">Title *</label>
+        <input required="true" type="text" class="form-control" id="formTitle" ng-model="form.title" placeholder="required">
+    </div>
+    <div class="form-group">
+        <label for="formDesc">Description</label>
+        <div class="form-control" contenteditable="true" id="formDesc" style="height: 10em; overflow-y: scroll;" ng-bind-html="form.description"></div>
+    </div>
+
+    <div class="form-group" ng-if="uri">
+        <button class="btn btn-default" ng-click="clickReset()">Reset</button>
+        <button class="btn btn-primary" ng-click="clickSave()" ng-enabled="form.title">Save</button>
+        <button class="btn btn-danger" ng-click="clickDelete()">Delete</button>
+    </div>
+
+    <div class="form-group" ng-if="!uri">
+        <button class="btn btn-primary" ng-click="clickCreate()" ng-enabled="form.title">Save</button>
+    </div>
+
+</form>

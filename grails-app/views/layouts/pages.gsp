@@ -30,7 +30,7 @@
     <g:layoutHead/>
 </head>
 
-<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="http://localhost:8080/services" ng-controller="appbody" >
+<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="http://localhost:8080/services" data-pages-url="http://localhost:8081/tree-editor" ng-controller="appbody" >
 
 <div class="container-fluid">
     <ul class="nav nav-pills" >
@@ -40,6 +40,11 @@
         <li role="presentation"><a href="${createLink(controller: 'Classifications', action: 'index')}">Classifications</a></li>
         <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
     </ul>
+
+    <div ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
+        <strong>{{m.msg}}</strong>
+        {{m.body}}
+    </div>
 
     <g:layoutBody/>
 </div>

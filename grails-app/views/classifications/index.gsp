@@ -15,7 +15,6 @@
 <body>
     <h1>Classifications</h1>
     <div classificationslist>
-
     </div>
 </body>
 </html>
