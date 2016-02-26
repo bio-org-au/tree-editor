@@ -1,1 +1,5 @@
-this is the angular template for the classifications list
+<div ng-if="loaded">
+    <table class="table">
+        <tr ng-repeat="uri in data" classificationslistrow uri="{{uri}}"></tr>
+    </table>
+</div>

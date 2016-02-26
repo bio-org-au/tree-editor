@@ -1,0 +1,5 @@
+<td ng-if="loaded">{{data.label}}</td>
+<td ng-if="loaded">{{data.description}}</td>
+<td ng-if="loading" colspan="2"><i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small></td>
+<td colspan="2" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
+<td><a class="btn btn-default">View</a></td>
