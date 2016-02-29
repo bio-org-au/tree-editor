@@ -1,0 +1,3 @@
+<span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
+<span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
+<span ng-if="json.fetched" ng-bind-html="json.fullNameHtml"></span>
