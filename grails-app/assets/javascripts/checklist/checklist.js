@@ -16,14 +16,15 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.path = [];
     $scope.top = null;
 
-
     $scope.fetchArrangement = function() {
         $http({
             method: 'GET',
-            url: $scope.initialUri
+            url: $scope.arrangementUri
         }).then(function successCallback(response) {
             $scope.arrangement = response.data;
-            $scope.fetchTopNode();
+            if(!$scope.focusUri) {
+                $scope.fetchTopNode();
+            }
         }, function errorCallback(response) {
             $scope.response = response;
         });
@@ -35,12 +36,8 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         if(!$scope.focusNode) $scope.focusNode = getPreferredLink($scope.arrangement.node);
 
         $scope.path = [$scope.focusNode];
-
         $scope.needJson($scope.focusNode);
     };
-
-
-    $scope.fetchArrangement();
 
     $scope.needJson = function(uri) {
         if(!uri) return null;
@@ -99,12 +96,23 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     };
 
     $scope.clickSubPath = function(a) {
-        console.log(a);
         if(a.length < 1) return; // this never happens
         for(u in a) {
             $scope.path.push(a[u]);
         }
         $scope.focusNode = a[a.length - 1];
+    }
+
+    $scope.clickNewWindow = function(i) {
+        window.open($rootScope.pagesUrl + "/editnode/checklist?arrangement="+ $scope.arrangementUri +"&node=" + $scope.path[i], '_blank');
+    };
+
+    $scope.fetchArrangement();
+
+    if($scope.focusUri) {
+        $scope.focusNode = $scope.focusUri;
+        $scope.path = [$scope.focusNode];
+        $scope.needJson($scope.focusNode);
     }
 };
 
@@ -117,7 +125,8 @@ var checklistDirective = function() {
         templateUrl: "/tree-editor/assets/ng/checklist/checklist.html",
         controller: ChecklistController,
         scope: {
-            initialUri: '@uri',
+            arrangementUri: "@",
+            focusUri: "@",
             listType: '@listType',
         },
     };
@@ -241,6 +250,9 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         $scope.$parent.clickSubPath(a);
     }
 
+    $scope.clickNewWindow = function() {
+        window.open($rootScope.pagesUrl + "/editnode/checklist?arrangement="+ $scope.cl_scope.arrangementUri +"&node=" + $scope.uri, '_blank');
+    };
 };
 
 NodeitemController.$inject = ['$scope', '$rootScope', '$http'];

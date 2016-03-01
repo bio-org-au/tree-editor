@@ -7,6 +7,6 @@
 </head>
 
 <body>
-<div data-list-type="Workspace" data-uri="${uri}" checklist></div>
+<div data-list-type="Workspace" data-arrangement-uri="${uri}" checklist></div>
 </body>
 </html>

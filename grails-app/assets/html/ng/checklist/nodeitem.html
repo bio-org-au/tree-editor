@@ -5,7 +5,10 @@
     </span>
     <div style="margin-left: 1em;" class="controlholder">
         <span shortnodetext uri="{{uri}}"></span>
-        <span class="controls"> <i class="fabutton fa fa-arrow-up" ng-click="clickUpArrow()"></i> </span>
+        <span class="controls">
+            <i class="fabutton fa fa-arrow-up" ng-click="clickUpArrow()"></i>
+            <i class="fabutton fa fa-external-link" ng-click="clickNewWindow()"></i>
+        </span>
     </div>
 </div>
 <div style="margin-left: 2em;" ng-if="json.fetched && hasSubnodes && UI.open" uri="{{uri}}" nodelist></div>

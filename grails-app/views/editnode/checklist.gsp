@@ -5,9 +5,7 @@
     <asset:javascript src="checklist/checklist.js"/>
     <asset:stylesheet src="checklist.css"/>
 </head>
-
 <body>
-<div data-list-type="Classification" data-arrangement-uri="${uri}" checklist></div>
-
+<div data-list-type="Checklist" data-arrangement-uri="${arrangement}" data-focus-uri="${node}" checklist></div>
 </body>
 </html>
