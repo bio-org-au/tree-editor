@@ -4,7 +4,8 @@
         <span class="controlholder">
         <span uri="{{uri}}" shortnodetext></span>
             <span class="controls">
-                <i ng-if="!$last" class="fabutton fa fa-arrow-down" ng-click="clickPath($index)"></i>
+                <i class="fabutton fa fa-bookmark" ng-click="clickBookmark($index)"></i>
+                <i ng-if="!$last" class="fabutton fa fa-search" ng-click="clickPath($index)"></i>
                 <i ng-if="!$first" class="fabutton fa fa-external-link" ng-click="clickNewWindow($index)"></i>
             </span>
         </span>

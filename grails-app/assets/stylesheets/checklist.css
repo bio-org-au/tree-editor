@@ -6,3 +6,7 @@
 .controlholder:hover > .controls {
     display: inline-block;
 }
+
+.controls {
+    margin-left: 1.5em;
+}
