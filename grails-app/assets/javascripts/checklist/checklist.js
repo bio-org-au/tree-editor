@@ -12,9 +12,10 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.arrangement = null;
     $scope.cache = {};
-    $scope.nodeUi = {}; // this is where I remember which nodes are open, etc
+    $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
     $scope.path = [];
     $scope.top = null;
+
 
     $scope.fetchArrangement = function() {
         $http({
@@ -36,18 +37,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $scope.path = [$scope.focusNode];
 
         $scope.needJson($scope.focusNode);
-
-        /*
-        $http({
-            method: 'GET',
-            url: $scope.initialUri
-        }).then(function successCallback(response) {
-            $scope.arrangement = response.data;
-            $scope.fetchTopNode();
-        }, function errorCallback(response) {
-            $scope.response = response;
-        });
-        */
     };
 
 
@@ -72,23 +61,25 @@ var ChecklistController = function ($scope, $rootScope, $http) {
                 fetching: false,
                 fetched: false
             };
+            $scope.nodeUI[uri] = { open: false };
         }
 
+        if(!$scope.cache[uri].fetching) {
+            $scope.cache[uri].fetching = true;
 
-        $scope.cache[uri].fetching = true;
-
-        $http({
-            method: 'GET',
-            url: uri
-        }).then(function successCallback(response) {
-            $scope.cache[uri] = response.data;
-            response.data.fetching = false;
-            response.data.fetched = true;
-            // if anyone is using this node, let them know
-            $scope.$broadcast('nsl-json-fetched', uri, response.data);
-        }, function errorCallback(response) {
-            $scope.cache[uri].fetching = false;
-        });
+            $http({
+                method: 'GET',
+                url: uri
+            }).then(function successCallback(response) {
+                $scope.cache[uri] = response.data;
+                response.data.fetching = false;
+                response.data.fetched = true;
+                // if anyone is using this node, let them know
+                $scope.$broadcast('nsl-json-fetched', uri, response.data);
+            }, function errorCallback(response) {
+                $scope.cache[uri].fetching = false;
+            });
+        }
 
         return $scope.cache[uri];
     }
@@ -112,17 +103,26 @@ var checklistDirective = function() {
 app.directive('checklist', checklistDirective);
 
 var GetJsonController = function ($scope) {
+    // everyone needs this
+    $scope.getPreferredLink = getPreferredLink;
     $scope.cl_scope = $scope.$parent.cl_scope;
 
     $scope.json = $scope.cl_scope.needJson($scope.uri);
+    if($scope.afterUpdateJson) {
+        $scope.afterUpdateJson();
+    }
 
     $scope.checkState = function(event, uri, json) {
         if(uri == $scope.uri) {
             $scope.json = json;
+            if($scope.afterUpdateJson) {
+                $scope.afterUpdateJson();
+            }
         }
     };
 
     $scope.$on('nsl-json-fetched', $scope.checkState);
+
 }
 
 GetJsonController.$inject = ['$scope'];
@@ -153,3 +153,74 @@ var shortnametextDirective = function() {
 
 app.directive('shortnametext', shortnametextDirective);
 
+var NodelistController = function ($scope, $rootScope, $http) {
+    GetJsonController($scope);
+
+
+};
+
+NodelistController.$inject = ['$scope', '$rootScope', '$http'];
+
+app.controller('Nodelist', NodelistController);
+
+var nodelistDirective = function(RecursionHelper) {
+    return {
+        templateUrl: "/tree-editor/assets/ng/checklist/nodelist.html",
+        controller: NodelistController,
+        scope: {
+            uri: "@"
+        },
+        compile: function(element) {
+            return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
+                // Define your normal link function here.
+                // Alternative: instead of passing a function,
+                // you can also pass an object with
+                // a 'pre'- and 'post'-link function.
+            });
+        },
+    };
+};
+
+nodelistDirective.$inject = ['RecursionHelper'];
+
+app.directive('nodelist', nodelistDirective);
+
+
+
+var NodeitemController = function ($scope, $rootScope, $http) {
+
+    $scope.afterUpdateJson = function() {
+        console.log("JSON updated for " + $scope.uri);
+
+        console.log("subnodes");
+        console.log($scope.json.subnodes);
+
+        if($scope.json.fetched) {
+            $scope.hasSubnodes = $scope.json.subnodes && $scope.json.subnodes.length > 0;
+        }
+        else {
+            $scope.hasSubnodes = false;
+        }
+    };
+
+    GetJsonController($scope);
+
+    $scope.UI = $scope.cl_scope.nodeUI[$scope.uri];
+
+};
+
+NodeitemController.$inject = ['$scope', '$rootScope', '$http'];
+
+app.controller('Nodeitem', NodeitemController);
+
+var nodeitemDirective = function() {
+    return {
+        templateUrl: "/tree-editor/assets/ng/checklist/nodeitem.html",
+        controller: NodeitemController,
+        scope: {
+            uri: "@"
+        },
+    };
+};
+
+app.directive('nodeitem', nodeitemDirective);
