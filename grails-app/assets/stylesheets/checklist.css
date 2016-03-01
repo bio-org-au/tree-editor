@@ -1,0 +1,8 @@
+.controlholder > .controls {
+    display: none;
+    cursor: pointer;
+}
+
+.controlholder:hover > .controls {
+    display: inline-block;
+}

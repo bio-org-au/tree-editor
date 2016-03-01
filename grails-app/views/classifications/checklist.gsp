@@ -3,12 +3,11 @@
 <head>
     <meta name="layout" content="pages"/>
     <asset:javascript src="checklist/checklist.js"/>
+    <asset:stylesheet src="checklist.css"/>
 </head>
 
 <body>
-<h1>Classification checklist</h1>
-
-<div data-list-type="classifciation" data-uri="${uri}" checklist></div>
+<div data-list-type="Classification" data-uri="${uri}" checklist></div>
 
 </body>
 </html>

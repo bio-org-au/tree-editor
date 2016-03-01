@@ -3,10 +3,10 @@
 <head>
     <meta name="layout" content="pages"/>
     <asset:javascript src="checklist/checklist.js"/>
+    <asset:stylesheet src="checklist.css"/>
 </head>
 
 <body>
-<h1>Workspace checklist</h1>
-<div data-list-type="workspace" data-uri="${uri}" checklist></div>
+<div data-list-type="Workspace" data-uri="${uri}" checklist></div>
 </body>
 </html>

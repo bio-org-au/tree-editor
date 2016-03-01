@@ -1,15 +1,18 @@
 <div>
-    <span ng-repeat="uri in path"> <i class="fa fa-angle-right"></i> <span uri="{{uri}}" shortnodetext></span> </span>
+    <span ng-repeat="uri in path">
+        <i ng-if="! $first" class="fa fa-angle-right"></i>
+        <span class="controlholder">
+        <span uri="{{uri}}" shortnodetext></span>
+            <span class="controls"> <i ng-if="! $last" class="fabutton fa fa-arrow-down" ng-click="clickPath($index)"></i></span>
+        </span>
+    </span>
 </div>
-<hr/>
+<h1 ng-if="!arrangement">{{listType}} checklist</h1>
+<h1 ng-if="arrangement">{{arrangement.label}}{{arrangement.title}}</h1>
+<div ng-bind-html="arrangement.description"></div>
 <div>
-    arrangement info
+    <h2><span uri="{{focusNode}}" shortnodetext></h2>
 </div>
-<hr/>
-<div>
-    focus info - next/prev, link to profile data
-</div>
-<hr/>
 <div>
     <div nodelist uri="{{focusNode}}"></div>
 </div>

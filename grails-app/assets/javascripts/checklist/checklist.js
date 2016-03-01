@@ -44,8 +44,9 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.needJson = function(uri) {
         if(!uri) return null;
+        $scope.initJson(uri);
 
-        if(!$scope.cache[uri]) {
+        if(!$scope.cache[uri].fetched) {
             $scope.refetchJson(uri);
         }
 
@@ -54,15 +55,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.refetchJson = function(uri) {
         if(!uri) return null;
-
-        if(!$scope.cache[uri]) {
-            $scope.cache[uri] = {
-                "_links": {"permalink": {"link": uri, "preferred": true}},
-                fetching: false,
-                fetched: false
-            };
-            $scope.nodeUI[uri] = { open: false };
-        }
+        $scope.initJson(uri);
 
         if(!$scope.cache[uri].fetching) {
             $scope.cache[uri].fetching = true;
@@ -82,6 +75,36 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         }
 
         return $scope.cache[uri];
+    }
+
+    $scope.initJson = function(uri) {
+        if(!uri) return null;
+
+        if(!$scope.nodeUI[uri]) {
+            $scope.nodeUI[uri] = { open: false };
+        }
+
+        if(!$scope.cache[uri]) {
+            $scope.cache[uri] = {
+                "_links": {"permalink": {"link": uri, "preferred": true}},
+                fetching: false,
+                fetched: false
+            };
+        }
+    };
+
+    $scope.clickPath = function(i) {
+        $scope.focusNode = $scope.path[i];
+        $scope.path = $scope.path.slice(0, i + 1);
+    };
+
+    $scope.clickSubPath = function(a) {
+        console.log(a);
+        if(a.length < 1) return; // this never happens
+        for(u in a) {
+            $scope.path.push(a[u]);
+        }
+        $scope.focusNode = a[a.length - 1];
     }
 };
 
@@ -123,6 +146,10 @@ var GetJsonController = function ($scope) {
 
     $scope.$on('nsl-json-fetched', $scope.checkState);
 
+    $scope.$watch('uri', function(){
+        $scope.json = $scope.cl_scope.needJson($scope.uri);
+    });
+
 }
 
 GetJsonController.$inject = ['$scope'];
@@ -156,6 +183,9 @@ app.directive('shortnametext', shortnametextDirective);
 var NodelistController = function ($scope, $rootScope, $http) {
     GetJsonController($scope);
 
+    $scope.clickSubPath = function(a) {
+        $scope.$parent.clickSubPath(a);
+    }
 
 };
 
@@ -190,11 +220,6 @@ app.directive('nodelist', nodelistDirective);
 var NodeitemController = function ($scope, $rootScope, $http) {
 
     $scope.afterUpdateJson = function() {
-        console.log("JSON updated for " + $scope.uri);
-
-        console.log("subnodes");
-        console.log($scope.json.subnodes);
-
         if($scope.json.fetched) {
             $scope.hasSubnodes = $scope.json.subnodes && $scope.json.subnodes.length > 0;
         }
@@ -206,6 +231,15 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     GetJsonController($scope);
 
     $scope.UI = $scope.cl_scope.nodeUI[$scope.uri];
+
+    $scope.clickUpArrow = function(){
+        $scope.clickSubPath([]);
+    };
+
+    $scope.clickSubPath = function(a) {
+        a.unshift($scope.uri);
+        $scope.$parent.clickSubPath(a);
+    }
 
 };
 
