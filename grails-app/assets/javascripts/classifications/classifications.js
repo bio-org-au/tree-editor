@@ -36,7 +36,7 @@ var ClassificationslistController = function ($scope, $rootScope, $http) {
         });
     };
 
-    $scope.$on('nsl-tree-edit-namespace-changed', $scope.reload);
+    $scope.$on('nsl-tree-edit.namespace-changed', $scope.reload);
 
     $scope.reload();
 };

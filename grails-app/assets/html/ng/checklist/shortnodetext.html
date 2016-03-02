@@ -1,7 +1,7 @@
 <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
 <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
 <span ng-if="json.fetched">
-    <span ng-switch="json.typeUri.uri">
+    <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
         <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">Classification</span>
         <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">Workspace</span>
         <span ng-switch-default>

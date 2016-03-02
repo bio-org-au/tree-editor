@@ -2,10 +2,10 @@
     <span ng-repeat="uri in path">
         <i ng-if="! $first" class="fa fa-angle-right"></i>
         <span class="controlholder">
-        <span uri="{{uri}}" shortnodetext></span>
+            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
+            <span ng-if="$last"uri="{{uri}}" shortnodetext></span>
+
             <span class="controls">
-                <i class="fabutton fa fa-bookmark" ng-click="clickBookmark($index)"></i>
-                <i ng-if="!$last" class="fabutton fa fa-search" ng-click="clickPath($index)"></i>
                 <i ng-if="!$first" class="fabutton fa fa-external-link" ng-click="clickNewWindow($index)"></i>
             </span>
         </span>
@@ -14,8 +14,14 @@
 <h1 ng-if="!arrangement">{{listType}} checklist</h1>
 <h1 ng-if="arrangement">{{arrangement.label}}{{arrangement.title}}</h1>
 <div ng-bind-html="arrangement.description"></div>
+<div ng-if="taxanodes_bookmarks.vec.length > 0">
+<span ng-repeat="uri in taxanodes_bookmarks.vec track by $index">
+    <span shortnodetext uri="{{uri}}"></span> <i class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
+</span>
+<a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear {{taxanodes_bookmarks.vec.length}} bookmarks</a>
+</div>
 <div>
-    <h2><span uri="{{focusNode}}" shortnodetext></h2>
+    <h2><span uri="{{focusNode}}" shortnodetext></span></h2>
 </div>
 <div>
     <div nodelist uri="{{focusNode}}"></div>

@@ -1,13 +1,12 @@
 <div>
     <span class="pull-left">
-        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton" ng-click="UI.open = false;"></i>
-        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton" ng-click="UI.open = true;"></i>
+        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton larger" ng-click="UI.open = false;"></i>
+        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger" ng-click="UI.open = true;"></i>
     </span>
     <div style="margin-left: 1em;" class="controlholder">
-        <span shortnodetext uri="{{uri}}"></span>
+        <a href="#" ng-click="clickUpArrow()"><span shortnodetext uri="{{uri}}"></span></a>
         <span class="controls">
-            <i class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
-            <i class="fabutton fa fa-search" ng-click="clickUpArrow()"></i>
+            <i ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
             <i class="fabutton fa fa-external-link" ng-click="clickNewWindow()"></i>
         </span>
     </div>

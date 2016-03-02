@@ -11,7 +11,7 @@ var NamespaceselectController = function ($scope, $rootScope, $http) {
     $scope.setNamespace = function(ns_name) {
         localStorage.setItem('nsl-tree-editor.namespaces.namespace', ns_name ? ns_name : '');
         $rootScope.namespace = ns_name;
-        $rootScope.$broadcast('nsl-tree-edit-namespace-changed', ns_name);
+        $rootScope.$broadcast('nsl-tree-edit.namespace-changed', ns_name);
     };
 
     $scope.namespaceDropdown_toggle = function() {

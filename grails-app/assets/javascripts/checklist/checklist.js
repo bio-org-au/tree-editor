@@ -114,6 +114,25 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $scope.path = [$scope.focusNode];
         $scope.needJson($scope.focusNode);
     }
+
+    // bookmark gear
+    $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+    $scope.$on('nsl-tree-edit.bookmark-changed', function(event, category, uri, status){
+        if(category == 'taxa-nodes') {
+            $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+        }
+    });
+    $scope.$on('nsl-tree-edit.namespace-changed', function(event) {
+        $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+    });
+
+
+    $scope.clickTrashBookmark = function(uri) {
+        $rootScope.removeBookmark('taxa-nodes', uri);
+    };
+    $scope.clickClearBookmarks = function(uri) {
+        $rootScope.clearBookmarks('taxa-nodes');
+    };
 };
 
 ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
@@ -158,7 +177,6 @@ var GetJsonController = function ($scope) {
     $scope.$watch('uri', function(){
         $scope.json = $scope.cl_scope.needJson($scope.uri);
     });
-
 }
 
 GetJsonController.$inject = ['$scope'];
@@ -240,6 +258,10 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     GetJsonController($scope);
 
     $scope.UI = $scope.cl_scope.nodeUI[$scope.uri];
+
+    $scope.clickBookmark = function() {
+        $rootScope.addBookmark('taxa-nodes', $scope.uri);
+    };
 
     $scope.clickUpArrow = function(){
         $scope.clickSubPath([]);

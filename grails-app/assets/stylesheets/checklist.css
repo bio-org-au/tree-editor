@@ -10,3 +10,11 @@
 .controls {
     margin-left: 1.5em;
 }
+
+.bookmark-off {
+    color: lightgray;
+}
+
+.bookmark-on {
+    color: darkgreen;
+}
