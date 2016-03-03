@@ -96,6 +96,14 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $scope.path = $scope.path.slice(0, i + 1);
     };
 
+    $scope.clickPathBookmark = function(i) {
+        $rootScope.addBookmark('taxa-nodes', $scope.path[i]);
+    };
+
+    $scope.clickPathNewWindow = function(i) {
+        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.rootUri +"&focus=" + $scope.path[i], '_blank');
+    };
+
     $scope.clickSubPath = function(a) {
         if(a.length < 1) return; // this never happens
         for(u in a) {
@@ -103,10 +111,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         }
         $scope.focusUri = a[a.length - 1];
     }
-
-    $scope.clickNewWindow = function(i) {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.rootUri +"&focus=" + $scope.path[i], '_blank');
-    };
 
     $scope.clickTrashBookmark = function(uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);

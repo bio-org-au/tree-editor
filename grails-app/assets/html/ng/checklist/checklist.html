@@ -1,16 +1,3 @@
-<div>
-    <span ng-repeat="uri in path">
-        <i ng-if="! $first" class="fa fa-angle-right"></i>
-        <span class="controlholder">
-            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
-            <span ng-if="$last"uri="{{uri}}" shortnodetext></span>
-
-            <span class="controls">
-                <i ng-if="!$first" class="fabutton fa fa-external-link" ng-click="clickNewWindow($index)"></i>
-            </span>
-        </span>
-    </span>
-</div>
 <h1 ng-if="!arrangement || !arrangement.fetched">Checklist <small class="text-muted">{{arrangementUri}}</small></h1>
 <h1 ng-if="arrangement && arrangement.fetched">{{arrangement.label}}{{arrangement.title}}</h1>
 <div ng-if="arrangement && arrangement.fetched && arrangement.description" ng-bind-html="arrangement.description"></div>
@@ -22,6 +9,20 @@
 </div>
 <div>
     <h2><span uri="{{focusUri}}" shortnodetext></span></h2>
+</div>
+<div>
+    <span ng-repeat="uri in path">
+        <i ng-if="! $first" class="fa fa-angle-right"></i>
+        <span class="controlholder">
+            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
+            <span ng-if="$last"uri="{{uri}}" shortnodetext></span>
+
+            <span class="controls">
+                <i ng-if="!$first" class="fabutton fa fa-bookmark" ng-click="clickPathBookmark($index)"></i>
+                <a href=#" ng-click="clickPathNewWindow($index)">new window</a>
+            </span>
+        </span>
+    </span>
 </div>
 <div>
     <div nodelist uri="{{focusUri}}"></div>
