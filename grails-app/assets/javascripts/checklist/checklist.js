@@ -158,9 +158,27 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         }
         else
         if($scope.rootUri && $scope.focusUri && $scope.focusUri!=$scope.rootUri) {
-            console.log("NEED TO FETCH PATH");
             $scope.path = [$scope.focusUri];
             deregisterPathInitializationListener();
+
+            $http({
+                method: 'GET',
+                url: $rootScope.servicesUrl + '/TreeJsonView/findPath',
+                params: {
+                    root: $scope.rootUri,
+                    focus: $scope.focusUri
+                }
+            }).then(function successCallback(response) {
+                $scope.path = response.data;
+                for(var i in $scope.path) {
+                    $scope.needJson($scope.path[i]);
+                    $scope.nodeUI[$scope.path[i]].open = true;
+                }
+
+            }, function errorCallback(response) {
+                $scope.loadingNamespaces = false;
+            });
+
         }
     }
     deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', pathInitializationListener);
