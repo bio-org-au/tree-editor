@@ -68,6 +68,29 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         return $scope.cache[uri];
     }
 
+    // loads a uri, with a callback
+
+    $scope.loadJson = function(uri, callback) {
+        if(!uri) {
+            callback(null, null);
+            return;
+        }
+
+        $scope.needJson(uri);
+        var callBackDone;
+
+        function onjsonfetched(event1, uri1, json1) {
+            var json = $scope.currentJson(uri);
+            if(!json.fetching) {
+                callBackDone();
+                callback(uri, json);
+            }
+        }
+
+        callBackDone = $scope.$on('nsl-json-fetched', onjsonfetched);
+        onjsonfetched();
+    };
+
     $scope.clickPath = function(i) {
         $scope.focusUri = $scope.path[i];
         $scope.path = $scope.path.slice(0, i + 1);
@@ -111,37 +134,40 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.needJson($scope.rootUri);
     $scope.needJson($scope.focusUri);
 
-    var deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
-        var arrangement = $scope.currentJson($scope.arrangement);
+    var deregisterPathInitializationListener;
+    function pathInitializationListener(event, uri, json) {
+        var arrangement = $scope.currentJson($scope.arrangementUri);
         var root = $scope.currentJson($scope.rootUri);
         var focus = $scope.currentJson($scope.focusUri);
 
         if(!$scope.rootUri && arrangement && arrangement.fetched) {
-            console.log("fetched arrangement, setting root");
             // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
 
             $scope.rootUri = getPreferredLink(arrangement.workingRoot);
             if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.currentRoot);
             if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.node);
+            $scope.needJson($scope.rootUri);
         }
 
         // right. we deregister ourselves when we have the path. that's the goal.
 
-        if(root && root.fetched && (!$scope.focusUri || $scope.focusUri==$scope.rootUri)) {
-            console.log("setting focus from root ");
+        if($scope.rootUri && (!$scope.focusUri || $scope.focusUri==$scope.rootUri)) {
             $scope.focusUri = $scope.rootUri;
             $scope.path = [$scope.rootUri];
             deregisterPathInitializationListener();
         }
-
+        else
         if($scope.rootUri && $scope.focusUri && $scope.focusUri!=$scope.rootUri) {
             console.log("NEED TO FETCH PATH");
             $scope.path = [$scope.focusUri];
             deregisterPathInitializationListener();
         }
-    });
+    }
+    deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', pathInitializationListener);
+    pathInitializationListener();
 
-    var deregisterArrangementInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
+    var deregisterArrangementInitializationListener;
+    function arrangementInitializationListener(event, uri, json) {
         $scope.arrangement = $scope.currentJson($scope.arrangementUri);
         var root = $scope.currentJson($scope.rootUri);
 
@@ -152,10 +178,12 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
         // right. we deregister ourselves when we know what our arrangement is. that's the goal.
 
-        if($scope.arrangement && $scope.arrangement.loaded) {
+        if($scope.arrangement && $scope.arrangement.fetched) {
             deregisterArrangementInitializationListener();
         }
-    });
+    }
+    deregisterArrangementInitializationListener = $scope.$on('nsl-json-fetched', arrangementInitializationListener);
+    arrangementInitializationListener();
 
 
     // kick off the initialization;
@@ -192,25 +220,21 @@ var GetJsonController = function ($scope) {
     $scope.getPreferredLink = getPreferredLink;
     $scope.cl_scope = $scope.$parent.cl_scope;
 
-    $scope.json = $scope.cl_scope.needJson($scope.uri);
-    if($scope.afterUpdateJson) {
-        $scope.afterUpdateJson();
-    }
-
-    $scope.checkState = function(event, uri, json) {
-        if(uri == $scope.uri) {
+    $scope.refetchUriAndJson = function() {
+        $scope.json = $scope.cl_scope.needJson($scope.uri);
+        if($scope.afterUpdateJson) {
+            $scope.afterUpdateJson();
+        }
+        $scope.cl_scope.loadJson($scope.uri, function(uri, json) {
             $scope.json = json;
             if($scope.afterUpdateJson) {
                 $scope.afterUpdateJson();
             }
-        }
+        });
     };
 
-    $scope.$on('nsl-json-fetched', $scope.checkState);
+    $scope.$watch('uri', $scope.refetchUriAndJson);
 
-    $scope.$watch('uri', function(){
-        $scope.json = $scope.cl_scope.needJson($scope.uri);
-    });
 }
 
 GetJsonController.$inject = ['$scope'];
@@ -281,15 +305,50 @@ app.directive('nodelist', nodelistDirective);
 var NodeitemController = function ($scope, $rootScope, $http) {
 
     $scope.afterUpdateJson = function() {
-        if($scope.json.fetched) {
+        if($scope.json && $scope.json.fetched) {
             $scope.hasSubnodes = $scope.json.subnodes && $scope.json.subnodes.length > 0;
         }
         else {
             $scope.hasSubnodes = false;
         }
+
+        $scope.name = null;
+        $scope.taxon = null;
+        $scope.resource = null;
+
+
+        $scope.cl_scope.loadJson($scope.uri, function(node_uri, node_json) {
+            $scope.name = null;
+            $scope.taxon = null;
+            $scope.resource = null;
+
+            if ($scope.json.fetched) {
+                if (!$scope.json.taxonUri && $scope.json.nameUri && $scope.json.nameUri.uri) {
+                    $scope.cl_scope.loadJson($scope.json.nameUri.uri, function (name_uri, name_json) {
+                        $scope.name = name_json;
+                    });
+                }
+                if ($scope.json.taxonUri && $scope.json.taxonUri.uri) {
+                    $scope.cl_scope.loadJson($scope.json.taxonUri.uri, function (taxon_uri, taxon_json) {
+                        $scope.taxon = taxon_json;
+                    });
+                }
+                //if ($scope.json.resourceUri && $scope.json.resourceUri.uri) {
+                //    $scope.cl_scope.loadJson($scope.json.resourceUri.uri, function (resource_uri, resource_json) {
+                //        $scope.resource = resource_json;
+                //    });
+                //}
+            }
+        });
+
+
     };
 
     GetJsonController($scope);
+
+    $scope.node = $scope.cl_scope.needJson($scope.uri);
+
+    $scope.afterUpdateJson();
 
     $scope.UI = $scope.cl_scope.nodeUI[$scope.uri];
 
