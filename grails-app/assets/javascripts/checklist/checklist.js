@@ -69,7 +69,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     }
 
     $scope.clickPath = function(i) {
-        $scope.focusNode = $scope.path[i];
+        $scope.focusUri = $scope.path[i];
         $scope.path = $scope.path.slice(0, i + 1);
     };
 
@@ -78,7 +78,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         for(u in a) {
             $scope.path.push(a[u]);
         }
-        $scope.focusNode = a[a.length - 1];
+        $scope.focusUri = a[a.length - 1];
     }
 
     $scope.clickNewWindow = function(i) {
@@ -111,20 +111,10 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.needJson($scope.rootUri);
     $scope.needJson($scope.focusUri);
 
-    console.log('arrangementUri ' + $scope.arrangementUri);
-    console.log('rootUri ' + $scope.rootUri);
-    console.log('focusUri ' + $scope.focusUri);
-
-
     var deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
-        console.log('initializing with ' + uri);
-        console.log(json);
-
         var arrangement = $scope.currentJson($scope.arrangement);
         var root = $scope.currentJson($scope.rootUri);
         var focus = $scope.currentJson($scope.focusUri);
-
-        // right. we deregister ourselves when we have the path. that's the goal.
 
         if(!$scope.rootUri && arrangement && arrangement.fetched) {
             console.log("fetched arrangement, setting root");
@@ -135,11 +125,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
             if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.node);
         }
 
-        if(!$scope.arrangementUri && root && root.fetched) {
-            console.log("fetched root, setting arrangement");
-            $scope.arrangementUri = getPreferredLink(json.arrangement);
-            $scope.needJson($scope.arrangementUri);
-        }
+        // right. we deregister ourselves when we have the path. that's the goal.
 
         if(root && root.fetched && (!$scope.focusUri || $scope.focusUri==$scope.rootUri)) {
             console.log("setting focus from root ");
@@ -157,6 +143,15 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     var deregisterArrangementInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
         $scope.arrangement = $scope.currentJson($scope.arrangementUri);
+        var root = $scope.currentJson($scope.rootUri);
+
+        if(!$scope.arrangementUri && root && root.fetched) {
+            $scope.arrangementUri = getPreferredLink(json.arrangement);
+            $scope.needJson($scope.arrangementUri);
+        }
+
+        // right. we deregister ourselves when we know what our arrangement is. that's the goal.
+
         if($scope.arrangement && $scope.arrangement.loaded) {
             deregisterArrangementInitializationListener();
         }
@@ -303,6 +298,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     };
 
     $scope.clickUpArrow = function(){
+        $scope.UI.open = true;
         $scope.clickSubPath([]);
     };
 
