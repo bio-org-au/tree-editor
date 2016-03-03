@@ -8,17 +8,16 @@ class EditnodeController {
             return render (view: '/validationerror', model: [ bean: p])
         }
 
-        render view: 'checklist', model: [ arrangement: p.arrangement, node: p.node]
+        render view: 'checklist', model: [ rootUri: p.root, focusUri: p.focus]
     }
 }
 
 @Validateable
 class NodeChecklistParam {
-    String arrangement
-    String node
+    String root
+    String focus
 
     static constraints = {
-        arrangement  blank: false
-        node  blank: false
+        focus  nullable: true
     }
 }

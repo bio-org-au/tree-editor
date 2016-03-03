@@ -14,36 +14,30 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.cache = {};
     $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
     $scope.path = [];
-    $scope.top = null;
 
-    $scope.fetchArrangement = function() {
-        $http({
-            method: 'GET',
-            url: $scope.arrangementUri
-        }).then(function successCallback(response) {
-            $scope.arrangement = response.data;
-            if(!$scope.focusUri) {
-                $scope.fetchTopNode();
-            }
-        }, function errorCallback(response) {
-            $scope.response = response;
-        });
-    };
+    $scope.currentJson = function(uri) {
+        if(!uri) return null;
 
-    $scope.fetchTopNode = function() {
-        $scope.focusNode = getPreferredLink($scope.arrangement.workingRoot);
-        if(!$scope.focusNode) $scope.focusNode = getPreferredLink($scope.arrangement.currentRoot);
-        if(!$scope.focusNode) $scope.focusNode = getPreferredLink($scope.arrangement.node);
+        if(!$scope.nodeUI[uri]) {
+            $scope.nodeUI[uri] = { open: false };
+        }
 
-        $scope.path = [$scope.focusNode];
-        $scope.needJson($scope.focusNode);
-    };
+        if(!$scope.cache[uri]) {
+            $scope.cache[uri] = {
+                "_links": {"permalink": {"link": uri, "preferred": true}},
+                fetching: false,
+                fetched: false
+            };
+        }
+
+        return $scope.cache[uri];
+    }
 
     $scope.needJson = function(uri) {
         if(!uri) return null;
-        $scope.initJson(uri);
+        var json = $scope.currentJson(uri);
 
-        if(!$scope.cache[uri].fetched) {
+        if(!json.fetched) {
             $scope.refetchJson(uri);
         }
 
@@ -52,10 +46,10 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.refetchJson = function(uri) {
         if(!uri) return null;
-        $scope.initJson(uri);
+        var json = $scope.currentJson(uri);
 
-        if(!$scope.cache[uri].fetching) {
-            $scope.cache[uri].fetching = true;
+        if(!json.fetching) {
+            json.fetching = true;
 
             $http({
                 method: 'GET',
@@ -74,22 +68,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         return $scope.cache[uri];
     }
 
-    $scope.initJson = function(uri) {
-        if(!uri) return null;
-
-        if(!$scope.nodeUI[uri]) {
-            $scope.nodeUI[uri] = { open: false };
-        }
-
-        if(!$scope.cache[uri]) {
-            $scope.cache[uri] = {
-                "_links": {"permalink": {"link": uri, "preferred": true}},
-                fetching: false,
-                fetched: false
-            };
-        }
-    };
-
     $scope.clickPath = function(i) {
         $scope.focusNode = $scope.path[i];
         $scope.path = $scope.path.slice(0, i + 1);
@@ -107,13 +85,13 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         window.open($rootScope.pagesUrl + "/editnode/checklist?arrangement="+ $scope.arrangementUri +"&node=" + $scope.path[i], '_blank');
     };
 
-    $scope.fetchArrangement();
+    $scope.clickTrashBookmark = function(uri) {
+        $rootScope.removeBookmark('taxa-nodes', uri);
+    };
+    $scope.clickClearBookmarks = function(uri) {
+        $rootScope.clearBookmarks('taxa-nodes');
+    };
 
-    if($scope.focusUri) {
-        $scope.focusNode = $scope.focusUri;
-        $scope.path = [$scope.focusNode];
-        $scope.needJson($scope.focusNode);
-    }
 
     // bookmark gear
     $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
@@ -127,12 +105,73 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     });
 
 
-    $scope.clickTrashBookmark = function(uri) {
-        $rootScope.removeBookmark('taxa-nodes', uri);
-    };
-    $scope.clickClearBookmarks = function(uri) {
-        $rootScope.clearBookmarks('taxa-nodes');
-    };
+    // ok. deal with initialisation.
+
+    $scope.arrangement =  $scope.needJson($scope.arrangementUri);
+    $scope.needJson($scope.rootUri);
+    $scope.needJson($scope.focusUri);
+
+    console.log('arrangementUri ' + $scope.arrangementUri);
+    console.log('rootUri ' + $scope.rootUri);
+    console.log('focusUri ' + $scope.focusUri);
+
+
+    var deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
+        console.log('initializing with ' + uri);
+        console.log(json);
+
+        var arrangement = $scope.currentJson($scope.arrangement);
+        var root = $scope.currentJson($scope.rootUri);
+        var focus = $scope.currentJson($scope.focusUri);
+
+        // right. we deregister ourselves when we have the path. that's the goal.
+
+        if(!$scope.rootUri && arrangement && arrangement.fetched) {
+            console.log("fetched arrangement, setting root");
+            // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
+
+            $scope.rootUri = getPreferredLink(arrangement.workingRoot);
+            if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.currentRoot);
+            if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.node);
+        }
+
+        if(!$scope.arrangementUri && root && root.fetched) {
+            console.log("fetched root, setting arrangement");
+            $scope.arrangementUri = getPreferredLink(json.arrangement);
+            $scope.needJson($scope.arrangementUri);
+        }
+
+        if(root && root.fetched && (!$scope.focusUri || $scope.focusUri==$scope.rootUri)) {
+            console.log("setting focus from root ");
+            $scope.focusUri = $scope.rootUri;
+            $scope.path = [$scope.rootUri];
+            deregisterPathInitializationListener();
+        }
+
+        if($scope.rootUri && $scope.focusUri && $scope.focusUri!=$scope.rootUri) {
+            console.log("NEED TO FETCH PATH");
+            $scope.path = [$scope.focusUri];
+            deregisterPathInitializationListener();
+        }
+    });
+
+    var deregisterArrangementInitializationListener = $scope.$on('nsl-json-fetched', function(event, uri, json) {
+        $scope.arrangement = $scope.currentJson($scope.arrangementUri);
+        if($scope.arrangement && $scope.arrangement.loaded) {
+            deregisterArrangementInitializationListener();
+        }
+    });
+
+
+    // kick off the initialization;
+    $scope.$broadcast('nsl-json-fetched', null, null);
+
+    if($scope.focusUri) {
+        $scope.focusNode = $scope.focusUri;
+        $scope.path = [$scope.focusNode];
+        $scope.needJson($scope.focusNode);
+    }
+
 };
 
 ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
@@ -145,8 +184,8 @@ var checklistDirective = function() {
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
-            focusUri: "@",
-            listType: '@listType',
+            rootUri: "@",
+            focusUri: "@"
         },
     };
 }
@@ -273,7 +312,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     }
 
     $scope.clickNewWindow = function() {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?arrangement="+ $scope.cl_scope.arrangementUri +"&node=" + $scope.uri, '_blank');
+        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
     };
 };
 

@@ -6,6 +6,6 @@
     <asset:stylesheet src="checklist.css"/>
 </head>
 <body>
-<div data-list-type="Checklist" data-arrangement-uri="${arrangement}" data-focus-uri="${node}" checklist></div>
+<div data-list-type="Checklist" data-root-uri="${rootUri}" data-focus-uri="${focusUri}" checklist></div>
 </body>
 </html>
