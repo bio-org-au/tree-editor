@@ -1,6 +1,4 @@
 var WorkspaceslistController = function ($scope, $rootScope, $http) {
-    console.log("WorkspaceslistController");
-
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -46,8 +44,6 @@ WorkspaceslistController.$inject = ['$scope', '$rootScope', '$http'];
 app.controller('Workspaceslist', WorkspaceslistController);
 
 var workspaceslistDirective = function() {
-    console.log("workspaceslistDirective");
-
     return {
         templateUrl: "/tree-editor/assets/ng/workspaces/list.html",
         controller: WorkspaceslistController,
@@ -59,8 +55,6 @@ var workspaceslistDirective = function() {
 app.directive('workspaceslist', workspaceslistDirective);
 
 var WorkspaceslistrowController = function ($scope, $rootScope, $http) {
-    console.log("WorkspaceslistrowController");
-
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -113,8 +107,6 @@ app.controller('Workspaceslistrow', WorkspaceslistrowController);
 
 
 var workspaceslistrowDirective = function() {
-    console.log("workspaceslistrowDirective");
-
     return {
         templateUrl: "/tree-editor/assets/ng/workspaces/row.html",
         controller: WorkspaceslistrowController,

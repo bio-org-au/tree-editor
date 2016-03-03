@@ -1,6 +1,4 @@
 var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
-    console.log("WorkspaceformController");
-
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -161,8 +159,6 @@ app.controller('Workspaceform', WorkspaceformController);
 
 
 var workspaceformDirective = function() {
-    console.log("workspaceformDirective");
-
     return {
         templateUrl: "/tree-editor/assets/ng/workspaces/form.html",
         controller: WorkspaceformController,

@@ -1,8 +1,4 @@
-console.log('loading the namespaces angular');
-
 var NamespaceselectController = function ($scope, $rootScope, $http) {
-    console.log('namespacesdropdownDirective');
-
     $rootScope.namespace = localStorage.getItem('nsl-tree-editor.namespaces.namespace');
     if(!$rootScope.namespace || $rootScope.namespace=='') {
         $rootScope.namespace = null;
@@ -66,11 +62,7 @@ NamespaceselectController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Namespaceselect', NamespaceselectController);
 
-console.log(NamespaceselectController);
-
 function namespacesdropdownDirective() {
-    console.log('namespacesdropdownDirective');
-
     return {
         templateUrl: "/tree-editor/assets/ng/namespaces/dropdown.html",
         controller: NamespaceselectController,
@@ -81,7 +73,3 @@ function namespacesdropdownDirective() {
 }
 
 app.directive('namespacesdropdown', namespacesdropdownDirective);
-
-console.log(namespacesdropdownDirective);
-
-console.log(app);

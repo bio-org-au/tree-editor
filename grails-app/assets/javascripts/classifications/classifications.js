@@ -1,6 +1,4 @@
 var ClassificationslistController = function ($scope, $rootScope, $http) {
-    console.log("ClassificationslistController");
-
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -41,15 +39,11 @@ var ClassificationslistController = function ($scope, $rootScope, $http) {
     $scope.reload();
 };
 
-
-
 ClassificationslistController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Classificationslist', ClassificationslistController);
 
 var classificationslistDirective = function() {
-    console.log("classificationslistDirective");
-
     return {
         templateUrl: "/tree-editor/assets/ng/classifications/list.html",
         controller: ClassificationslistController,
@@ -61,8 +55,6 @@ var classificationslistDirective = function() {
 app.directive('classificationslist', classificationslistDirective);
 
 var ClassificationslistrowController = function ($scope, $rootScope, $http) {
-    console.log("ClassificationslistrowController");
-
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -106,10 +98,7 @@ ClassificationslistController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Classificationslistrow', ClassificationslistrowController);
 
-
 var classificationslistrowDirective = function() {
-    console.log("classificationslistrowDirective");
-
     return {
         templateUrl: "/tree-editor/assets/ng/classifications/row.html",
         controller: ClassificationslistrowController,

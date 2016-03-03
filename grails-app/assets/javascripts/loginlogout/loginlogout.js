@@ -39,7 +39,6 @@ LoginlogoutController.$inject = ['$scope', '$rootScope', '$http'];
 app.controller('Loginlogout', LoginlogoutController);
 
 function loginlogoutDirective() {
-    console.log("we have a loginlogout directive");
     return {
         templateUrl: "/tree-editor/assets/ng/loginlogout/loginlogout.html",
         controller: LoginlogoutController,
@@ -50,5 +49,3 @@ function loginlogoutDirective() {
 }
 
 app.directive('loginlogout', loginlogoutDirective);
-
-console.log("loginlogout is set up");
