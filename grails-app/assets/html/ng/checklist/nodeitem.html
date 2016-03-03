@@ -4,35 +4,32 @@
         <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger" ng-click="UI.open = true;"></i>
     </span>
     <div style="margin-left: 1em;" class="controlholder">
-        <a href="#" ng-click="clickUpArrow()">
-            <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
-            <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
-            <span ng-if="json.fetched">
-                <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
-                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">Classification</span>
-                    <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">Workspace</span>
-                    <span ng-switch-default>
-                        <span ng-switch="json.type">
-                            <span ng-switch-when="T">
-                                <span ng-if="!taxon.instance && !name.name">
-                                    <span>&nbsp;</span>
-                                </span>
-                                <span ng-if="!taxon.instance">
-                                    <span ng-bind-html="name.name.fullNameHtml"></span>
-                                </span>
-                                <span ng-if="taxon.instance">
-                                    <span ng-bind-html="taxon.instance.name.fullNameHtml"></span>
-                                    in
-                                    <span ng-bind-html="taxon.instance.reference.citationHtml"></span>
-                                </span>
+
+        <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
+        <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
+        <span ng-if="json.fetched">
+            <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
+                <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">Classification</span>
+                <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">Workspace</span>
+                <span ng-switch-default>
+                    <span ng-switch="json.type">
+                        <span ng-switch-when="T">
+                            <span ng-if="!json.taxonUri">
+                                <small class="text-muted" ng-if="!name || name.fetching">{{json.nameUri.uri}}</small>
+                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="name.name.fullNameHtml"></span></a>
                             </span>
-                            <span ng-switch-when="S">{{json.idPart}}</span>
-                            <span ng-switch-default>{{json.typeUri.idPart}}</span>
+                            <span ng-if="json.taxonUri">
+                                <small class="text-muted" ng-if="!taxon || taxon.fetching">{{json.taxonUri.uri}}</small>
+                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="taxon.instance.name.fullNameHtml"></span></a>
+                                <small ng-bind-html="taxon.instance.reference.citationHtml"></small>
+                            </span>
                         </span>
+                        <span ng-switch-when="S">{{json.idPart}}</span>
+                        <span ng-switch-default>{{json.typeUri.idPart}}</span>
                     </span>
                 </span>
             </span>
-        </a>
+        </span>
         <span class="controls">
             <i ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
             <a href="#" ng-click="clickNewWindow()">new window</a>

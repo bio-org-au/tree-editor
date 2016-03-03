@@ -105,7 +105,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     }
 
     $scope.clickNewWindow = function(i) {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?arrangement="+ $scope.arrangementUri +"&node=" + $scope.path[i], '_blank');
+        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.rootUri +"&focus=" + $scope.path[i], '_blank');
     };
 
     $scope.clickTrashBookmark = function(uri) {
@@ -233,6 +233,8 @@ var GetJsonController = function ($scope) {
         });
     };
 
+    $scope.refetchUriAndJson();
+
     $scope.$watch('uri', $scope.refetchUriAndJson);
 
 }
@@ -322,7 +324,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
             $scope.taxon = null;
             $scope.resource = null;
 
-            if ($scope.json.fetched) {
+            if ($scope.json && $scope.json.fetched) {
                 if (!$scope.json.taxonUri && $scope.json.nameUri && $scope.json.nameUri.uri) {
                     $scope.cl_scope.loadJson($scope.json.nameUri.uri, function (name_uri, name_json) {
                         $scope.name = name_json;
