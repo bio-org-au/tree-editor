@@ -18,6 +18,7 @@ class NodeChecklistParam {
     String focus
 
     static constraints = {
+        root  nullable: true
         focus  nullable: true
     }
 }

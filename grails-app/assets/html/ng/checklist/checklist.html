@@ -1,14 +1,11 @@
-<h1 ng-if="!arrangement || !arrangement.fetched">Checklist <small class="text-muted">{{arrangementUri}}</small></h1>
-<h1 ng-if="arrangement && arrangement.fetched">{{arrangement.label}}{{arrangement.title}}</h1>
-<div ng-if="arrangement && arrangement.fetched && arrangement.description" ng-bind-html="arrangement.description"></div>
 <div ng-if="taxanodes_bookmarks.vec.length > 0" style="font-size: smaller;">
 <span ng-repeat="uri in taxanodes_bookmarks.vec track by $index">
-    <span shortnodetext uri="{{uri}}"></span> <i class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
+    <a href="#" ng-click="clickBookmark(uri)"><span shortnodetext uri="{{uri}}"></span></a> <i class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
 </span>
 <a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear {{taxanodes_bookmarks.vec.length}} bookmarks</a>
 </div>
 <div>
-    <h2><span uri="{{focusUri}}" shortnodetext></span></h2>
+    <h1><span uri="{{focusUri}}" shortnodetext></span> <small>{{arrangement.label}}{{arrangement.title}}</small></h1>
 </div>
 <div>
     <span ng-repeat="uri in path">

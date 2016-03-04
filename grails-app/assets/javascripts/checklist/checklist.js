@@ -50,18 +50,24 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
         if(!json.fetching) {
             json.fetching = true;
+            $scope.$broadcast('nsl-json-state', uri, json);
 
             $http({
                 method: 'GET',
                 url: uri
             }).then(function successCallback(response) {
-                $scope.cache[uri] = response.data;
+                json = response.data;
+                $scope.cache[uri] = json;
                 response.data.fetching = false;
                 response.data.fetched = true;
-                // if anyone is using this node, let them know
-                $scope.$broadcast('nsl-json-fetched', uri, response.data);
+                $scope.$broadcast('nsl-json-state', uri, json);
+                $scope.$broadcast('nsl-json-fetched', uri, json);
             }, function errorCallback(response) {
+                if(uri=='http://localhost:7070/nsl-mapper/tree/apni/1133571') {
+                    console.log('failure! ' + uri);
+                }
                 $scope.cache[uri].fetching = false;
+                $scope.$broadcast('nsl-json-state', uri, json);
             });
         }
 
@@ -112,6 +118,9 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $scope.focusUri = a[a.length - 1];
     }
 
+    $scope.clickBookmark = function(uri) {
+        window.location = $rootScope.pagesUrl + "/editnode/checklist?focus=" + uri;
+    };
     $scope.clickTrashBookmark = function(uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);
     };
@@ -137,86 +146,104 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.arrangement =  $scope.needJson($scope.arrangementUri);
     $scope.needJson($scope.rootUri);
     $scope.needJson($scope.focusUri);
+    $scope.decidedOnPath = false;
 
-    var deregisterPathInitializationListener;
-    function pathInitializationListener(event, uri, json) {
-        var arrangement = $scope.currentJson($scope.arrangementUri);
-        var root = $scope.currentJson($scope.rootUri);
-        var focus = $scope.currentJson($scope.focusUri);
+    var deregisterInitializationListener;
+    function initializationListener(event, uri, json) {
+        var madeAChange;
+        do {
+            madeAChange = false;
 
-        if(!$scope.rootUri && arrangement && arrangement.fetched) {
-            // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
+            $scope.arrangement =  $scope.currentJson($scope.arrangementUri);
+            var arrangement = $scope.currentJson($scope.arrangementUri);
+            var root = $scope.currentJson($scope.rootUri);
+            var focus = $scope.currentJson($scope.focusUri);
 
-            $scope.rootUri = getPreferredLink(arrangement.workingRoot);
-            if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.currentRoot);
-            if(!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.node);
-            $scope.needJson($scope.rootUri);
+            // set the arrangement to the root arrangement if we can and need to
+
+            if (!$scope.arrangementUri && root && root.fetched) {
+                $scope.arrangementUri = getPreferredLink(root.arrangement);
+                $scope.arrangement = $scope.needJson($scope.arrangementUri);
+                arrangement = $scope.arrangement;
+                madeAChange = true;
+            }
+
+            // set the arrangement to the focus is we can and need to
+
+            if (!$scope.arrangementUri && focus && focus.fetched) {
+                $scope.arrangementUri = getPreferredLink(focus.arrangement);
+                $scope.arrangement = $scope.needJson($scope.arrangementUri);
+                arrangement = $scope.needJson($scope.arrangementUri);
+                madeAChange = true;
+            }
+
+            // get the root off the arrangement if we can and need to
+
+            if (!$scope.rootUri && arrangement && arrangement.fetched) {
+                // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
+                $scope.rootUri = getPreferredLink(arrangement.workingRoot);
+                if (!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.currentRoot);
+                if (!$scope.rootUri) $scope.rootUri = getPreferredLink(arrangement.node);
+                root = $scope.needJson($scope.rootUri);
+                madeAChange = true;
+            }
+
+            // set the focus to the root, if we can and need to
+            if (!$scope.focusUri && $scope.rootUri) {
+                $scope.focusUri = $scope.rootUri;
+                focus = $scope.needJson($scope.focusUri);
+                madeAChange = true;
+            }
+        }
+        while(madeAChange);
+
+
+        // if we have a root and a focus, set up the path
+
+        if (!$scope.decidedOnPath && $scope.rootUri && $scope.focusUri) {
+            $scope.decidedOnPath = true;
+
+            if ($scope.focusUri == $scope.rootUri) {
+                $scope.path = [$scope.rootUri];
+            }
+            else {
+                $http({
+                    method: 'GET',
+                    url: $rootScope.servicesUrl + '/TreeJsonView/findPath',
+                    params: {
+                        root: $scope.rootUri,
+                        focus: $scope.focusUri
+                    }
+                }).then(function successCallback(response) {
+                    $scope.path = response.data;
+
+                    if ($scope.path.length == 0) {
+                        // no path from the root to the focus. just use the focus as the root.
+                        console.log("no path from the root to the focus. just use the focus as the root");
+                        $scope.rootUri = $scope.focusUri;
+                        $scope.path = [$scope.rootUri];
+                    }
+                    else {
+                        for (var i in $scope.path) {
+                            $scope.needJson($scope.path[i]);
+                            $scope.nodeUI[$scope.path[i]].open = true;
+                        }
+                    }
+                }, function errorCallback(response) {
+                    console.log("setting path to focus because failed to get path");
+                    $scope.rootUri = $scope.focusUri;
+                    $scope.path = [$scope.focusUri];
+                });
+
+            }
         }
 
-        // right. we deregister ourselves when we have the path. that's the goal.
-
-        if($scope.rootUri && (!$scope.focusUri || $scope.focusUri==$scope.rootUri)) {
-            $scope.focusUri = $scope.rootUri;
-            $scope.path = [$scope.rootUri];
-            deregisterPathInitializationListener();
-        }
-        else
-        if($scope.rootUri && $scope.focusUri && $scope.focusUri!=$scope.rootUri) {
-            $scope.path = [$scope.focusUri];
-            deregisterPathInitializationListener();
-
-            $http({
-                method: 'GET',
-                url: $rootScope.servicesUrl + '/TreeJsonView/findPath',
-                params: {
-                    root: $scope.rootUri,
-                    focus: $scope.focusUri
-                }
-            }).then(function successCallback(response) {
-                $scope.path = response.data;
-                for(var i in $scope.path) {
-                    $scope.needJson($scope.path[i]);
-                    $scope.nodeUI[$scope.path[i]].open = true;
-                }
-
-            }, function errorCallback(response) {
-                $scope.loadingNamespaces = false;
-            });
-
+        if(arrangement && arrangement.fetched && root && root.fetched && focus && focus.fetched) {
+            deregisterInitializationListener();
         }
     }
-    deregisterPathInitializationListener = $scope.$on('nsl-json-fetched', pathInitializationListener);
-    pathInitializationListener();
-
-    var deregisterArrangementInitializationListener;
-    function arrangementInitializationListener(event, uri, json) {
-        $scope.arrangement = $scope.currentJson($scope.arrangementUri);
-        var root = $scope.currentJson($scope.rootUri);
-
-        if(!$scope.arrangementUri && root && root.fetched) {
-            $scope.arrangementUri = getPreferredLink(json.arrangement);
-            $scope.needJson($scope.arrangementUri);
-        }
-
-        // right. we deregister ourselves when we know what our arrangement is. that's the goal.
-
-        if($scope.arrangement && $scope.arrangement.fetched) {
-            deregisterArrangementInitializationListener();
-        }
-    }
-    deregisterArrangementInitializationListener = $scope.$on('nsl-json-fetched', arrangementInitializationListener);
-    arrangementInitializationListener();
-
-
-    // kick off the initialization;
-    $scope.$broadcast('nsl-json-fetched', null, null);
-
-    if($scope.focusUri) {
-        $scope.focusNode = $scope.focusUri;
-        $scope.path = [$scope.focusNode];
-        $scope.needJson($scope.focusNode);
-    }
-
+    deregisterInitializationListener = $scope.$on('nsl-json-fetched', initializationListener);
+    initializationListener();
 };
 
 ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
