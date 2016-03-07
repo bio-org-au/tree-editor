@@ -5,10 +5,7 @@
     <div class="form-group" ng-if="withTopNode">
         <label for="topNode">Using checklist</label>
         <div class="form-control form-control-static" id="topNode" style="border-radius: 0;">
-            {{withTopNode}}
-
-            <span uri="{{withTopNode}}" shortnodetext></span> <small>{{arrangement.label}}{{arrangement.title}}</small>
-
+            <span uri="{{withTopNode}}" shortnodetext></span> <small ng-if="arrangement">({{arrangement.label}}{{arrangement.title}})</small>
         </div>
         <input type="hidden"  name="with-top-node" value="{{withTopNode}}"/>
     </div>

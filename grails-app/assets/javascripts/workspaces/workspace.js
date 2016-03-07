@@ -3,15 +3,29 @@
 //= require utility/get-json-controller
 
 var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
+    setupJsonCache($rootScope, $http);
+
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
     $scope.data = null;
     $scope.response = null;
 
-    console.log($element);
-
     $scope.can_edit = false;
+
+    if ($scope.withTopNode) {
+        $rootScope.needJson($scope.withTopNode);
+        var deregisterInitializationListener;
+        function initializationListener(event, uri, json) {
+            if(uri == $scope.withTopNode && $rootScope.currentJson($scope.withTopNode).fetched) {
+                $scope.arrangement = $rootScope.needJson($scope.withTopNode).arrangement;
+                deregisterInitializationListener();
+            }
+        }
+
+        deregisterInitializationListener = $scope.$on('nsl-json-fetched', initializationListener);
+        initializationListener();
+    }
 
     $scope.reload = function() {
         $scope.loading = false;
