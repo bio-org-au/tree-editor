@@ -15,4 +15,7 @@ class WorkspacesController {
 
     }
 
+    def newWorkspaceFromChecklist() {
+        redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
+    }
 }

@@ -1,9 +1,15 @@
+
+//= require get-preferred-link
+//= require utility/get-json-controller
+
 var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
     $scope.data = null;
     $scope.response = null;
+
+    console.log($element);
 
     $scope.can_edit = false;
 
@@ -163,7 +169,8 @@ var workspaceformDirective = function() {
         templateUrl: "/tree-editor/assets/ng/workspaces/form.html",
         controller: WorkspaceformController,
         scope: {
-            uri: "@uri"
+            uri: "@uri",
+            withTopNode: "@withTopNode"
         },
     };
 }

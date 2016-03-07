@@ -12,4 +12,8 @@ class ClassificationsController {
         render view: 'checklist', model: [ uri: u.uri]
 
     }
+
+    def newWorkspaceFromChecklist() {
+        redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
+    }
 }

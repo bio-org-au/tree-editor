@@ -10,6 +10,10 @@ class EditnodeController {
 
         render view: 'checklist', model: [ rootUri: p.root, focusUri: p.focus]
     }
+
+    def newWorkspaceFromChecklist() {
+        redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
+    }
 }
 
 @Validateable
