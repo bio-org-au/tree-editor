@@ -1,0 +1,9 @@
+<td ng-if="!json.fetched"><small>{{uri}}</small></td>
+<td ng-if="json.name" ng-bind-html="json.name.fullNameHtml"></td>
+<td ng-if="json.instance" ng-bind-html="json.instance.name.fullNameHtml"></td>
+<td ng-if="json.instance" ng-bind-html="json.instance.reference.citationHtml"></td>
+<td ng-if="json.instance">{{json.instance.nomenclaturalStatus.name}}</td>
+<td ng-if="json.instance">{{json.instance.instanceType.name}}</td>
+<td ng-click="clickSelection()">
+    <i class="fa fabutton" ng-class="selected ? 'text-success fa-check' : 'text-muted fa-question'"></i>
+</td>

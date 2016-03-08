@@ -1,6 +1,7 @@
 <div>
-    <h1><span uri="{{focusUri}}" shortnodetext></span>
-        <small>{{arrangement.label}}{{arrangement.title}}</small>
+    <div class="pull-right"><a href="addRemoveNames?root={{rootUri}}&focus={{focusUri}}">Back</a></div>
+    <h4>Search and add names</h4>
+    <h1><span uri="{{focusUri}}" shortnodetext></span> <small>{{arrangement.label}}{{arrangement.title}}</small>
     </h1>
 </div>
 
@@ -15,6 +16,12 @@
     <fieldset class="form-group">
         <label for="inputName">Name</label>
         <input type="text" class="form-control" id="inputName" ng-model="form.name">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="form.includeSubnames">
+                Include subnames
+            </label>
+        </div>
     </fieldset>
     <fieldset class="form-group">
         <label for="inputReference">Reference</label>
@@ -36,13 +43,46 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <button type="button" ng-class="form.allReferences ? 'active' : ''" class="btn btn-primary" ng-click="clickSearch()">Search</button>
-        <a href="addRemoveNames?root={{rootUri}}&focus={{focusUri}}">Back</a>
+        <button type="button" ng-class="(form.searching ? 'disabled' : '')" class="btn btn-primary" ng-click="clickSearch()">Search</button>
     </fieldset>
 
 </form>
 
-<div ng-if="searchResults">
+
+<div ng-if="searching">
     <hr>
-    {{searchResults}}
+    <i class="fa fa-refresh fa-spin"></i>
+</div>
+
+<div ng-if="searchResults && searchResults.length && searchResults.length > 0">
+    <div class="pull-right">
+        <a href="#" ng-click="clickSelectAll()">Select All</a>
+        |
+        <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
+        |
+        <a href="#" ng-click="searchResults.length=0" class="pull-right">Clear search results</a>
+    </div>
+    <table class="table">
+        <caption>Search Results</caption>
+        <tr ng-repeat="uri in searchResults" searchresultrow uri="{{uri}}">
+        </tr>
+    </table>
+    <div class="pull-right">
+        <a href="#" ng-click="clickSelectAll()">Select All</a>
+        |
+        <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
+        |
+        <a href="#" ng-click="searchResults.length=0" class="pull-right">Clear search results</a>
+    </div>
+</div>
+
+<div ng-if="selected && selected.length && selected.length > 0">
+    <a href="#" ng-click="selected.length=0" class="pull-right">Clear selection results</a>
+    <table class="table">
+        <caption>Selected</caption>
+        <tr ng-repeat="uri in selected" searchresultrow uri="{{uri}}">
+        </tr>
+    </table>
+    <a href="#" ng-click="selected.length=0" class="pull-right">Clear selection results</a>
+    <button type="button" class="btn btn-primary" ng-click="clickAddNames()">Add {{selected.length}} name{{selected.length!=1?'s':''}}.</button>
 </div>
