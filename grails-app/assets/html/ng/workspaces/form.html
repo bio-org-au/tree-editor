@@ -1,13 +1,12 @@
-<div ng-if="loading">
+<div ng-if="json && json.fetching">
    <i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small>
 </div>
-<form ng-if="loaded">
+<form ng-if="!json || json.fetched">
     <div class="form-group" ng-if="withTopNode">
-        <label for="topNode">Using checklist</label>
+        <label for="topNode">Starting with checklist</label>
         <div class="form-control form-control-static" id="topNode" style="border-radius: 0;">
             <span uri="{{withTopNode}}" shortnodetext></span> <small ng-if="arrangement">({{arrangement.label}}{{arrangement.title}})</small>
         </div>
-        <input type="hidden"  name="with-top-node" value="{{withTopNode}}"/>
     </div>
     <div class="form-group">
         <label for="formTitle">Title *</label>

@@ -14,6 +14,23 @@ class EditnodeController {
     def newWorkspaceFromChecklist() {
         redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
     }
+
+    def addRemoveNames(AddRemoveNamesParam p) {
+        if(!p.validate()) {
+            return render (view: '/validationerror', model: [ bean: p])
+        }
+
+        [ rootUri: p.root, focusUri: p.focus]
+    }
+
+    def searchNames(AddRemoveNamesParam p) {
+        if(!p.validate()) {
+            return render (view: '/validationerror', model: [ bean: p])
+        }
+
+        [ rootUri: p.root, focusUri: p.focus]
+    }
+
 }
 
 @Validateable
@@ -26,3 +43,16 @@ class NodeChecklistParam {
         focus  nullable: true
     }
 }
+
+@Validateable
+class AddRemoveNamesParam {
+    String root
+    String focus
+
+    static constraints = {
+        root  nullable: false
+        focus  nullable: false
+    }
+}
+
+

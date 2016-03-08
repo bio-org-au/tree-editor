@@ -1,0 +1,48 @@
+<div>
+    <h1><span uri="{{focusUri}}" shortnodetext></span>
+        <small>{{arrangement.label}}{{arrangement.title}}</small>
+    </h1>
+</div>
+
+<div ng-if="searchError" class="alert alert-warning">
+    {{searchError.config.url}}<br>
+    <strong>{{searchError.status}}</strong> - {{searchError.statusText}}
+    <blockquote>{{searchError}}</blockquote>
+</div>
+
+<!-- the input form -->
+<form>
+    <fieldset class="form-group">
+        <label for="inputName">Name</label>
+        <input type="text" class="form-control" id="inputName" ng-model="form.name">
+    </fieldset>
+    <fieldset class="form-group">
+        <label for="inputReference">Reference</label>
+        <input type="text" class="form-control" id="inputReference" ng-model="form.reference" ng-change="changeReference()">
+        <button type="button" id="inputNamesOnly" ng-class="form.namesOnly ? 'active' : ''" class="btn btn-default btn-sm" ng-click="clickNamesOnly()">Names only</button>
+        <button type="button" id="inputAllReferences" ng-class="form.allReferences ? 'active' : ''" class="btn btn-default btn-sm" ng-click="clickAllReferences()">All References</button>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="form.includeSubreferences">
+                Include subreferences
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="form.primaryInstancesOnly">
+                Primary instances only
+            </label>
+        </div>
+    </fieldset>
+
+    <fieldset class="form-group">
+        <button type="button" ng-class="form.allReferences ? 'active' : ''" class="btn btn-primary" ng-click="clickSearch()">Search</button>
+        <a href="addRemoveNames?root={{rootUri}}&focus={{focusUri}}">Back</a>
+    </fieldset>
+
+</form>
+
+<div ng-if="searchResults">
+    <hr>
+    {{searchResults}}
+</div>

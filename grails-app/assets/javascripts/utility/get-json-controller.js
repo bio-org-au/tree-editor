@@ -89,6 +89,7 @@ function setupJsonCache($rootScope, $http) {
 var GetJsonController = function ($scope, $rootScope) {
     // everyone needs this
     $scope.getPreferredLink = getPreferredLink;
+    $scope.json = $rootScope.needJson($scope.uri);
 
     $scope.refetchUriAndJson = function() {
         $scope.json = $rootScope.needJson($scope.uri);

@@ -5,13 +5,29 @@
 var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
     setupJsonCache($rootScope, $http);
 
-    $scope.loading = false;
-    $scope.loaded = false;
-    $scope.failedtoload = false;
-    $scope.data = null;
-    $scope.response = null;
 
     $scope.can_edit = false;
+    $scope.form = {};
+
+    $scope.resetForm = $scope.clickReset = $scope.afterUpdateJson = function() {
+        if($scope.json) {
+            // TODO: we should be asking the service layer what permissions we have,
+            // rather than figuring this out clientside
+            $scope.can_edit = $scope.json.owner == $rootScope.getUser();
+            $scope.form.title = $scope.json.title;
+            $scope.form.description = $scope.json.description;
+            $element.find('#formDesc').html($scope.form.description);
+        }
+        else {
+            $scope.can_edit = true;
+            $scope.form.title = '';
+            $scope.form.description = '';
+            $element.find('#formDesc').html($scope.form.description);
+        }
+    };
+
+    GetJsonController($scope, $rootScope);
+    $scope.resetForm();
 
     if ($scope.withTopNode) {
         $rootScope.needJson($scope.withTopNode);
@@ -27,44 +43,6 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
         initializationListener();
     }
 
-    $scope.reload = function() {
-        $scope.loading = false;
-        $scope.loaded = false;
-        $scope.failedtoload = false;
-        $scope.data = null;
-        $scope.response = null;
-        $scope.form = {}
-
-        $scope.can_edit = false;
-
-        if(!$scope.uri) {
-            // new workspace
-            $scope.loading = false;
-            $scope.loaded = true;
-            return;
-        }
-
-        $scope.loading = true;
-
-        $http({
-            method: 'GET',
-            url: $scope.uri
-        }).then(function successCallback(response) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            $scope.data = response.data;
-
-            $scope.resetForm();
-
-        }, function errorCallback(response) {
-            $scope.loading = false;
-            $scope.failedtoload = true;
-            $scope.response = response;
-        });
-    };
-
-    $scope.reload();
-
     $scope.clickSave = function() {
         if(!$scope.form.title) return;
         $http({
@@ -77,7 +55,7 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             params: {
                 'uri': $scope.uri,
                 'title': $scope.form.title,
-                'description': $element.find('#formDesc').html(),
+                'description': $element.find('#formDesc').html()
             }
         }).then(function successCallback(response) {
             window.location = $rootScope.pagesUrl + "/workspaces/index";
@@ -111,6 +89,7 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
                 'namespace': $rootScope.namespace,
                 'title': $scope.form.title,
                 'description': $element.find('#formDesc').html(),
+                'checkout': $scope.withTopNode
             }
         }).then(function successCallback(response) {
             window.location = $rootScope.pagesUrl + "/workspaces/index";
@@ -131,7 +110,7 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
     };
 
     $scope.clickDelete = function() {
-        if(!window.confirm("Delete workspace \"" + $scope.data.title + "\" ?")) return;
+        if(!window.confirm("Delete workspace \"" + $scope.json.title + "\" ?")) return;
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
@@ -158,15 +137,6 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
                 ];
             }
         });
-    };
-
-    $scope.resetForm = $scope.clickReset = function() {
-        // TODO: we should be asking the service layer what permissions we have,
-        // rather than figuring this out clientside
-        $scope.can_edit = $scope.data.owner == $rootScope.getUser();
-        $scope.form.title = $scope.data.title;
-        $scope.form.description = $scope.data.description;
-        $element.find('#formDesc').html($scope.form.description);
     };
 
 

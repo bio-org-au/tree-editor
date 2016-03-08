@@ -55,6 +55,11 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $rootScope.clearBookmarks('taxa-nodes');
     };
 
+    $scope.clickAddRemoveNames = function() {
+        window.open($rootScope.pagesUrl + "/editnode/addRemoveNames?root="+ $scope.rootUri +"&focus=" + $scope.focusUri);
+    };
+
+
 
     // bookmark gear
     $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
@@ -292,6 +297,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     $scope.clickNewWindow = function() {
         window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
     };
+
 };
 
 NodeitemController.$inject = ['$scope', '$rootScope', '$http'];
