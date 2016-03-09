@@ -162,6 +162,13 @@ var SearchnamesController = function ($scope, $rootScope, $http) {
 
 
     $scope.clickAddNames = function() {
+        console.log ({
+            'root': $scope.rootUri,
+                'focus': $scope.focusUri,
+                'names': $scope.selected
+        });
+
+
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/addNamesToNode',
@@ -170,8 +177,8 @@ var SearchnamesController = function ($scope, $rootScope, $http) {
                 'nsl-jwt': $rootScope.getJwt()
             },
             params: {
-                'root': $scope.rootUrl,
-                'focus': $scope.focusUrl,
+                'root': $scope.rootUri,
+                'focus': $scope.focusUri,
                 'names': $scope.selected
             }
         }).then(function successCallback(response) {
