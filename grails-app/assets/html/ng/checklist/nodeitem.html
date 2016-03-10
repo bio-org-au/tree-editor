@@ -4,7 +4,6 @@
         <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger" ng-click="UI.open = true;"></i>
     </span>
     <div style="margin-left: 1em;" class="controlholder">
-
         <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
         <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
         <span ng-if="json.fetched">
@@ -16,14 +15,12 @@
                 <span ng-switch-default>
                     <span ng-switch="json.type">
                         <span ng-switch-when="T">
-                            <span ng-if="!json.taxonUri">
-                                <small class="text-muted" ng-if="!name || name.fetching">{{json.nameUri.uri}}</small>
-                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="name.name.fullNameHtml"></span></a>
+                            <span ng-if="!json.instance">
+                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="json.name"></span></a>
                             </span>
-                            <span ng-if="json.taxonUri">
-                                <small class="text-muted" ng-if="!taxon || taxon.fetching">{{json.taxonUri.uri}}</small>
-                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="taxon.instance.name.fullNameHtml"></span></a>
-                                <small ng-bind-html="taxon.instance.reference.citationHtml"></small>
+                            <span ng-if="json.instance">
+                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="json.instance.name"></span></a>
+                                <small ng-bind-html="json.instance.citationHtml"></small>
                             </span>
                         </span>
                         <span ng-switch-when="S">{{json.idPart}}</span>
@@ -38,4 +35,5 @@
         </span>
     </div>
 </div>
+
 <div style="margin-left: 2em;" ng-if="json.fetched && hasSubnodes && UI.open" uri="{{uri}}" nodelist></div>

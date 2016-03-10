@@ -40,7 +40,7 @@ var SearchnamesController = function ($scope, $rootScope, $http) {
         }
     }
 
-    deregisterInitializationListener = $scope.$on('nsl-json-fetched', initializationListener);
+    deregisterInitializationListener = $rootScope.$on('nsl-json-fetched', initializationListener);
     initializationListener();
 
     function dorefbuttons() {

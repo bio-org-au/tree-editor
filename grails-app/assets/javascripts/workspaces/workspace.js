@@ -39,7 +39,7 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             }
         }
 
-        deregisterInitializationListener = $scope.$on('nsl-json-fetched', initializationListener);
+        deregisterInitializationListener = $rootScope.$on('nsl-json-fetched', initializationListener);
         initializationListener();
     }
 
