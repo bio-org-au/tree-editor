@@ -31,6 +31,10 @@ class EditnodeController {
         [ rootUri: p.root, focusUri: p.focus]
     }
 
+    def searchEmbedded() {
+
+    }
+
 }
 
 @Validateable
