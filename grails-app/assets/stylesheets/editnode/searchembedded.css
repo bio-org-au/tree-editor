@@ -1,0 +1,15 @@
+
+.selection-pad {
+    text-align: center;
+    cursor: pointer;
+    width: 2em;
+}
+
+.selection-pad.on {
+    background-color: green;
+    color: white;
+}
+
+.selection-pad.off {
+
+}
