@@ -26,6 +26,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.clickPath = function(i) {
         $scope.focusUri = $scope.path[i];
+        $scope.focus = $rootScope.needJson($scope.focusUri);
         $scope.path = $scope.path.slice(0, i + 1);
     };
 
@@ -43,6 +44,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
             $scope.path.push(a[u]);
         }
         $scope.focusUri = a[a.length - 1];
+        $scope.focus = $rootScope.needJson($scope.focusUri);
     }
 
     $scope.clickBookmark = function(uri) {
