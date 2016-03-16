@@ -31,8 +31,12 @@ class EditnodeController {
         [ rootUri: p.root, focusUri: p.focus]
     }
 
-    def searchEmbedded() {
+    def searchEmbedded(AddRemoveNamesParam p) {
+        if(!p.validate()) {
+            return render (view: '/validationerror', model: [ bean: p])
+        }
 
+        [ rootUri: p.root, focusUri: p.focus]
     }
 
 }

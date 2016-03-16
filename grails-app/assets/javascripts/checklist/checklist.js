@@ -57,8 +57,8 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         $rootScope.clearBookmarks('taxa-nodes');
     };
 
-    $scope.clickAddRemoveNames = function() {
-        window.open($rootScope.pagesUrl + "/editnode/addRemoveNames?root="+ $scope.rootUri +"&focus=" + $scope.focusUri);
+    $scope.clickSearchAddNames = function() {
+        window.open($rootScope.pagesUrl + "/editnode/searchEmbedded?root="+ $scope.rootUri +"&focus=" + $scope.focusUri);
     };
 
 

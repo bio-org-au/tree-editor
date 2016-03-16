@@ -20,6 +20,8 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
 
     $scope.swipeOn = true;
 
+    $scope.amAddingNames = false;
+
     $scope.formSubmitted = function() {
         var searchParams = {};
         var a = $element.find('#search').serializeArray();
@@ -167,12 +169,22 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
     };
 
     $scope.clickAddNames = function() {
+
+        var names = [];
+        for(i in $scope.selected) {
+            if($scope.selected[i].selected)
+                names.push(i);
+        }
+
+
         console.log ({
             'root': $scope.rootUri,
             'focus': $scope.focusUri,
-            'names': $scope.selected
+            'names': names
         });
 
+
+        $scope.amAddingNames = true;
 
         $http({
             method: 'POST',
@@ -184,11 +196,13 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
             params: {
                 'root': $scope.rootUri,
                 'focus': $scope.focusUri,
-                'names': $scope.selected
+                'names': names
             }
         }).then(function successCallback(response) {
+            $scope.amAddingNames = false;
             window.location = $rootScope.pagesUrl + "/Editnode/addRemoveNames?root=" + $scope.rootUri + "&focus=" + $scope.focusUri;
         }, function errorCallback(response) {
+            $scope.amAddingNames = false;
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
             }
@@ -229,8 +243,8 @@ var searchembeddedDirective = function () {
         templateUrl: "/tree-editor/assets/ng/editnode/searchembedded.html",
         controller: SearchembeddedController,
         scope: {
-            rootUri: "@root",
-            focusUri: "@focus"
+            rootUri: "@",
+            focusUri: "@"
         },
         link: function(scope, element, attrs, controller, transcludeFn) {
             // put the services search fomr into #search-container

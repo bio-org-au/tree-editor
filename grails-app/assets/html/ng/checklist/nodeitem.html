@@ -16,7 +16,7 @@
                     <span ng-switch="json.type">
                         <span ng-switch-when="T">
                             <span ng-if="!json.instance">
-                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="json.name"></span></a>
+                                <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="json.name.fullNameHtml"></span></a>
                             </span>
                             <span ng-if="json.instance">
                                 <a href="#" ng-click="clickUpArrow()"><span ng-bind-html="json.instance.name"></span></a>

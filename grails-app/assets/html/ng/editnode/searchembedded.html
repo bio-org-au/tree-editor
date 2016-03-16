@@ -1,10 +1,7 @@
 <div>
     <div class="pull-right"><a href="checklist?root={{rootUri}}&focus={{focusUri}}">Back</a></div>
-    <h4>Add/remove names</h4>
-    focus: {{focusUri}}
-    root: {{rootUri}}
-    <h1><span uri="{{focusUri}}" shortnodetext></span>
-        <small><span uri="{{root.arrangement._uri}}" shortarrangementtext></span></small>
+    <h4>Search/Add names</h4>
+    <h1><span uri="{{focusUri}}" shortnodetext></span> <small><span uri="{{root.arrangement._uri}}" shortarrangementtext></span></small>
     </h1>
 </div>
 
@@ -15,10 +12,11 @@
         ng-class="(tab == 'resultsTab' ? 'active' : '') + (hasResults ? '' : ' disabled')"><a href="#">Search Results</a></li>
     <li role="presentation" ng-click="clickSelectedNamesTab();"
         ng-class="(tab == 'selectedNamesTab' ? 'active' : '') + (hasSelectedNames ? '' : ' disabled')"><a href="#">Selected
-        Names<span uri="{{focusUri}}" shortnodetext></span> </a></li>
+        Names</a></li>
 </ul>
 
 <div class="container" id="search-container" ng-class="tab == 'searchTab' ? '' : 'hidden'"></div>
+
 <div ng-class="tab == 'resultsTab' ? '' : 'hidden'">
     <div ng-if="searching"><i class="fa fa-refresh fa-spin"></i> Searching &hellip;</div>
     <div ng-if="!searchResults && !searching">No names found.</div>
@@ -32,6 +30,10 @@
                     <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
                     |
                     <a href="#" ng-click="clickClearResults()">Clear search results</a>
+                    <span ng-class="hasSelectedNames ? '' : ' hidden'">
+                    |
+                    <a href="#" ng-click="clickSelectedNamesTab();">Review names to add to <span uri="{{focusUri}}" shortnodetext></span></a>
+                    </span>
                 </td>
             </tr>
             <tr ng-repeat="uri in searchResults" uri="{{uri}}" searchresultrow>
@@ -44,26 +46,19 @@
                     <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
                     |
                     <a href="#" ng-click="clickClearResults()">Clear search results</a>
+                    <span ng-class="hasSelectedNames ? '' : ' hidden'">
+                    |
+                    <a href="#" ng-click="clickSelectedNamesTab();">Review names to add to <span uri="{{focusUri}}" shortnodetext></span></a>
+                    </span>
                 </td>
             </tr>
         </table>
     </div>
 </div>
+
 <div ng-class="tab == 'selectedNamesTab' ? '' : 'hidden'">
     <div ng-if="!hasSelectedNames">No names selected.</div>
     <div ng-if="hasSelectedNames">
-        <div>
-            <small>
-                <ul>
-                    <li>
-                        <a href="#">action</a>
-                    </li>
-                    <li>
-                        <a href="#">aother action</a>
-                    </li>
-                </ul>
-            </small>
-        </div>
         <table class="table">
             <tr>
                 <th>Select</th>
@@ -72,7 +67,7 @@
                 |
                 <a href="#" ng-click="clickDeselectAllSelected()">Deselect All</a>
                 |
-                <a href="#" ng-click="clickClearUnselected()">Clear unselected</a>
+                <a href="#" ng-click="clickClearUnselected()">Remove unselected</a>
                 </td>
 
             </tr>
@@ -85,10 +80,12 @@
                     |
                     <a href="#" ng-click="clickDeselectAllSelected()">Deselect All</a>
                     |
-                    <a href="#" ng-click="clickClearUnselected()">Clear unselected</a>
+                    <a href="#" ng-click="clickClearUnselected()">Remove unselected</a>
                 </td>
             </tr>
         </table>
+
+        Add these names to <span uri="{{focusUri}}" shortnodetext></span> <small><span uri="{{root.arrangement._uri}}" shortarrangementtext></span></small> <a href="#" ng-click="clickAddNames()" class="btn btn-primary">Add</span></a>
     </div>
 </div>
 

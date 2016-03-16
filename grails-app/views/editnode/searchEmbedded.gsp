@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<div searchembedded></div>
+<div data-root-uri="${rootUri}" data-focus-uri="${focusUri}" searchembedded></div>
 
 </body>
 </html>
