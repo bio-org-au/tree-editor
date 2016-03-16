@@ -7,26 +7,15 @@
         <small><span uri="{{root.arrangement._uri}}" shortarrangementtext></span></small>
     </h1>
 </div>
-SUBMISSION COUNT: {{submissionCount}}
-<div>
-    <small>
-        <ul>
-            action
-        </ul>
-        <ul>
-            another action
-        </ul>
-    </small>
-</div>
 
 <ul class="nav nav-tabs">
     <li role="presentation" ng-click="clickSearchTab()" ng-class="tab == 'searchTab' ? 'active' : ''"><a
             href="#">Search</a></li>
     <li role="presentation" ng-click="clickResultsTab();"
-        ng-class="(tab == 'resultsTab' ? 'active' : '') + (hasResults ? '' : ' disabled')"><a href="#">Results</a></li>
+        ng-class="(tab == 'resultsTab' ? 'active' : '') + (hasResults ? '' : ' disabled')"><a href="#">Search Results</a></li>
     <li role="presentation" ng-click="clickSelectedNamesTab();"
-        ng-class="(tab == 'selectedNamesTab' ? 'active' : '') + (hasSelectedNames ? '' : ' disabled')"><a href="#">Add
-        names<span uri="{{focusUri}}" shortnodetext></span> </a></li>
+        ng-class="(tab == 'selectedNamesTab' ? 'active' : '') + (hasSelectedNames ? '' : ' disabled')"><a href="#">Selected
+        Names<span uri="{{focusUri}}" shortnodetext></span> </a></li>
 </ul>
 
 <div class="container" id="search-container" ng-class="tab == 'searchTab' ? '' : 'hidden'"></div>
@@ -42,7 +31,7 @@ SUBMISSION COUNT: {{submissionCount}}
                     |
                     <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
                     |
-                    <a href="#" ng-click="searchResults.length=0">Clear search results</a>
+                    <a href="#" ng-click="clickClearResults()">Clear search results</a>
                 </td>
             </tr>
             <tr ng-repeat="uri in searchResults" uri="{{uri}}" searchresultrow>
@@ -54,13 +43,52 @@ SUBMISSION COUNT: {{submissionCount}}
                     |
                     <a href="#" ng-click="clickDeselectAll()">Deselect All</a>
                     |
-                    <a href="#" ng-click="searchResults.length=0">Clear search results</a>
+                    <a href="#" ng-click="clickClearResults()">Clear search results</a>
                 </td>
             </tr>
         </table>
     </div>
 </div>
 <div ng-class="tab == 'selectedNamesTab' ? '' : 'hidden'">
-    this is the selected names tab
+    <div ng-if="!hasSelectedNames">No names selected.</div>
+    <div ng-if="hasSelectedNames">
+        <div>
+            <small>
+                <ul>
+                    <li>
+                        <a href="#">action</a>
+                    </li>
+                    <li>
+                        <a href="#">aother action</a>
+                    </li>
+                </ul>
+            </small>
+        </div>
+        <table class="table">
+            <tr>
+                <th>Select</th>
+                <td>
+                <a href="#" ng-click="clickSelectAllSelected()">Select All</a>
+                |
+                <a href="#" ng-click="clickDeselectAllSelected()">Deselect All</a>
+                |
+                <a href="#" ng-click="clickClearUnselected()">Clear unselected</a>
+                </td>
+
+            </tr>
+            <tr ng-repeat="nugget in selected" uri="{{nugget.uri}}" searchresultrow>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <a href="#" ng-click="clickSelectAllSelected()">Select All</a>
+                    |
+                    <a href="#" ng-click="clickDeselectAllSelected()">Deselect All</a>
+                    |
+                    <a href="#" ng-click="clickClearUnselected()">Clear unselected</a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 

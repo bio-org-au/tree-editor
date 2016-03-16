@@ -12,9 +12,7 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
     $scope.root = $rootScope.needJson($scope.rootUri);
     $scope.focus =$rootScope.needJson($scope.focusUri);
 
-    $scope.selected = [];
-
-    $scope.submissionCount = 0;
+    $scope.selected = {};
 
     $scope.hasResults = false;
     $scope.hasSelectedNames = false;
@@ -23,8 +21,6 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
     $scope.swipeOn = true;
 
     $scope.formSubmitted = function() {
-        $scope.submissionCount++;
-
         var searchParams = {};
         var a = $element.find('#search').serializeArray();
         for(i in a) {
@@ -53,6 +49,22 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
 
     };
 
+    $scope.getUriInSelected = function(uri) {
+        return $scope.selected[uri];
+    };
+
+    $scope.isSelected = function(uri) {
+        var nugget = $scope.getUriInSelected(uri);
+        return nugget ? nugget.selected : false;
+    };
+
+    $scope.isAnySelected = function() {
+        for(i in $scope.selected) {
+            return true;
+        }
+        return false;
+    }
+
     $scope.clickSearchTab = function() {
         $scope.tab = 'searchTab';
     };
@@ -67,73 +79,92 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
             $scope.tab = 'selectedNamesTab';
     };
 
+    $scope.select = function (uri) {
+        var nugget = $scope.getUriInSelected(uri);
 
-    $scope.toggleSelection = function (uri) {
-        var found = false;
-        var newselected = new Array;
-        for (i in $scope.selected) {
-            if ($scope.selected[i] == uri) {
-                found = true;
-            }
-            else {
-                newselected.push($scope.selected[i]);
-            }
+        if(!nugget) {
+            nugget = { uri: uri, selected: true};
+            $scope.selected[uri] = nugget;
         }
-        if (!found) {
-            newselected.push(uri);
+        else {
+            nugget.selected = true;
         }
 
-        $scope.selected = newselected;
-        $scope.swipeOn = !found;
+        $scope.swipeOn = nugget.selected;
+        $scope.$broadcast('nsl-tree-editor.selection', uri, nugget.selected);
+        $scope.hasSelectedNames = $scope.isAnySelected();
+    };
 
-        $scope.$broadcast('nsl-tree-editor.selection', uri, !found);
+    $scope.deselect = function (uri) {
+        var nugget = $scope.getUriInSelected(uri);
+
+        if(!nugget) {
+            return;
+        }
+        else {
+            nugget.selected = false;
+        }
+
+        $scope.swipeOn = nugget.selected;
+        $scope.$broadcast('nsl-tree-editor.selection', uri, nugget.selected);
+        $scope.hasSelectedNames = $scope.isAnySelected();
     };
 
     $scope.clickSelectAll = function () {
         for (i in $scope.searchResults) {
-            var uri_i = $scope.searchResults[i];
-            var found_j = false;
-            for (j in $scope.selected) {
-                var uri_j = $scope.selected[j];
-                if (uri_i == uri_j) {
-                    found_j = true;
-                    break;
-                }
-            }
-            if (!found_j) {
-                $scope.selected.push(uri_i);
-                $scope.$broadcast('nsl-tree-editor.selection', uri_i, true);
-
-            }
+            $scope.select($scope.searchResults[i]);
         }
     };
 
     $scope.clickDeselectAll = function () {
-        var newselected = new Array;
-
-        for (i in $scope.selected) {
-            var uri_i = $scope.selected[i];
-            var found_j = false;
-            for (j in $scope.searchResults) {
-                var uri_j = $scope.searchResults[j];
-                if (uri_i == uri_j) {
-                    found_j = true;
-                    break;
-                }
-            }
-            if (!found_j) {
-                newselected.push(uri_i);
-            }
-        }
-
-        $scope.selected = newselected;
-
-        for (j in $scope.searchResults) {
-            var uri_j = $scope.searchResults[j];
-            $scope.$broadcast('nsl-tree-editor.selection', uri_j, false);
+        for (i in $scope.searchResults) {
+            $scope.deselect($scope.searchResults[i]);
         }
     };
 
+    $scope.clickClearResults = function() {
+        $scope.searchResults.lenght = 0;
+        $scope.hasResults = false;
+        $scope.tab = 'searchTab';
+    }
+
+    $scope.clickSelectAllSelected = function() {
+        for (i in $scope.selected) {
+            $scope.select($scope.selected[i].uri);
+        }
+    };
+
+    $scope.clickDeselectAllSelected = function() {
+        for (i in $scope.selected) {
+            $scope.deselect($scope.selected[i].uri);
+        }
+    };
+
+    $scope.clickClearUnselected = function() {
+        var nuggets = [];
+        for(i in $scope.selected) {
+            if($scope.selected[i].selected) {
+                nuggets.push($scope.selected[i]);
+            }
+        }
+
+        $scope.selected = {};
+        for(i in nuggets) {
+            $scope.selected[nuggets[i].uri] = nuggets[i];
+        }
+
+        $scope.hasSelectedNames = $scope.isAnySelected();
+
+        if(!$scope.hasSelectedNames) {
+            if($scope.hasResults) {
+                $scope.tab = 'resultsTab';
+            }
+            else {
+                $scope.tab = 'searchTab';
+            }
+
+        }
+    };
 
     $scope.clickAddNames = function() {
         console.log ({
@@ -223,25 +254,27 @@ app.directive('searchembedded', searchembeddedDirective);
 var SearchresultrowController = function ($scope, $rootScope, $http) {
     GetJsonController($scope, $rootScope);
 
-    $scope.selected = false;
-
-    for (u in $scope.$parent.selected) {
-        if ($scope.$parent.selected[u] == $scope.uri) {
-            $scope.selected = true;
-        }
-    }
+    $scope.selected = $scope.$parent.isSelected($scope.uri);
 
     $scope.$on('nsl-tree-editor.selection', function (event, uri, selected) {
         if (uri == $scope.uri) $scope.selected = selected;
     });
 
     $scope.clickSelection = function () {
-        $scope.$parent.toggleSelection($scope.uri);
+        if($scope.selected) {
+            $scope.$parent.deselect($scope.uri);
+        }
+        else {
+            $scope.$parent.select($scope.uri);
+        }
     }
 
     $scope.swipeSelection = function () {
-        if($scope.$parent.swipeOn != $scope.selected) {
-            $scope.$parent.toggleSelection($scope.uri);
+        if($scope.$parent.swipeOn) {
+            $scope.$parent.select($scope.uri);
+        }
+        else {
+            $scope.$parent.deselect($scope.uri);
         }
     }
 };
