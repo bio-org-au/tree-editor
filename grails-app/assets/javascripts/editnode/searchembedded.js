@@ -200,7 +200,7 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
             }
         }).then(function successCallback(response) {
             $scope.amAddingNames = false;
-            window.location = $rootScope.pagesUrl + "/Editnode/addRemoveNames?root=" + $scope.rootUri + "&focus=" + $scope.focusUri;
+            window.location = $rootScope.pagesUrl + "/Editnode/checklist?root=" + $scope.rootUri + "&focus=" + $scope.focusUri;
         }, function errorCallback(response) {
             $scope.amAddingNames = false;
             if(response.data && response.data.msg) {
