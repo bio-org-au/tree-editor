@@ -7,11 +7,35 @@
 
 //= require get-preferred-link
 //= require utility/get-json-controller
+//= require utility/get-uri-permissions
 
 var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.cl_scope = $scope;
 
     setupJsonCache($rootScope, $http);
+
+    $scope.rootPermissions = {};
+
+    $scope.focusPermissions = {};
+
+    $scope.refreshPermissions = function() {
+        $scope.rootPermissions = {};
+        get_uri_permissions($rootScope, $http, $scope.rootUri, function(data, success) {
+            if(success)
+                $scope.rootPermissions = data;
+        });
+        $scope.focusPermissions = {};
+        get_uri_permissions($rootScope, $http, $scope.focusUri, function(data, success) {
+            if(success)
+                $scope.focusPermissions = data;
+        });
+    };
+
+    $scope.$watch('rootUri', $scope.refreshPermissions);
+
+    $scope.$watch('focusUri', $scope.refreshPermissions);
+
+    $rootScope.$on('nsl-tree-editor.loginlogout', $scope.refreshPermissions);
 
     $scope.arrangement = null;
     $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
@@ -60,8 +84,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.clickSearchAddNames = function() {
         window.open($rootScope.pagesUrl + "/editnode/searchEmbedded?root="+ $scope.rootUri +"&focus=" + $scope.focusUri);
     };
-
-
 
     // bookmark gear
     $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');

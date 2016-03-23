@@ -3,6 +3,8 @@ var LoginlogoutController = function ($scope, $rootScope, $http) {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
         localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
         localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
+        $rootScope.$emit('nsl-tree-editor.loginlogout');
+
         $http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/auth/signInJson',
@@ -11,6 +13,7 @@ var LoginlogoutController = function ($scope, $rootScope, $http) {
             localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'Y');
             localStorage.setItem('nsl-tree-editor.loginlogout.principal', response.data.principal);
             localStorage.setItem('nsl-tree-editor.loginlogout.jwt', response.data.jwt);
+            $rootScope.$emit('nsl-tree-editor.loginlogout');
         }, function errorCallback(response) {
         });
     };
@@ -19,6 +22,8 @@ var LoginlogoutController = function ($scope, $rootScope, $http) {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
         localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
         localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
+        $rootScope.$emit('nsl-tree-editor.loginlogout');
+
         $http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/auth/signOutJson',

@@ -7,12 +7,22 @@
 <div>
     <h4>Checklist</h4>
     <h1><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
+    --: {{rootPermissions}} :--
+    <br/>
+    --: {{focusPermissions}} :--
 </div>
 <div>
     <small>
     <ul>
-        <li><a href="newWorkspaceFromChecklist?focusUri={{focusUri}}">Create a new workspace using this checklist</a></li>
-        <li><a href="#" ng-click="clickSearchAddNames()">Search for names to add to <span uri="{{focus._uri}}" shortnodetext></span></a></li>
+        <li ng-if="rootPermissions.userPermissions.canCreateWorkspaces"><a href="newWorkspaceFromChecklist?focusUri={{focusUri}}">Create a new workspace using this checklist</a></li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit"><a href="#" ng-click="clickSearchAddNames()">Search for names to add to <span uri="{{focus._uri}}" shortnodetext></span></a></li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Add/move a bookmarked node into this list</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Change the name at this placement</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Select instances for this name and/or names below it</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Remove this placement, moving all names beneath it up</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Remove this placement and all nodes below it</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Revert all changes made to the checklist at and below this point</li>
+        <li ng-if="rootPermissions.uriPermissions.canEdit">Commit all changes made to the checklist at and below this point</li>
     </ul>
     </small>
 </div>

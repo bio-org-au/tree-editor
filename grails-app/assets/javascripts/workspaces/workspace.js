@@ -78,6 +78,8 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
     $scope.clickCreate = function() {
         if(!$scope.form.title) return;
 
+        console.log("ABOUT TO CREATE!");
+
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
