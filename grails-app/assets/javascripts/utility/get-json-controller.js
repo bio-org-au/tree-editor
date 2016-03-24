@@ -200,3 +200,15 @@ var shortarrangementtextDirective = function() {
 }
 
 app.directive('shortarrangementtext', shortarrangementtextDirective);
+
+var shortinstreftextDirective = function() {
+    return {
+        templateUrl: "/tree-editor/assets/ng/utility/shortinstreftext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        },
+    };
+}
+
+app.directive('shortinstreftext', shortinstreftextDirective);
