@@ -248,7 +248,12 @@ var searchembeddedDirective = function () {
         },
         link: function(scope, element, attrs, controller, transcludeFn) {
             // put the services search fomr into #search-container
+
+            console.log("LOADING THE SEARCH FORM");
+
             $(element).find("#search-container").load("http://localhost:8080/services/search/form", null, function() {
+                console.log("SEARCH FORM IS LOADED");
+
                 // once the search container has been loaded, hijack it by
                 // catching the form submit event
                 $("#search").submit(function(event) {
