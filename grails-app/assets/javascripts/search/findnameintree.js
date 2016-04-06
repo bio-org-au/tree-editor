@@ -6,6 +6,50 @@ var FindnameintreeController = function ($scope, $rootScope, $http, $element) {
     setupJsonCache($rootScope, $http);
 
     GetJsonController($scope, $rootScope);
+
+    $scope.hasResults = true;
+    $scope.tab = 'searchTab';
+    $scope.searching = false;
+    $scope.searchResults = [];
+
+    $scope.clickSearchTab = function() {
+        $scope.tab = 'searchTab';
+    };
+
+    $scope.clickResultsTab = function() {
+        if($scope.hasResults)
+            $scope.tab = 'resultsTab';
+    };
+
+
+    $scope.formSubmitted = function() {
+        var searchParams = {};
+        var a = $element.find('#search').serializeArray();
+        for(i in a) {
+            searchParams[a[i].name] = a[i].value;
+        }
+
+        searchParams['product'] = $rootScope.namespace;
+        searchParams['tree_uri'] = $scope.uri;
+
+        $scope.searching = true;
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + '/TreeJsonView/searchNamesInTree',
+            params: searchParams
+        }).then(function successCallback(response) {
+            $scope.searching = false;
+            $scope.searchResults = response.data;
+            $scope.searchError = null;
+            $scope.hasResults = true;
+        }, function errorCallback(response) {
+            $scope.searching = false;
+            $scope.searchError = response;
+        });
+
+        $scope.tab = 'resultsTab';
+    };
 }
 
 FindnameintreeController.$inject = ['$scope', '$rootScope', '$http', '$element'];
@@ -17,12 +61,12 @@ var findnameintreeDirective = function () {
         templateUrl: "/tree-editor/assets/ng/search/findnameintree.html",
         controller: FindnameintreeController,
         scope: {
-            uri: "@"
+            uri: "@",
+            type: "@"
         },
         link: function(scope, element, attrs, controller, transcludeFn) {
             // put the services search fomr into #search-container
-/*
-            console.log("LOADING THE SEARCH FORM");
+            console.log("EXECUTING LINK");
 
             $(element).find("#search-container").load("http://localhost:8080/services/search/form", null, function() {
                 console.log("SEARCH FORM IS LOADED");
@@ -37,7 +81,6 @@ var findnameintreeDirective = function () {
                     });
                 });
             });
- */
         }
     };
 };
