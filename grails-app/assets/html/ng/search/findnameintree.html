@@ -17,7 +17,7 @@
         <div ng-if="searchResults">
             <table class="table">
                 <tr ng-repeat="r in searchResults">
-                    <td><span uri="{{r}}" shortnodetext/></td>
+                    <td><a href="{{pagesUrl}}/editnode/checklist?focus={{r}}&tree={{uri}}"><span uri="{{r}}" shortnodetext/></a></td>
                 </tr>
             </table>
         </div>

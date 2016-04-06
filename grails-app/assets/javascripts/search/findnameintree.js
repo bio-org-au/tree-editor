@@ -12,6 +12,8 @@ var FindnameintreeController = function ($scope, $rootScope, $http, $element) {
     $scope.searching = false;
     $scope.searchResults = [];
 
+    $scope.pagesUrl = $rootScope.pagesUrl;
+
     $scope.clickSearchTab = function() {
         $scope.tab = 'searchTab';
     };
