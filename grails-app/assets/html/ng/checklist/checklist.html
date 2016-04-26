@@ -6,10 +6,16 @@
 </div>
 <div>
     <h4>Checklist</h4>
+    <div ng-repeat="uri in path">
+        <div class="controlholder" ng-if="!$last">
+            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
+            <span class="controls">
+                <i ng-if="!$first" class="fabutton fa fa-bookmark" ng-click="clickPathBookmark($index)"></i>
+                <a href=#" ng-click="clickPathNewWindow($index)">new window</a>
+            </span>
+        </div>
+    </div>
     <h1><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
-    --: {{rootPermissions}} :--
-    <br/>
-    --: {{focusPermissions}} :--
 </div>
 <div>
     <small>
@@ -25,20 +31,6 @@
         <li ng-if="rootPermissions.uriPermissions.canEdit">Commit all changes made to the checklist at and below this point</li>
     </ul>
     </small>
-</div>
-<div>
-    <span ng-repeat="uri in path">
-        <i ng-if="! $first" class="fa fa-angle-right"></i>
-        <span class="controlholder">
-            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
-            <span ng-if="$last"uri="{{uri}}" shortnodetext></span>
-
-            <span class="controls">
-                <i ng-if="!$first" class="fabutton fa fa-bookmark" ng-click="clickPathBookmark($index)"></i>
-                <a href=#" ng-click="clickPathNewWindow($index)">new window</a>
-            </span>
-        </span>
-    </span>
 </div>
 <div>
     <div nodelist uri="{{focusUri}}"></div>

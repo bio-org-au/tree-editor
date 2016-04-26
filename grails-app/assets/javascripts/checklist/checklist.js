@@ -140,9 +140,8 @@ var ChecklistController = function ($scope, $rootScope, $http) {
                 console.log($scope.arrangement);
 
                 // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
-                $scope.rootUri = getPreferredLink($scope.arrangement.workingRoot);
+                $scope.rootUri = getPreferredLink($scope.arrangement.node);
                 if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.currentRoot);
-                if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.node);
                 $scope.root = $rootScope.needJson($scope.rootUri);
                 madeAChange = true;
                 return;

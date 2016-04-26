@@ -199,8 +199,15 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
                 'names': names
             }
         }).then(function successCallback(response) {
+
+            console.log(response);
+
             $scope.amAddingNames = false;
-            window.location = $rootScope.pagesUrl + "/Editnode/checklist?root=" + $scope.rootUri + "&focus=" + $scope.focusUri;
+
+
+
+            // window.location = $rootScope.pagesUrl + "/Editnode/checklist?root=" + $scope.rootUri + "&focus=" + $scope.focusUri;
+             window.location = $rootScope.pagesUrl + "/Editnode/checklist?focus=" + response.data.newFocus;
         }, function errorCallback(response) {
             $scope.amAddingNames = false;
             if(response.data && response.data.msg) {
