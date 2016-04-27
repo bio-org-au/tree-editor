@@ -15,7 +15,10 @@
             </span>
         </div>
     </div>
-    <h1><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
+    <h1
+        ondrop="dropUri(event)"
+        ondragover="allowDropUri(event)"
+    ><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
 </div>
 <div>
     <small>

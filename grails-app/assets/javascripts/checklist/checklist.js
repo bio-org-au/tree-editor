@@ -9,7 +9,34 @@
 //= require utility/get-json-controller
 //= require utility/get-uri-permissions
 
+
+function allowDropUri(ev) {
+    if(ev.dataTransfer.getData("uri")) {
+        ev.preventDefault();
+    }
+}
+
+function dragUri(ev) {
+    var s = $(ev.target).scope();
+    ev.dataTransfer.setData("uri", s.uri);
+}
+
+function dropUri(ev) {
+    ev.preventDefault();
+    var uri = ev.dataTransfer.getData("uri");
+    var scope;
+    for(scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUri ; scope = scope.$parent) {
+    }
+    // have to use timeout to get out of the apply loop
+    window.setTimeout(function() {
+        scope.$apply(function() {
+            scope.dropUri(uri);
+        });
+    }, 0);
+}
+
 var ChecklistController = function ($scope, $rootScope, $http) {
+    $scope.foo = "I AM A CHECKLIST!";
     $scope.cl_scope = $scope;
 
     setupJsonCache($rootScope, $http);
@@ -30,6 +57,9 @@ var ChecklistController = function ($scope, $rootScope, $http) {
                 $scope.focusPermissions = data;
         });
     };
+
+    $scope.getRootUri = function() {return "I AM A ROOT URI";};
+    $scope.getFocusUri = function() {return $scope.getFocusUri;};
 
     $scope.$watch('rootUri', $scope.refreshPermissions);
 
@@ -214,6 +244,12 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     deregisterInitializationListener.push($scope.$watch("root.fetched", initializationListener));
     deregisterInitializationListener.push($scope.$watch("focusUri", initializationListener));
     deregisterInitializationListener.push($scope.$watch("focus.fetched", initializationListener));
+
+
+    $scope.dropUri = function(uri) {
+        console.log("dropped " + uri + " onto focus uri " + $scope.focusUri);
+    };
+
 };
 
 ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
@@ -235,8 +271,13 @@ var checklistDirective = function() {
 app.directive('checklist', checklistDirective);
 
 var NodelistController = function ($scope, $rootScope, $http) {
+    $scope.foo = "I AM A NODE LIST!";
+
     $scope.cl_scope = $scope.$parent.cl_scope;
     GetJsonController($scope, $rootScope);
+
+    $scope.getRootUri = function() {return "I am a root uri!"};
+    $scope.getFocusUri = function() {$scope.$parent.getFocusUri();};
 
     $scope.clickSubPath = function(a) {
         $scope.$parent.clickSubPath(a);
@@ -253,7 +294,7 @@ var nodelistDirective = function(RecursionHelper) {
         templateUrl: "/tree-editor/assets/ng/checklist/nodelist.html",
         controller: NodelistController,
         scope: {
-            uri: "@"
+            uri: "@",
         },
         compile: function(element) {
             return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
@@ -271,6 +312,8 @@ nodelistDirective.$inject = ['RecursionHelper'];
 app.directive('nodelist', nodelistDirective);
 
 var NodeitemController = function ($scope, $rootScope, $http) {
+    $scope.foo = "I AM A NODE ITEM!";
+
     $scope.cl_scope = $scope.$parent.cl_scope;
 
     $scope.afterUpdateJson = function() {
@@ -284,9 +327,15 @@ var NodeitemController = function ($scope, $rootScope, $http) {
 
     GetJsonController($scope, $rootScope);
 
+    $scope.getRootUri = function() {"I, also, am a root uri!"};
+    $scope.getFocusUri = function() {$scope.$parent.getFocusUri();};
+
     $scope.node = $rootScope.needJson($scope.uri);
 
     $scope.UI = $scope.cl_scope.getNodeUI($scope.uri);
+
+    $scope.rootUri = $scope.$parent.rootUri;
+    $scope.focusUri = $scope.$parent.focusUri;
 
     $scope.clickBookmark = function() {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
@@ -306,6 +355,9 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
     };
 
+    $scope.dropUri = function(uri) {
+        console.log("dropped " + uri + " onto " + $scope.uri);
+    };
 };
 
 NodeitemController.$inject = ['$scope', '$rootScope', '$http'];

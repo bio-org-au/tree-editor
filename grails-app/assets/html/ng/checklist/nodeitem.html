@@ -9,7 +9,11 @@
         <span ng-if="json.fetched">
             <small ng-if="!json.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
             <small ng-if="json.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
-            <a href="#" ng-click="clickUpArrow()"><span uri="{{uri}}" shortnodetext></span></a>
+            <span draggable="true"
+                  ondragstart="dragUri(event)"
+                  ondrop="dropUri(event)"
+                  ondragover="allowDropUri(event)"
+            ><span uri="{{uri}}" shortnodetext></span></span>
         </span>
         <span class="controls">
             <i ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
