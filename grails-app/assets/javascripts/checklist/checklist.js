@@ -11,26 +11,26 @@
 
 
 function allowDropUri(ev) {
-    if(ev.dataTransfer.getData("uri")) {
+    if(ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list")) {
         ev.preventDefault();
     }
 }
 
 function dragUri(ev) {
     var s = $(ev.target).scope();
-    ev.dataTransfer.setData("uri", s.uri);
+    ev.dataTransfer.setData("au.org.biodiversity.nsl.uri-list", JSON.stringify([s.uri]));
 }
 
 function dropUri(ev) {
     ev.preventDefault();
-    var uri = ev.dataTransfer.getData("uri");
+    var uriList = JSON.parse(ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list"))
     var scope;
-    for(scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUri ; scope = scope.$parent) {
+    for(scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList ; scope = scope.$parent) {
     }
     // have to use timeout to get out of the apply loop
     window.setTimeout(function() {
         scope.$apply(function() {
-            scope.dropUri(uri);
+            scope.dropUriList(uriList);
         });
     }, 0);
 }
@@ -246,8 +246,8 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     deregisterInitializationListener.push($scope.$watch("focus.fetched", initializationListener));
 
 
-    $scope.dropUri = function(uri) {
-        console.log("dropped " + uri + " onto focus uri " + $scope.focusUri);
+    $scope.dropUriList = function(uriList) {
+        console.log("dropped " + uriList + " onto focus uri " + $scope.focusUri);
     };
 
 };
@@ -355,8 +355,10 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
     };
 
-    $scope.dropUri = function(uri) {
-        console.log("dropped " + uri + " onto " + $scope.uri);
+    $scope.dropUriList = function(uriList) {
+        console.log("dropped ");
+        console.log(uriList);
+        console.log(" onto " + $scope.uri);
     };
 };
 
