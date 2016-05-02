@@ -505,3 +505,12 @@ var nodeitemDirective = function() {
 };
 
 app.directive('nodeitem', nodeitemDirective);
+
+
+var droptargetDirective = function() {
+    return {
+        templateUrl: "/tree-editor/assets/ng/checklist/droptarget.html"
+    };
+};
+
+app.directive('droptarget', droptargetDirective);
