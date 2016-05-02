@@ -4,7 +4,10 @@
 </span>
 <a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear {{taxanodes_bookmarks.vec.length}} bookmarks</a>
 </div>
-<div>
+<div
+        ondrop="dropUri(event)"
+        ondragover="allowDropUri(event)"
+>
     <h4>Checklist</h4>
     <div ng-repeat="uri in path">
         <div class="controlholder" ng-if="!$last">
@@ -16,8 +19,8 @@
         </div>
     </div>
     <h1
-        ondrop="dropUri(event)"
-        ondragover="allowDropUri(event)"
+        draggable="true"
+        ondragstart="dragUri(event)"
     ><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
 </div>
 <div>

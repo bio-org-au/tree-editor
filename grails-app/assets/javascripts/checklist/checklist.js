@@ -18,7 +18,7 @@ function allowDropUri(ev) {
 
 function dragUri(ev) {
     var s = $(ev.target).scope();
-    ev.dataTransfer.setData("au.org.biodiversity.nsl.uri-list", JSON.stringify([s.uri]));
+    ev.dataTransfer.setData("au.org.biodiversity.nsl.uri-list", JSON.stringify(s.getDragUriList()));
 }
 
 function dropUri(ev) {
@@ -33,6 +33,131 @@ function dropUri(ev) {
             scope.dropUriList(uriList);
         });
     }, 0);
+}
+
+function CanAcceptDrops($scope, $rootScope, $http) {
+    $scope.clearDropState = function() {
+        $scope.nodeDropState = {
+            open: false,
+            inProgress: false,
+            msg: null,
+            action: null,
+            uriList: null,
+            chooseAction: null,
+        };
+    };
+
+    $scope.dropUriList = function(uriList) {
+        if($scope.nodeDropState.open) return; // we have another drop in progress
+        $scope.clearDropState();
+        $scope.nodeDropState.open = true;
+        $scope.nodeDropState.uriList = uriList;
+        $scope.sendDrop();
+    };
+
+    $scope.sendDrop = function() {
+        if($scope.nodeDropState.inProgress) return; // we have another drop in progress
+
+        var action = $scope.nodeDropState.action ? $scope.nodeDropState.action.action : null;
+
+        console.log("sending drop");
+        console.log({
+            'root': $scope.rootUri,
+            'focus': $scope.focusUri,
+            'target': $scope.uri,
+            'dropAction': action,
+            'uris': $scope.nodeDropState.uriList
+        });
+
+        $scope.nodeDropState.inProgress = true;
+
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + '/TreeJsonEdit/dropUrisOntoNode',
+            headers: {
+                'Access-Control-Request-Headers': 'nsl-jwt',
+                'nsl-jwt': $rootScope.getJwt()
+            },
+            params: {
+                'root': $scope.rootUri,
+                'focus': $scope.focusUri,
+                'target': $scope.uri,
+                'dropAction': action,
+                'uris': $scope.nodeDropState.uriList
+            }
+        }).then(function successCallback(response) {
+            $scope.nodeDropState.inProgress = false;
+
+            console.log(response);
+
+            // general message message
+            if(response.data.msg) {
+                $scope.nodeDropState.msg = response.data.msg;
+            }
+
+            if(response.data.success) {
+                $scope.nodeDropState.open = false;
+                $scope.nodeDropState.inProgress = true;
+
+                if(!$rootScope.msg)
+                    $rootScope.msg = [response.data.msg];
+                else
+                    $rootScope.msg.push(response.data.msg);
+            }
+            else {
+                $scope.nodeDropState.chooseAction = response.data.chooseAction;
+            }
+
+        }, function errorCallback(response) {
+            $scope.nodeDropState.inProgress = false;
+            $scope.nodeDropState.open = false;
+
+            if(response.data && response.data.msg) {
+                $rootScope.msg = response.data.msg;
+            }
+            else if(response.data.status) {
+                $rootScope.msg = [
+                    {
+                        msg: response.data.status,
+                        body: response.data.reason,
+                        status: 'danger',  // we use danger because we got no JSON back at all
+                    }
+                ];
+            }
+            else  {
+                console.log(response);
+                $rootScope.msg = [
+                    {
+                        msg: 'URL',
+                        body: response.config.url,
+                        status: 'info',
+                    },
+                    {
+                        msg: response.status,
+                        body: response.statusText,
+                        status: 'danger',  // we use danger because we got no JSON back at all
+                    }
+                ];
+            }
+        });
+
+        if($scope.nodeDropState.action == null) {
+            $scope.nodeDropState.msg = null;
+
+        }
+        else {
+            $scope.nodeDropState.msg = $scope.nodeDropState.action.msg;
+
+        }
+        $scope.nodeDropState.action = null;
+        $scope.nodeDropState.options = null;
+
+
+    };
+
+    $scope.clearDropState();
+
 }
 
 var ChecklistController = function ($scope, $rootScope, $http) {
@@ -245,10 +370,11 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     deregisterInitializationListener.push($scope.$watch("focusUri", initializationListener));
     deregisterInitializationListener.push($scope.$watch("focus.fetched", initializationListener));
 
+    $scope.getDragUriList = function() {
+        return [$scope.focusUri];
+    }
 
-    $scope.dropUriList = function(uriList) {
-        console.log("dropped " + uriList + " onto focus uri " + $scope.focusUri);
-    };
+    CanAcceptDrops($scope, $rootScope, $http);
 
 };
 
@@ -337,6 +463,13 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     $scope.rootUri = $scope.$parent.rootUri;
     $scope.focusUri = $scope.$parent.focusUri;
 
+
+    CanAcceptDrops($scope, $rootScope, $http);
+
+    $scope.getDragUriList = function() {
+        return [$scope.uri];
+    }
+
     $scope.clickBookmark = function() {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
     };
@@ -355,11 +488,6 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
     };
 
-    $scope.dropUriList = function(uriList) {
-        console.log("dropped ");
-        console.log(uriList);
-        console.log(" onto " + $scope.uri);
-    };
 };
 
 NodeitemController.$inject = ['$scope', '$rootScope', '$http'];

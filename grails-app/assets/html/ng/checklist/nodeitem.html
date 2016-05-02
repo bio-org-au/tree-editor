@@ -1,7 +1,9 @@
 <div>
     <span class="pull-left">
-        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton larger" ng-click="UI.open = false;"></i>
-        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger" ng-click="UI.open = true;"></i>
+        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton larger"
+           ng-click="UI.open = false;"></i>
+        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger"
+           ng-click="UI.open = true;"></i>
     </span>
     <div style="margin-left: 1em;" class="controlholder">
         <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
@@ -19,6 +21,30 @@
             <i ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
             <a href="#" ng-click="clickNewWindow()">new window</a>
         </span>
+    </div>
+
+    <div ng-if="nodeDropState.open" class="well">
+        <div class="text-muted" style="font-size: 80%;">
+            Dropping <span ng-repeat="u in nodeDropState.uriList" uri="{{u}}" shortnodetext></span>
+        </div>
+
+        <div ng-if="nodeDropState.msg" class="alert" ng-class="'alert-' + nodeDropState.msg.status">
+            <strong>{{nodeDropState.msg.msg}}</strong>
+            {{nodeDropState.msg.body}}
+        </div>
+
+        <div ng-if="!nodeDropState.inProgress">
+            <div ng-repeat="opt in nodeDropState.chooseAction">
+                <i ng-if="nodeDropState.action == opt" class="fa fa-check-square-o fabutton" ng-click="nodeDropState.action = null"></i>
+                <i ng-if="nodeDropState.action != opt" class="fa fa-square-o fabutton" ng-click="nodeDropState.action = opt"></i>
+                <span ng-class="'text-' + opt.msg.status">
+                    <strong>{{opt.msg.msg}}</strong>
+                    {{opt.msg.body}}
+                </span>
+            </div>
+            <button ng-if="nodeDropState.chooseAction" class="button btn-primary btn-sm" ng-click="sendDrop()">Ok</button>
+            <button class="button btn-default btn-sm" ng-click="clearDropState()">Cancel</button>
+        </div>
     </div>
 </div>
 
