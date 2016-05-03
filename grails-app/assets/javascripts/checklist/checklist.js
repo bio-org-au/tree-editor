@@ -60,17 +60,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
         var action = $scope.nodeDropState.action ? $scope.nodeDropState.action.action : null;
 
-        console.log("sending drop");
-        console.log({
-            'root': $scope.rootUri,
-            'focus': $scope.focusUri,
-            'target': $scope.uri,
-            'dropAction': action,
-            'uris': $scope.nodeDropState.uriList
-        });
-
         $scope.nodeDropState.inProgress = true;
-
 
         $http({
             method: 'POST',
@@ -80,8 +70,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 'nsl-jwt': $rootScope.getJwt()
             },
             params: {
-                'root': $scope.rootUri,
-                'focus': $scope.focusUri,
+                'wsNode': $scope.cl_scope.rootUri,
                 'target': $scope.uri,
                 'dropAction': action,
                 'uris': $scope.nodeDropState.uriList

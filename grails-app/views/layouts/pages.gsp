@@ -41,9 +41,13 @@
         <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
     </ul>
 
-    <div ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
+    <div ng-if="msg && !msg.msg" ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
         <strong>{{m.msg}}</strong>
         {{m.body}}
+    </div>
+    <div ng-if="msg && msg.msg" class="alert" ng-class="'alert-' + msg.status">
+        <strong>{{msg.msg}}</strong>
+        {{msg.body}}
     </div>
 
     <g:layoutBody/>
