@@ -11,10 +11,11 @@
     <h4>Checklist</h4>
     <div ng-repeat="uri in path">
         <div class="controlholder" ng-if="!$last">
-            <a ng-if="!$last" href="#" ng-click="clickPath($index)"><span uri="{{uri}}" shortnodetext></span></a>
+            <span uri="{{uri}}" shortnodetext></span>
             <span class="controls">
+                <i class="fabutton fa fa-level-down" ng-click="clickPath($index)"></i>
                 <i ng-if="!$first" class="fabutton fa fa-bookmark" ng-click="clickPathBookmark($index)"></i>
-                <a href=#" ng-click="clickPathNewWindow($index)">new window</a>
+                <a href="#" ng-click="clickPathNewWindow($index)">new window</a>
             </span>
         </div>
     </div>
