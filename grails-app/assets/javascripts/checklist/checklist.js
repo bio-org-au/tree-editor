@@ -64,6 +64,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
         var params = {
             'wsNode': $scope.cl_scope.rootUri,
+            'focus': $scope.cl_scope.focusUri,
             'target': $scope.getDropTargetUri(),
             'dropAction': action,
             'uris': $scope.nodeDropState.uriList
@@ -82,7 +83,11 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         }).then(function successCallback(response) {
             $scope.nodeDropState.inProgress = false;
 
+            console.log("***************");
             console.log(response);
+            console.log(response.data);
+            console.log(response.data.success);
+            console.log("***************");
 
             // general message message
             if(response.data.msg) {
@@ -90,15 +95,28 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             }
 
             if(response.data.success) {
+                console.log("***************");
                 $scope.nodeDropState.open = false;
                 $scope.nodeDropState.inProgress = true;
 
-                if(!$rootScope.msg)
-                    $rootScope.msg = [response.data.msg];
-                else
-                    $rootScope.msg.push(response.data.msg);
+
+                console.log("***************");
+
+                console.log($scope.cl_scope.path);
+                console.log($scope.cl_scope.focus);
+                console.log($scope.cl_scope.focusUri);
+
+                console.log("***************");
+
+                if(response.data.focusPath) {
+                    $scope.cl_scope.path = response.data.focusPath;
+                    $scope.cl_scope.focusUri = response.data.focusPath[response.data.focusPath.length-1];
+                    $scope.cl_scope.focus = $rootScope.refetchJson($scope.cl_scope.focusUri);
+                }
+
             }
             else {
+                console.log("*****FAIL***");
                 $scope.nodeDropState.chooseAction = response.data.chooseAction;
             }
 
