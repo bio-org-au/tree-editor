@@ -62,6 +62,15 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
         $scope.nodeDropState.inProgress = true;
 
+        var params = {
+            'wsNode': $scope.cl_scope.rootUri,
+            'target': $scope.getDropTargetUri(),
+            'dropAction': action,
+            'uris': $scope.nodeDropState.uriList
+        }
+
+        console.log('params ' + params)
+
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/dropUrisOntoNode',
@@ -69,12 +78,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $rootScope.getJwt()
             },
-            params: {
-                'wsNode': $scope.cl_scope.rootUri,
-                'target': $scope.uri,
-                'dropAction': action,
-                'uris': $scope.nodeDropState.uriList
-            }
+            params: params
         }).then(function successCallback(response) {
             $scope.nodeDropState.inProgress = false;
 
@@ -363,6 +367,12 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         return [$scope.focusUri];
     }
 
+    $scope.getDropTargetUri = function() {
+        return $scope.focusUri;
+    }
+
+
+
     CanAcceptDrops($scope, $rootScope, $http);
 
 };
@@ -458,6 +468,11 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     $scope.getDragUriList = function() {
         return [$scope.uri];
     }
+
+    $scope.getDropTargetUri = function() {
+        return $scope.uri;
+    }
+
 
     $scope.clickBookmark = function() {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
