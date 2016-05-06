@@ -70,8 +70,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             'uris': $scope.nodeDropState.uriList
         }
 
-        console.log('params ' + params)
-
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/dropUrisOntoNode',
@@ -83,30 +81,14 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         }).then(function successCallback(response) {
             $scope.nodeDropState.inProgress = false;
 
-            console.log("***************");
-            console.log(response);
-            console.log(response.data);
-            console.log(response.data.success);
-            console.log("***************");
-
             // general message message
             if(response.data.msg) {
                 $scope.nodeDropState.msg = response.data.msg;
             }
 
             if(response.data.success) {
-                console.log("***************");
                 $scope.nodeDropState.open = false;
                 $scope.nodeDropState.inProgress = true;
-
-
-                console.log("***************");
-
-                console.log($scope.cl_scope.path);
-                console.log($scope.cl_scope.focus);
-                console.log($scope.cl_scope.focusUri);
-
-                console.log("***************");
 
                 if(response.data.focusPath) {
                     $scope.cl_scope.path = response.data.focusPath;
@@ -119,14 +101,8 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     }
                 }
 
-                console.log("forcing refetch")
-                console.log(response.data.refetch);
-
                 for(p in response.data.refetch) {
-                    console.log("scope.data.refetch["+p+"]");
                     for(pp in response.data.refetch[p]) {
-                        console.log("response.data.refetch["+p+"]["+pp+"]");
-                        console.log(response.data.refetch[p][pp]);
                         $rootScope.refetchJson(response.data.refetch[p][pp])
                         $scope.cl_scope.getNodeUI(response.data.refetch[p][pp]).open = true;
                     }
@@ -134,7 +110,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
             }
             else {
-                console.log("*****FAIL***");
                 $scope.nodeDropState.chooseAction = response.data.chooseAction;
             }
 
@@ -155,7 +130,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 ];
             }
             else  {
-                console.log(response);
                 $rootScope.msg = [
                     {
                         msg: 'URL',
