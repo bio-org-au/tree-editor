@@ -111,7 +111,25 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 if(response.data.focusPath) {
                     $scope.cl_scope.path = response.data.focusPath;
                     $scope.cl_scope.focusUri = response.data.focusPath[response.data.focusPath.length-1];
-                    $scope.cl_scope.focus = $rootScope.refetchJson($scope.cl_scope.focusUri);
+
+                    $scope.cl_scope.focus = $rootScope.needJson($scope.cl_scope.focusUri);
+
+                    for(p in response.data.focusPath) {
+                        $scope.cl_scope.focus = $rootScope.refetchJson(response.data.focusPath[p]);
+                    }
+                }
+
+                console.log("forcing refetch")
+                console.log(response.data.refetch);
+
+                for(p in response.data.refetch) {
+                    console.log("scope.data.refetch["+p+"]");
+                    for(pp in response.data.refetch[p]) {
+                        console.log("response.data.refetch["+p+"]["+pp+"]");
+                        console.log(response.data.refetch[p][pp]);
+                        $rootScope.refetchJson(response.data.refetch[p][pp])
+                        $scope.cl_scope.getNodeUI(response.data.refetch[p][pp]).open = true;
+                    }
                 }
 
             }
