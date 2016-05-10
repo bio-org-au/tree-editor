@@ -1,4 +1,3 @@
-
 // a checklist holds a context and a focus. it displays a breadcrumb trail and the tree
 
 // it is initialised with a uri and a 'workspace or classsification' setting.
@@ -11,7 +10,7 @@
 
 
 function allowDropUri(ev) {
-    if(ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list")) {
+    if (ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list")) {
         ev.preventDefault();
     }
 }
@@ -25,84 +24,120 @@ function dropUri(ev) {
     ev.preventDefault();
     var uriList = JSON.parse(ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list"))
     var scope;
-    for(scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList ; scope = scope.$parent) {
+    for (scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList; scope = scope.$parent) {
     }
     // have to use timeout to get out of the apply loop
-    window.setTimeout(function() {
-        scope.$apply(function() {
+    window.setTimeout(function () {
+        scope.$apply(function () {
             scope.dropUriList(uriList);
         });
     }, 0);
 }
 
+/*
+ And angular object with a serverside opertaion session is a thing that can ask the 
+ server to do a thing, and handle replies from the server asking for more information.
+
+ This method uses a scope variable named 'serversideState'. It contains
+ - 'url'
+ - 'params'
+ - an 'inProgress' flag
+
+ The reply from the server will be a json object containing 
+ - a 'success' boolean
+ - a 'msg' message
+ - a 'chooseAction' array
+ - a focusPath
+ - an array of refetch paths
+
+ On receiving the reply, 
+
+ */
+
+
 function CanAcceptDrops($scope, $rootScope, $http) {
-    $scope.clearDropState = function() {
-        $scope.nodeDropState = {
+    $scope.clearServersideOperationState = function () {
+        $scope.serversideOperationState = {
             open: false,
             inProgress: false,
             msg: null,
-            action: null,
-            uriList: null,
+            confirm: null,
             chooseAction: null,
+            params: {}
         };
     };
 
-    $scope.dropUriList = function(uriList) {
-        if($scope.nodeDropState.open) return; // we have another drop in progress
-        $scope.clearDropState();
-        $scope.nodeDropState.open = true;
-        $scope.nodeDropState.uriList = uriList;
-        $scope.sendDrop();
+    $scope.clickRemove = function() {
+        if ($scope.serversideOperationState.open) return; // we have another operation in progress
+        $scope.clearServersideOperationState();
+        $scope.serversideOperationState.open = true;
+        $scope.serversideOperationState.action = 'removeNode';
+        $scope.sendServersideOperation();
     };
 
-    $scope.sendDrop = function() {
-        if($scope.nodeDropState.inProgress) return; // we have another drop in progress
+    $scope.clickRevert = function() {
+        if ($scope.serversideOperationState.open) return; // we have another operation in progress
+        $scope.clearServersideOperationState();
+        $scope.serversideOperationState.open = true;
+        $scope.serversideOperationState.action = 'revertNode';
+        $scope.sendServersideOperation();
+    };
 
-        var action = $scope.nodeDropState.action ? $scope.nodeDropState.action.action : null;
+    $scope.dropUriList = function (uriList) {
+        if ($scope.serversideOperationState.open) return; // we have another operation in progress
+        $scope.clearServersideOperationState();
+        $scope.serversideOperationState.open = true;
+        $scope.serversideOperationState.action = 'dropUrisOntoNode';
+        $scope.serversideOperationState.params.uris = uriList;
+        $scope.sendServersideOperation();
+    };
 
-        $scope.nodeDropState.inProgress = true;
+    $scope.sendServersideOperation = function () {
+        if ($scope.serversideOperationState.inProgress) return; // we have another drop in progress
 
-        var params = {
-            'wsNode': $scope.cl_scope.rootUri,
-            'focus': $scope.cl_scope.focusUri,
-            'target': $scope.getDropTargetUri(),
-            'dropAction': action,
-            'uris': $scope.nodeDropState.uriList
-        }
+        $scope.serversideOperationState.inProgress = true;
+
+        $scope.serversideOperationState.params.wsNode = $scope.cl_scope.rootUri;
+        $scope.serversideOperationState.params.focus = $scope.cl_scope.focusUri;
+        $scope.serversideOperationState.params.target = $scope.getTargetUri();
+        $scope.serversideOperationState.params.confirm = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.confirm.action : null;
+
+        console.log($scope.serversideOperationState);
+
+        console.log("SENDING");
 
         $http({
             method: 'POST',
-            url: $rootScope.servicesUrl + '/TreeJsonEdit/dropUrisOntoNode',
+            url: $rootScope.servicesUrl + '/TreeJsonEdit/' + $scope.serversideOperationState.action,
             headers: {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $rootScope.getJwt()
             },
-            params: params
+            params: $scope.serversideOperationState.params
         }).then(function successCallback(response) {
-            $scope.nodeDropState.inProgress = false;
 
-            // general message message
-            if(response.data.msg) {
-                $scope.nodeDropState.msg = response.data.msg;
-            }
+            console.log("OK");
+            console.log(response);
 
-            if(response.data.success) {
-                $scope.nodeDropState.open = false;
-                $scope.nodeDropState.inProgress = true;
+            $scope.serversideOperationState.inProgress = false;
 
-                if(response.data.focusPath) {
+            if (response.data.success) {
+                $rootScope.msg = response.data.msg;
+                $scope.serversideOperationState.open = false;
+
+                if (response.data.focusPath) {
                     $scope.cl_scope.path = response.data.focusPath;
-                    $scope.cl_scope.focusUri = response.data.focusPath[response.data.focusPath.length-1];
+                    $scope.cl_scope.focusUri = response.data.focusPath[response.data.focusPath.length - 1];
 
                     $scope.cl_scope.focus = $rootScope.needJson($scope.cl_scope.focusUri);
 
-                    for(p in response.data.focusPath) {
+                    for (p in response.data.focusPath) {
                         $scope.cl_scope.focus = $rootScope.refetchJson(response.data.focusPath[p]);
                     }
                 }
 
-                for(p in response.data.refetch) {
-                    for(pp in response.data.refetch[p]) {
+                for (p in response.data.refetch) {
+                    for (pp in response.data.refetch[p]) {
                         $rootScope.refetchJson(response.data.refetch[p][pp])
                         $scope.cl_scope.getNodeUI(response.data.refetch[p][pp]).open = true;
                     }
@@ -110,26 +145,39 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
             }
             else {
-                $scope.nodeDropState.chooseAction = response.data.chooseAction;
+                $scope.serversideOperationState.chooseAction = response.data.chooseAction;
+                $scope.serversideOperationState.msg = response.data.msg;
             }
 
         }, function errorCallback(response) {
-            $scope.nodeDropState.inProgress = false;
-            $scope.nodeDropState.open = false;
+            console.log("ERROR");
+            console.log(response);
 
-            if(response.data && response.data.msg) {
+
+            $scope.serversideOperationState.inProgress = false;
+            $scope.serversideOperationState.open = false;
+
+            if (response.data && response.data.msg) {
+                console.log("message is msg");
                 $rootScope.msg = response.data.msg;
             }
-            else if(response.data.status) {
+            else if (response.data.status) {
+                console.log("message is status");
                 $rootScope.msg = [
+                    {
+                        msg: 'URL',
+                        body: response.config.url,
+                        status: 'info',
+                    },
                     {
                         msg: response.data.status,
                         body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'
                     }
                 ];
             }
-            else  {
+            else {
+                console.log("message is response stuff");
                 $rootScope.msg = [
                     {
                         msg: 'URL',
@@ -139,27 +187,16 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     {
                         msg: response.status,
                         body: response.statusText,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'
                     }
                 ];
             }
+
+            console.log($rootScope.msg);
         });
-
-        if($scope.nodeDropState.action == null) {
-            $scope.nodeDropState.msg = null;
-
-        }
-        else {
-            $scope.nodeDropState.msg = $scope.nodeDropState.action.msg;
-
-        }
-        $scope.nodeDropState.action = null;
-        $scope.nodeDropState.options = null;
-
-
     };
 
-    $scope.clearDropState();
+    $scope.clearServersideOperationState();
 
 }
 
@@ -173,21 +210,25 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     $scope.focusPermissions = {};
 
-    $scope.refreshPermissions = function() {
+    $scope.refreshPermissions = function () {
         $scope.rootPermissions = {};
-        get_uri_permissions($rootScope, $http, $scope.rootUri, function(data, success) {
-            if(success)
+        get_uri_permissions($rootScope, $http, $scope.rootUri, function (data, success) {
+            if (success)
                 $scope.rootPermissions = data;
         });
         $scope.focusPermissions = {};
-        get_uri_permissions($rootScope, $http, $scope.focusUri, function(data, success) {
-            if(success)
+        get_uri_permissions($rootScope, $http, $scope.focusUri, function (data, success) {
+            if (success)
                 $scope.focusPermissions = data;
         });
     };
 
-    $scope.getRootUri = function() {return "I AM A ROOT URI";};
-    $scope.getFocusUri = function() {return $scope.getFocusUri;};
+    $scope.getRootUri = function () {
+        return "I AM A ROOT URI";
+    };
+    $scope.getFocusUri = function () {
+        return $scope.getFocusUri;
+    };
 
     $scope.$watch('rootUri', $scope.refreshPermissions);
 
@@ -199,67 +240,71 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
     $scope.path = [];
 
-    $scope.getNodeUI = function(uri) {
-        if(!$scope.nodeUI[uri]) {
-            $scope.nodeUI[uri] = { open: false };
+    $scope.getNodeUI = function (uri) {
+        if (!$scope.nodeUI[uri]) {
+            $scope.nodeUI[uri] = {open: false};
         }
         return $scope.nodeUI[uri];
     };
 
-    $scope.clickPath = function(i) {
+    $scope.clickPath = function (i) {
         $scope.focusUri = $scope.path[i];
         $scope.focus = $rootScope.needJson($scope.focusUri);
         $scope.path = $scope.path.slice(0, i + 1);
     };
 
-    $scope.clickPathBookmark = function(i) {
+    $scope.clickPathAddBookmark = function (i) {
         $rootScope.addBookmark('taxa-nodes', $scope.path[i]);
     };
 
-    $scope.clickPathNewWindow = function(i) {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.rootUri +"&focus=" + $scope.path[i], '_blank');
+    $scope.clickAddBookmark = function () {
+        $rootScope.addBookmark('taxa-nodes', $scope.focusUri);
     };
 
-    $scope.clickSubPath = function(a) {
-        if(a.length < 1) return; // this never happens
-        for(u in a) {
+    $scope.clickPathNewWindow = function (i) {
+        window.open($rootScope.pagesUrl + "/editnode/checklist?root=" + $scope.rootUri + "&focus=" + $scope.path[i], '_blank');
+    };
+
+    $scope.clickSubPath = function (a) {
+        if (a.length < 1) return; // this never happens
+        for (u in a) {
             $scope.path.push(a[u]);
         }
         $scope.focusUri = a[a.length - 1];
         $scope.focus = $rootScope.needJson($scope.focusUri);
     }
 
-    $scope.clickBookmark = function(uri) {
+    $scope.clickBookmark = function (uri) {
         window.location = $rootScope.pagesUrl + "/editnode/checklist?focus=" + uri;
     };
-    $scope.clickTrashBookmark = function(uri) {
+    $scope.clickTrashBookmark = function (uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);
     };
-    $scope.clickClearBookmarks = function(uri) {
+    $scope.clickClearBookmarks = function (uri) {
         $rootScope.clearBookmarks('taxa-nodes');
     };
 
-    $scope.clickSearchAddNames = function() {
-        window.open($rootScope.pagesUrl + "/editnode/searchEmbedded?root="+ $scope.rootUri +"&focus=" + $scope.focusUri);
+    $scope.clickSearchAddNames = function () {
+        window.open($rootScope.pagesUrl + "/editnode/searchEmbedded?root=" + $scope.rootUri + "&focus=" + $scope.focusUri);
     };
 
     // bookmark gear
     $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
-    $scope.$on('nsl-tree-edit.bookmark-changed', function(event, category, uri, status){
-        if(category == 'taxa-nodes') {
+    $scope.$on('nsl-tree-edit.bookmark-changed', function (event, category, uri, status) {
+        if (category == 'taxa-nodes') {
             $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
         }
     });
-    $scope.$on('nsl-tree-edit.namespace-changed', function(event) {
+    $scope.$on('nsl-tree-edit.namespace-changed', function (event) {
         $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
     });
 
 
     // ok. deal with initialisation.
 
-    $scope.arrangement =  $rootScope.needJson($scope.arrangementUri);
+    $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
     $scope.root = $rootScope.needJson($scope.rootUri);
-    $scope.focus =  $rootScope.needJson($scope.focusUri);
+    $scope.focus = $rootScope.needJson($scope.focusUri);
     $scope.decidedOnPath = false;
 
     var deregisterInitializationListener = [];
@@ -314,7 +359,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
                 madeAChange = true;
             }
         }
-        while(madeAChange);
+        while (madeAChange);
 
 
         // if we have a root and a focus, set up the path
@@ -358,8 +403,8 @@ var ChecklistController = function ($scope, $rootScope, $http) {
             }
         }
 
-        if($scope.arrangementUri && $scope.arrangement.fetched && $scope.rootUri && $scope.root.fetched && $scope.focusUri && $scope.focus.fetched) {
-            for(var i in deregisterInitializationListener) {
+        if ($scope.arrangementUri && $scope.arrangement.fetched && $scope.rootUri && $scope.root.fetched && $scope.focusUri && $scope.focus.fetched) {
+            for (var i in deregisterInitializationListener) {
                 deregisterInitializationListener[i]();
             }
         }
@@ -373,14 +418,13 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     deregisterInitializationListener.push($scope.$watch("focusUri", initializationListener));
     deregisterInitializationListener.push($scope.$watch("focus.fetched", initializationListener));
 
-    $scope.getDragUriList = function() {
+    $scope.getDragUriList = function () {
         return [$scope.focusUri];
     }
 
-    $scope.getDropTargetUri = function() {
+    $scope.getTargetUri = function () {
         return $scope.focusUri;
     }
-
 
 
     CanAcceptDrops($scope, $rootScope, $http);
@@ -391,7 +435,7 @@ ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Checklist', ChecklistController);
 
-var checklistDirective = function() {
+var checklistDirective = function () {
     return {
         templateUrl: "/tree-editor/assets/ng/checklist/checklist.html",
         controller: ChecklistController,
@@ -411,10 +455,14 @@ var NodelistController = function ($scope, $rootScope, $http) {
     $scope.cl_scope = $scope.$parent.cl_scope;
     GetJsonController($scope, $rootScope);
 
-    $scope.getRootUri = function() {return "I am a root uri!"};
-    $scope.getFocusUri = function() {$scope.$parent.getFocusUri();};
+    $scope.getRootUri = function () {
+        return "I am a root uri!"
+    };
+    $scope.getFocusUri = function () {
+        $scope.$parent.getFocusUri();
+    };
 
-    $scope.clickSubPath = function(a) {
+    $scope.clickSubPath = function (a) {
         $scope.$parent.clickSubPath(a);
     }
 
@@ -424,14 +472,14 @@ NodelistController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Nodelist', NodelistController);
 
-var nodelistDirective = function(RecursionHelper) {
+var nodelistDirective = function (RecursionHelper) {
     return {
         templateUrl: "/tree-editor/assets/ng/checklist/nodelist.html",
         controller: NodelistController,
         scope: {
             uri: "@",
         },
-        compile: function(element) {
+        compile: function (element) {
             return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
                 // Define your normal link function here.
                 // Alternative: instead of passing a function,
@@ -451,8 +499,8 @@ var NodeitemController = function ($scope, $rootScope, $http) {
 
     $scope.cl_scope = $scope.$parent.cl_scope;
 
-    $scope.afterUpdateJson = function() {
-        if($scope.json && $scope.json.fetched) {
+    $scope.afterUpdateJson = function () {
+        if ($scope.json && $scope.json.fetched) {
             $scope.hasSubnodes = $scope.json.subnodes && $scope.json.subnodes.length > 0;
         }
         else {
@@ -462,8 +510,12 @@ var NodeitemController = function ($scope, $rootScope, $http) {
 
     GetJsonController($scope, $rootScope);
 
-    $scope.getRootUri = function() {"I, also, am a root uri!"};
-    $scope.getFocusUri = function() {$scope.$parent.getFocusUri();};
+    $scope.getRootUri = function () {
+        "I, also, am a root uri!"
+    };
+    $scope.getFocusUri = function () {
+        $scope.$parent.getFocusUri();
+    };
 
     $scope.node = $rootScope.needJson($scope.uri);
 
@@ -475,31 +527,31 @@ var NodeitemController = function ($scope, $rootScope, $http) {
 
     CanAcceptDrops($scope, $rootScope, $http);
 
-    $scope.getDragUriList = function() {
+    $scope.getDragUriList = function () {
         return [$scope.uri];
     }
 
-    $scope.getDropTargetUri = function() {
+    $scope.getTargetUri = function () {
         return $scope.uri;
     }
 
 
-    $scope.clickBookmark = function() {
+    $scope.clickAddBookmark = function () {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
     };
 
-    $scope.clickUpArrow = function(){
+    $scope.clickUpArrow = function () {
         $scope.UI.open = true;
         $scope.clickSubPath([]);
     };
 
-    $scope.clickSubPath = function(a) {
+    $scope.clickSubPath = function (a) {
         a.unshift($scope.uri);
         $scope.$parent.clickSubPath(a);
     }
 
-    $scope.clickNewWindow = function() {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?root="+ $scope.cl_scope.rootUri +"&focus=" + $scope.uri, '_blank');
+    $scope.clickNewWindow = function () {
+        window.open($rootScope.pagesUrl + "/editnode/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
 
 };
@@ -508,7 +560,7 @@ NodeitemController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Nodeitem', NodeitemController);
 
-var nodeitemDirective = function() {
+var nodeitemDirective = function () {
     return {
         templateUrl: "/tree-editor/assets/ng/checklist/nodeitem.html",
         controller: NodeitemController,
@@ -521,7 +573,7 @@ var nodeitemDirective = function() {
 app.directive('nodeitem', nodeitemDirective);
 
 
-var droptargetDirective = function() {
+var droptargetDirective = function () {
     return {
         templateUrl: "/tree-editor/assets/ng/checklist/droptarget.html"
     };

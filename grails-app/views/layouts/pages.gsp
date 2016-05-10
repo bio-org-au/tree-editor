@@ -44,7 +44,7 @@
     <div ng-if="msg && msg.msg" class="alert" ng-class="'alert-' + msg.status">
         <strong>{{msg.msg}}</strong> {{msg.body}}
     </div>
-    <div ng-if="msg && Array.isArray(msg)" ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
+    <div ng-if="msg && msg[0]" ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
         <strong>{{m.msg}}</strong> {{m.body}}
     </div>
 

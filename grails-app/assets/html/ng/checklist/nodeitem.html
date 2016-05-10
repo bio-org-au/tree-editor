@@ -19,10 +19,16 @@
             ><span uri="{{uri}}" shortnodetext></span></span>
         </span>
         <span class="controls">
-            <i class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
-            <i ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickBookmark()"></i>
+            <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
+            <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
             <a href="#" ng-click="clickNewWindow()">new window</a>
+            <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit">
+            <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
+            <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
+            </span>
         </span>
+
+        {{userOperations}}
     </div>
 
     <div droptarget/>

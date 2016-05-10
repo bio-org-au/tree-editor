@@ -1,8 +1,10 @@
 <div ng-if="taxanodes_bookmarks.vec.length > 0" style="font-size: smaller;">
 <span ng-repeat="uri in taxanodes_bookmarks.vec track by $index">
-    <a href="#" ng-click="clickBookmark(uri)"><span shortnodetext uri="{{uri}}"></span></a> <i class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
+    <a href="#" ng-click="clickBookmark(uri)"><span shortnodetext uri="{{uri}}"></span></a> <i
+        class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
 </span>
-<a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear {{taxanodes_bookmarks.vec.length}} bookmarks</a>
+    <a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear
+        {{taxanodes_bookmarks.vec.length}} bookmarks</a>
 </div>
 <div
         ondrop="dropUri(event)"
@@ -13,34 +15,41 @@
         <div class="controlholder" ng-if="!$last">
             <span uri="{{uri}}" shortnodetext></span>
             <span class="controls">
-                <i class="fabutton fa fa-level-down" ng-click="clickPath($index)"></i>
-                <i ng-if="!$first" class="fabutton fa fa-bookmark" ng-click="clickPathBookmark($index)"></i>
+                <i title="focus here" class="fabutton fa fa-level-down" ng-click="clickPath($index)"></i>
+                <i title="bookmark this placement" ng-if="!$first" class="fabutton fa fa-bookmark"
+                   ng-click="clickPathAddBookmark($index)"></i>
                 <a href="#" ng-click="clickPathNewWindow($index)">new window</a>
             </span>
         </div>
     </div>
     <h1
-        draggable="true"
-        ondragstart="dragUri(event)"
-        style="cursor: grab;"
-    ><span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}" shortarrangementtext></small></h1>
+            div class="controlholder"
+    >
+        <span draggable="true"
+              ondragstart="dragUri(event)"
+              style="cursor: grab;"
+        >
+        <span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}"
+                                                                shortarrangementtext></small>
+        </span>
+        <span class="controls">
+            <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
+            <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit">
+            <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
+            </span>
+        </span>
+    </h1>
 
     <div droptarget/>
 
 </div>
 <div>
     <small>
-    <ul>
-        <li ng-if="rootPermissions.userPermissions.canCreateWorkspaces"><a href="newWorkspaceFromChecklist?focusUri={{focusUri}}">Create a new workspace using this checklist</a></li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit"><a href="#" ng-click="clickSearchAddNames()">Search for names to add to <span uri="{{focus._uri}}" shortnodetext></span></a></li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Add/move a bookmarked node into this list</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Change the name at this placement</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Select instances for this name and/or names below it</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Remove this placement, moving all names beneath it up</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Remove this placement and all nodes below it</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Revert all changes made to the checklist at and below this point</li>
-        <li ng-if="rootPermissions.uriPermissions.canEdit">Commit all changes made to the checklist at and below this point</li>
-    </ul>
+        <ul>
+            <li ng-if="rootPermissions.userPermissions.canCreateWorkspaces"><a
+                    href="newWorkspaceFromChecklist?focusUri={{focusUri}}">Create a new workspace using this
+                checklist</a></li>
+        </ul>
     </small>
 </div>
 <div>
