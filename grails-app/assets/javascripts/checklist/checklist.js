@@ -102,6 +102,8 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.serversideOperationState.params.target = $scope.getTargetUri();
         $scope.serversideOperationState.params.confirm = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.confirm.action : null;
 
+        $scope.serversideOperationState.msg = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.msg : null;
+
         console.log($scope.serversideOperationState);
 
         console.log("SENDING");
