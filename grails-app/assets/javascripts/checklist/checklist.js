@@ -100,6 +100,8 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.serversideOperationState.params.wsNode = $scope.cl_scope.rootUri;
         $scope.serversideOperationState.params.focus = $scope.cl_scope.focusUri;
         $scope.serversideOperationState.params.target = $scope.getTargetUri();
+        $scope.serversideOperationState.params.linkSuper = $scope.getTargetLinkSuper();
+        $scope.serversideOperationState.params.linkSeq = $scope.getTargetLinkSeq();
         $scope.serversideOperationState.params.confirm = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.confirm.action : null;
 
         $scope.serversideOperationState.msg = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.msg : null;
@@ -428,6 +430,13 @@ var ChecklistController = function ($scope, $rootScope, $http) {
         return $scope.focusUri;
     }
 
+    $scope.getTargetLinkSuper = function () {
+        return null;
+    }
+
+    $scope.getTargetLinkSeq = function () {
+        return null;
+    }
 
     CanAcceptDrops($scope, $rootScope, $http);
 
@@ -537,6 +546,13 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         return $scope.uri;
     }
 
+    $scope.getTargetLinkSuper = function () {
+        return $scope.linkSuper;
+    }
+
+    $scope.getTargetLinkSeq = function () {
+        return $scope.linkSeq;
+    }
 
     $scope.clickAddBookmark = function () {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
@@ -567,6 +583,8 @@ var nodeitemDirective = function () {
         templateUrl: "/tree-editor/assets/ng/checklist/nodeitem.html",
         controller: NodeitemController,
         scope: {
+            linkSuper: "@",
+            linkSeq: "@",
             uri: "@"
         },
     };
