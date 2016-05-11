@@ -25,6 +25,8 @@
     <h1
             div class="controlholder"
     >
+        <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
+        <small ng-if="focus.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
         <span draggable="true"
               ondragstart="dragUri(event)"
               style="cursor: grab;"
