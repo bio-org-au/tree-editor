@@ -18,27 +18,14 @@ function dragUriEnd(ev) {
 
 
 function dropUriOver(ev) {
-    if (!ev.dataTransfer.getData("text/uri-list")) return;
+    if (!ev.dataTransfer.types.contains("text/uri-list")) return;
 
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'move';
 }
 
 function dropUriEnter(ev) {
-    console.log(ev.dataTransfer);
-
-
-    for (var i = 0; i < ev.dataTransfer.types.length; i++) {
-        console.log(ev.dataTransfer.types[i]);
-        try {
-            console.log(ev.dataTransfer.getData(ev.dataTransfer.types[i]));
-        } catch (ex) {
-            console.log(ex);
-        }
-
-    }
-
-    if (!ev.dataTransfer.getData("text/uri-list")) return;
+    if (!ev.dataTransfer.types.contains("text/uri-list")) return;
 
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'move';
@@ -49,9 +36,18 @@ function dropUriLeave(ev) {
 
 
 function dropUri(ev) {
-    if (!ev.dataTransfer.getData("text/uri-list")) return;
+    if (!ev.dataTransfer.types.contains("text/uri-list")) return;
     ev.preventDefault();
-    var uriList = ev.dataTransfer.getData("text/uri-list").split('\n');
+
+    var uriList
+    try {
+        uriList = ev.dataTransfer.getData("text/uri-list").split('\n');
+    }
+    catch(e) {
+        alert(e);
+        throw e;
+    }
+
 
     var scope;
     for (scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList; scope = scope.$parent) {
@@ -137,10 +133,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
         $scope.serversideOperationState.msg = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.msg : null;
 
-        console.log($scope.serversideOperationState);
-
-        console.log("SENDING");
-
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/' + $scope.serversideOperationState.action,
@@ -150,10 +142,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             },
             params: $scope.serversideOperationState.params
         }).then(function successCallback(response) {
-
-            console.log("OK");
-            console.log(response);
-
             $scope.serversideOperationState.inProgress = false;
 
             if (response.data.success) {
@@ -185,19 +173,13 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             }
 
         }, function errorCallback(response) {
-            console.log("ERROR");
-            console.log(response);
-
-
             $scope.serversideOperationState.inProgress = false;
             $scope.serversideOperationState.open = false;
 
             if (response.data && response.data.msg) {
-                console.log("message is msg");
                 $rootScope.msg = response.data.msg;
             }
             else if (response.data.status) {
-                console.log("message is status");
                 $rootScope.msg = [
                     {
                         msg: 'URL',
@@ -212,7 +194,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 ];
             }
             else {
-                console.log("message is response stuff");
                 $rootScope.msg = [
                     {
                         msg: 'URL',
@@ -226,8 +207,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     }
                 ];
             }
-
-            console.log($rootScope.msg);
         });
     };
 
@@ -345,8 +324,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     var deregisterInitializationListener = [];
 
     function initializationListener(oldvalue, newvalue) {
-        console.log("Executing initialization listener " + oldvalue + " --> " + newvalue);
-
         var madeAChange;
         do {
             madeAChange = false;
@@ -361,11 +338,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
             // set the arrangement to the focus is we can and need to
 
-
             if (!$scope.arrangementUri && $scope.focusUri && $scope.focus.fetched) {
-                console.log("setting the arrangement from the focus");
-                console.log($scope.focus);
-
                 $scope.arrangementUri = getPreferredLink($scope.focus.arrangement);
                 $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
                 madeAChange = true;
@@ -374,9 +347,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
             // get the root off the arrangement if we can and need to
 
             if (!$scope.rootUri && $scope.arrangementUri && $scope.arrangement.fetched) {
-                console.log("getting the root off the arramngement");
-                console.log($scope.arrangement);
-
                 // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
                 $scope.rootUri = getPreferredLink($scope.arrangement.node);
                 if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.currentRoot);
@@ -387,8 +357,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
             // set the focus to the root, if we can and need to
             if (!$scope.focusUri && $scope.rootUri) {
-                console.log("setting the focus to the root");
-
                 $scope.focusUri = $scope.rootUri;
                 $scope.focus = $rootScope.needJson($scope.focusUri);
                 madeAChange = true;
@@ -418,7 +386,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
                     if ($scope.path.length == 0) {
                         // no path from the root to the focus. just use the focus as the root.
-                        console.log("no path from the root to the focus. just use the focus as the root");
                         $scope.rootUri = $scope.focusUri;
                         $scope.path = [$scope.rootUri];
                     }
@@ -429,8 +396,6 @@ var ChecklistController = function ($scope, $rootScope, $http) {
                         }
                     }
                 }, function errorCallback(response) {
-                    console.log("setting path to focus because failed to get path");
-                    console.log(response);
                     $scope.rootUri = $scope.focusUri;
                     $scope.path = [$scope.focusUri];
                 });
