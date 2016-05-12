@@ -8,16 +8,37 @@
 //= require utility/get-json-controller
 //= require utility/get-uri-permissions
 
+function dragUriStart(ev) {
+    var s = $(ev.target).scope();
+    ev.dataTransfer.setData("text/uri-list", s.getDragUriList().join('\n'));
+}
+
+function dragUriEnd(ev) {
+}
+
 
 function dropUriOver(ev) {
-    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
+    if (!ev.dataTransfer.getData("text/uri-list")) return;
 
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'move';
 }
 
 function dropUriEnter(ev) {
-    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
+    console.log(ev.dataTransfer);
+
+
+    for (var i = 0; i < ev.dataTransfer.types.length; i++) {
+        console.log(ev.dataTransfer.types[i]);
+        try {
+            console.log(ev.dataTransfer.getData(ev.dataTransfer.types[i]));
+        } catch (ex) {
+            console.log(ex);
+        }
+
+    }
+
+    if (!ev.dataTransfer.getData("text/uri-list")) return;
 
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'move';
@@ -26,24 +47,16 @@ function dropUriEnter(ev) {
 function dropUriLeave(ev) {
 }
 
-function dragUriStart(ev) {
-    var s = $(ev.target).scope();
-    ev.dataTransfer.setData("application/uri-list+json", JSON.stringify(s.getDragUriList()));
-}
-
-function dragUriEnd(ev) {
-}
 
 function dropUri(ev) {
-    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
-
+    if (!ev.dataTransfer.getData("text/uri-list")) return;
     ev.preventDefault();
+    var uriList = ev.dataTransfer.getData("text/uri-list").split('\n');
 
-    var uriList = JSON.parse(ev.dataTransfer.getData("application/uri-list+json"))
     var scope;
     for (scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList; scope = scope.$parent) {
     }
-    if(!scope) return;
+    if (!scope) return;
     // have to use timeout to get out of the apply loop
     window.setTimeout(function () {
         scope.$apply(function () {
@@ -85,7 +98,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         };
     };
 
-    $scope.clickRemove = function() {
+    $scope.clickRemove = function () {
         if ($scope.serversideOperationState.open) return; // we have another operation in progress
         $scope.clearServersideOperationState();
         $scope.serversideOperationState.open = true;
@@ -93,7 +106,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.sendServersideOperation();
     };
 
-    $scope.clickRevert = function() {
+    $scope.clickRevert = function () {
         if ($scope.serversideOperationState.open) return; // we have another operation in progress
         $scope.clearServersideOperationState();
         $scope.serversideOperationState.open = true;
