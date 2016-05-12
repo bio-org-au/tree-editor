@@ -11,11 +11,14 @@
         <span ng-if="json.fetched">
             <small ng-if="!json.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
             <small ng-if="json.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
-            <span draggable="true"
-                  ondragstart="dragUri(event)"
+            <span class="draggable-uri droppable-uri"
+                  draggable="true"
+                  ondragstart="dragUriStart(event)"
+                  ondragend="dragUriEnd(event)"
                   ondrop="dropUri(event)"
-                  ondragover="allowDropUri(event)"
-                  style="cursor: grab;"
+                  ondragover="dropUriOver(event)"
+                  ondragenter="dropUriEnter(event)"
+                  ondragleave="dropUriLeave(event)"
             ><span uri="{{uri}}" shortnodetext></span></span>
         </span>
         <span class="controls">

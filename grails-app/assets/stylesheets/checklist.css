@@ -30,3 +30,10 @@
 .declared-bt {
     color: #808080
 }
+
+.draggable-uri {
+    cursor: grab;
+}
+
+.droppable-uri {
+}

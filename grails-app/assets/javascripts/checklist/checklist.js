@@ -9,23 +9,41 @@
 //= require utility/get-uri-permissions
 
 
-function allowDropUri(ev) {
-    if (ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list")) {
-        ev.preventDefault();
-    }
+function dropUriOver(ev) {
+    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
+
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
 }
 
-function dragUri(ev) {
+function dropUriEnter(ev) {
+    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
+
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
+}
+
+function dropUriLeave(ev) {
+}
+
+function dragUriStart(ev) {
     var s = $(ev.target).scope();
-    ev.dataTransfer.setData("au.org.biodiversity.nsl.uri-list", JSON.stringify(s.getDragUriList()));
+    ev.dataTransfer.setData("application/uri-list+json", JSON.stringify(s.getDragUriList()));
+}
+
+function dragUriEnd(ev) {
 }
 
 function dropUri(ev) {
+    if(!ev.dataTransfer.getData("application/uri-list+json")) return;
+
     ev.preventDefault();
-    var uriList = JSON.parse(ev.dataTransfer.getData("au.org.biodiversity.nsl.uri-list"))
+
+    var uriList = JSON.parse(ev.dataTransfer.getData("application/uri-list+json"))
     var scope;
     for (scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList; scope = scope.$parent) {
     }
+    if(!scope) return;
     // have to use timeout to get out of the apply loop
     window.setTimeout(function () {
         scope.$apply(function () {

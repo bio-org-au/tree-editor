@@ -6,9 +6,13 @@
     <a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear
         {{taxanodes_bookmarks.vec.length}} bookmarks</a>
 </div>
+
 <div
+        class="droppable-uri"
         ondrop="dropUri(event)"
-        ondragover="allowDropUri(event)"
+        ondragover="dropUriOver(event)"
+        ondragenter="dropUriEnter(event)"
+        ondragleave="dropUriLeave(event)"
 >
     <h4>Checklist</h4>
     <div ng-repeat="uri in path">
@@ -27,9 +31,10 @@
     >
         <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
         <small ng-if="focus.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
-        <span draggable="true"
-              ondragstart="dragUri(event)"
-              style="cursor: grab;"
+        <span class="draggable-uri"
+              draggable="true"
+              ondragstart="dragUriStart(event)"
+              ondragend="dragUriEnd(event)"
         >
         <span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}"
                                                                 shortarrangementtext></small>
