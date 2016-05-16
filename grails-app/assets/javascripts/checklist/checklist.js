@@ -129,9 +129,13 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.serversideOperationState.params.target = $scope.getTargetUri();
         $scope.serversideOperationState.params.linkSuper = $scope.getTargetLinkSuper();
         $scope.serversideOperationState.params.linkSeq = $scope.getTargetLinkSeq();
-        $scope.serversideOperationState.params.confirm = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.confirm.action : null;
 
-        $scope.serversideOperationState.msg = $scope.serversideOperationState.confirm ? $scope.serversideOperationState.msg : null;
+        for(c in $scope.serversideOperationState.moreInfoNeeded) {
+            var cc = $scope.serversideOperationState.moreInfoNeeded[c];
+            $scope.serversideOperationState.params[cc.name] = cc.selected;
+        }
+
+        $scope.serversideOperationState.msg = null;
 
         $http({
             method: 'POST',
@@ -140,7 +144,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                 'Access-Control-Request-Headers': 'nsl-jwt',
                 'nsl-jwt': $rootScope.getJwt()
             },
-            params: $scope.serversideOperationState.params
+            data: $scope.serversideOperationState.params
         }).then(function successCallback(response) {
             $scope.serversideOperationState.inProgress = false;
 
@@ -169,6 +173,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             }
             else {
                 $scope.serversideOperationState.chooseAction = response.data.chooseAction;
+                $scope.serversideOperationState.moreInfoNeeded = response.data.moreInfoNeeded;
                 $scope.serversideOperationState.msg = response.data.msg;
             }
 

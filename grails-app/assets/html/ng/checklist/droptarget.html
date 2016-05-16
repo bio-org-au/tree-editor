@@ -7,15 +7,26 @@
     </div>
 
     <div ng-if="!serversideOperationState.inProgress">
-        <div ng-repeat="opt in serversideOperationState.chooseAction">
-            <i ng-if="serversideOperationState.confirm == opt" class="fa fa-check-square-o fabutton" ng-click="serversideOperationState.confirm = null"></i>
-            <i ng-if="serversideOperationState.confirm != opt" class="fa fa-square-o fabutton" ng-click="serversideOperationState.confirm = opt"></i>
-                <span ng-class="'text-' + opt.msg.status">
-                    <strong>{{opt.msg.msg}}</strong>
-                    {{opt.msg.body}}
+        <div ng-repeat="inf in serversideOperationState.moreInfoNeeded" ng-if="inf.msg||inf.options" ng-class="'alert-' + inf.msg.status">
+            <div ng-if="inf.msg">
+                <span ng-class="'text-' + inf.msg.status">
+                    <strong>{{inf.msg.msg}}</strong>
+                    {{inf.msg.body}}
                 </span>
+            </div>
+            <div ng-repeat="opt in inf.options">
+                <i ng-if="inf.selected == opt.whenSelected" class="fa fa-check-square-o fabutton" ng-click="inf.selected = null"></i>
+                <i ng-if="inf.selected != opt.whenSelected" class="fa fa-square-o fabutton" ng-click="inf.selected = opt.whenSelected"></i>
+                <span ng-class="'text-' + opt.status">
+                    <strong>{{opt.msg}}</strong>
+                    {{opt.body}}
+                </span>
+            </div>
         </div>
-        <button ng-if="serversideOperationState.chooseAction" class="button btn-primary btn-sm" ng-click="sendServersideOperation()">Ok</button>
+
+
+        <button class="button btn-sm btn-primary"
+                ng-click="sendServersideOperation()">Ok</button>
         <button class="button btn-default btn-sm" ng-click="clearServersideOperationState()">Cancel</button>
     </div>
 </div>
