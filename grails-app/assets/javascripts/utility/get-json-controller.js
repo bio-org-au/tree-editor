@@ -100,24 +100,11 @@ function setupJsonCache($rootScope, $http) {
                 method: 'GET',
                 url: uri
             }).then(function successCallback(response) {
-                if(uri=='http://biodiversity.org.au/boa/name/apni/54717') {
-                    console.log("sucessfully got name");
-                    console.log(response.data);
-                }
-
                 stampJson(response.data);
                 scanJson(response.data);
-
-                if(uri=='http://biodiversity.org.au/boa/name/apni/54717') {
-                    console.log("after scan, the cache contains");
-                    console.log($rootScope.jsonCache[uri]);
-                }
-
+                json.fetching = false;
             }, function errorCallback(response) {
-                if(uri=='http://localhost:7070/nsl-mapper/tree/apni/1133571') {
-                    console.log('failure! ' + uri);
-                }
-                $rootScope.jsonCache[uri].fetching = false;
+                json.fetching = false;
                 json._fetchError = response;
             });
         }
