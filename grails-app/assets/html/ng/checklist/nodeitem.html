@@ -1,11 +1,11 @@
-<div>
-    <span class="pull-left">
-        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton larger"
+<div class="nodeitem-item controlholder">
+    <span class="nodeitem-handle">
+        <i ng-if="json.fetched && hasSubnodes && UI.open" class="fa fa-angle-down fabutton"
            ng-click="UI.open = false;"></i>
-        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton larger"
+        <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton"
            ng-click="UI.open = true;"></i>
     </span>
-    <div style="margin-left: 1em;" class="controlholder">
+    <span class="nodeitem-content">
         <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
         <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
         <span ng-if="json.fetched">
@@ -21,19 +21,21 @@
                   ondragleave="dropUriLeave(event)"
             ><span uri="{{uri}}" shortnodetext></span></span>
         </span>
-        <span class="controls">
-            <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
-            <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
-            <a href="#" ng-click="clickNewWindow()">new window</a>
-            <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit">
-            <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
-            <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
-            </span>
+    </span>
+    <span class="controls">
+        <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
+        <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
+        <a href="#" ng-click="clickNewWindow()">new window</a>
+        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit">
+        <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
+        <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
         </span>
-    </div>
+    </span>
 
     <div droptarget/>
 
 </div>
 
-<div style="margin-left: 2em;" ng-if="json.fetched && hasSubnodes && UI.open" uri="{{uri}}" nodelist></div>
+<div ng-if="json.fetched && hasSubnodes && UI.open" class="nodeitem-list">
+    <div uri="{{uri}}" class="nodelist" nodelist></div>
+</div>

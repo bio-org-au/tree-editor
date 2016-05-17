@@ -1,19 +1,28 @@
-.controls {
-    font-size: smaller;
+.fabutton {
+    padding: 0 .2em 0 .2em;
+    border-radius: .25em;
+    width: 1.1em;
+    text-align: center;
+}
+
+.fabutton:hover {
+    color: white;
+    background-color: #333;
 }
 
 .controlholder > .controls {
     display: none;
-    cursor: pointer;
+    position: relative;
+    left: .5em;
 }
 
 .controlholder:hover > .controls {
     display: inline-block;
+    cursor: pointer;
+    position: relative;
+    z-index: 99;
 }
 
-.controls {
-    margin-left: 1.5em;
-}
 
 .bookmark-off {
     color: lightgray;
@@ -36,4 +45,28 @@
 }
 
 .droppable-uri {
+}
+
+
+.nodelist {
+}
+
+.nodelist-item {
+}
+
+.nodeitem {
+}
+
+.nodeitem-handle {
+    font-size: 95%;
+}
+
+.nodeitem-content {
+}
+
+.nodeitem-item {
+}
+
+.nodeitem-list {
+  margin-left: 2em;
 }

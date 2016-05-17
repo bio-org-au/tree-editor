@@ -152,7 +152,7 @@ GetJsonController.$inject = ['$scope', '$rootScope'];
 
 app.controller('GetJsonController', GetJsonController);
 
-var shortnodetextDirective = function() {
+app.directive('shortnodetext', function() {
     return {
         templateUrl: "/tree-editor/assets/ng/utility/shortnodetext.html",
         controller: GetJsonController,
@@ -160,11 +160,9 @@ var shortnodetextDirective = function() {
             uri: '@uri'
         },
     };
-}
+});
 
-app.directive('shortnodetext', shortnodetextDirective);
-
-var shortnametextDirective = function() {
+app.directive('shortnametext', function() {
     return {
         templateUrl: "/tree-editor/assets/ng/utility/shortnametext.html",
         controller: GetJsonController,
@@ -172,11 +170,9 @@ var shortnametextDirective = function() {
             uri: '@uri'
         },
     };
-}
+});
 
-app.directive('shortnametext', shortnametextDirective);
-
-var shortarrangementtextDirective = function() {
+app.directive('shortarrangementtext', function() {
     return {
         templateUrl: "/tree-editor/assets/ng/utility/shortarrangementtext.html",
         controller: GetJsonController,
@@ -184,11 +180,9 @@ var shortarrangementtextDirective = function() {
             uri: '@uri'
         },
     };
-}
+});
 
-app.directive('shortarrangementtext', shortarrangementtextDirective);
-
-var shortinstreftextDirective = function() {
+app.directive('shortinstreftext', function() {
     return {
         templateUrl: "/tree-editor/assets/ng/utility/shortinstreftext.html",
         controller: GetJsonController,
@@ -196,6 +190,4 @@ var shortinstreftextDirective = function() {
             uri: '@uri'
         },
     };
-}
-
-app.directive('shortinstreftext', shortinstreftextDirective);
+});
