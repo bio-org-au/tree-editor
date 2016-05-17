@@ -88,6 +88,12 @@ grails.hibernate.osiv.readonly = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+
+        treeEditor {
+            servicesUrl = 'http://localhost:8080/services'
+            pagesUrl = 'http://localhost:8081/tree-editor'
+        }
+
     }
     production {
         grails.logging.jul.usebridge = false
@@ -115,3 +121,4 @@ log4j.main = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+

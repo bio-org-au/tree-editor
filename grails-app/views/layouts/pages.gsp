@@ -30,7 +30,7 @@
     <g:layoutHead/>
 </head>
 
-<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="http://localhost:8080/services" data-pages-url="http://localhost:8081/tree-editor" ng-controller="appbody" >
+<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="${grailsApplication.config.treeEditor.servicesUrl}" data-pages-url="${grailsApplication.config.treeEditor.pagesUrl}" ng-controller="appbody" >
 
 <div class="container-fluid">
     <ul class="nav nav-pills" >
