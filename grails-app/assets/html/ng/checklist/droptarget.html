@@ -15,8 +15,8 @@
                 </span>
             </div>
             <div ng-repeat="opt in inf.options">
-                <i ng-if="inf.selected == opt.whenSelected" class="fa fa-check-square-o fabutton" ng-click="inf.selected = null"></i>
-                <i ng-if="inf.selected != opt.whenSelected" class="fa fa-square-o fabutton" ng-click="inf.selected = opt.whenSelected"></i>
+                <i ng-if="inf.selected == opt.whenSelected" class="fa fa-dot-circle-o fabutton" ng-click="inf.selected = null"></i>
+                <i ng-if="inf.selected != opt.whenSelected" class="fa fa-circle-o fabutton" ng-click="inf.selected = opt.whenSelected"></i>
                 <span ng-class="'text-' + opt.status">
                     <strong>{{opt.msg}}</strong>
                     {{opt.body}}

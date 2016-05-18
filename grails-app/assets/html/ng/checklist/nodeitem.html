@@ -4,6 +4,7 @@
            ng-click="UI.open = false;"></i>
         <i ng-if="json.fetched && hasSubnodes && !UI.open" class="fa fa-angle-right fabutton"
            ng-click="UI.open = true;"></i>
+        <i ng-if="!json.fetched || !hasSubnodes" class="fa fabutton">&nbsp;</i>
     </span>
     <span class="nodeitem-content">
         <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
