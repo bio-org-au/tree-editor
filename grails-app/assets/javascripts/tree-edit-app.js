@@ -19,7 +19,7 @@ function adjust_working_body_height () {
 
 $(window).resize(adjust_working_body_height);
 
-var TreeEditAppController = function ($scope, $http, $element) {
+var TreeEditAppController = function ($rootScope, $scope, $http, $element) {
     $scope.footer = "this is a footer";
     $scope.rightpanel_select = "cls";
 
@@ -180,7 +180,7 @@ var TreeEditAppController = function ($scope, $http, $element) {
     $scope.reloadNamespaces();
 };
 
-TreeEditAppController.$inject = ['$scope', '$http', '$element'];
+TreeEditAppController.$inject = ['$rootScope', '$scope', '$http', '$element'];
 
 app.controller('TreeEditAppController', TreeEditAppController);
 
@@ -324,8 +324,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             method: 'POST',
             url: $scope.appScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $scope.appScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'namespace': $scope.appScope.namespace,
@@ -360,8 +360,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             method: 'POST',
             url: $scope.appScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $scope.appScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'uri': $scope.editForm.uri,
@@ -396,8 +396,8 @@ var WorkspacesPaneController = function ($scope, $http, $element) {
             method: 'POST',
             url: $scope.appScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $scope.appScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'uri': $scope.editForm.uri,

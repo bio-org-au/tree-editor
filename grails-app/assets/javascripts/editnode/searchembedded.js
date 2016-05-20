@@ -190,8 +190,8 @@ var SearchembeddedController = function ($scope, $rootScope, $http, $element) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/addNamesToNode',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'root': $scope.rootUri,

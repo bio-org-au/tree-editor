@@ -49,8 +49,8 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'uri': $scope.uri,
@@ -84,8 +84,8 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'namespace': $rootScope.namespace,
@@ -117,8 +117,8 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'uri': $scope.uri,

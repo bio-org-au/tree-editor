@@ -7,8 +7,8 @@ function get_uri_permissions($rootScope, $http, uri, callback)
         method: 'POST',
         url: $rootScope.servicesUrl + '/TreeJsonView/permissions',
         headers: {
-            'Access-Control-Request-Headers': 'nsl-jwt',
-            'nsl-jwt': $rootScope.getJwt()
+            'Access-Control-Request-Headers': 'Authorization',
+            'Authorization': 'JWT ' + $rootScope.getJwt()
         },
         params: {
             'uri': uri

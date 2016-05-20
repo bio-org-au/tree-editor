@@ -141,8 +141,8 @@ function CanAcceptDrops($scope, $rootScope, $http) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/' + $scope.serversideOperationState.action,
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             data: $scope.serversideOperationState.params
         }).then(function successCallback(response) {

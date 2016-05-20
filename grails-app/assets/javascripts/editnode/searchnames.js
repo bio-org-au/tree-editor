@@ -173,8 +173,8 @@ var SearchnamesController = function ($scope, $rootScope, $http) {
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/addNamesToNode',
             headers: {
-                'Access-Control-Request-Headers': 'nsl-jwt',
-                'nsl-jwt': $rootScope.getJwt()
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
                 'root': $scope.rootUri,
