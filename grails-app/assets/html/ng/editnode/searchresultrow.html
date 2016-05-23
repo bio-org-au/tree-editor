@@ -1,7 +1,0 @@
-<td ng-mouseenter="swipeSelection()" ng-click="clickSelection()" class="selection-pad" ng-class="selected?'on':'off'">
-    <i class="fa fabutton" ng-class="selected ? 'fa-check' : ''"></i>
-</td>
-<td ng-click="clickSelection()">
-<span ng-if="!json.fetched"><small>{{uri}}</small></span>
-<span ng-if="json.fetched" ng-click="clickSelection()" style="cursor: pointer;"><span uri="{{uri}}" shortnametext></span></span>
-</td>

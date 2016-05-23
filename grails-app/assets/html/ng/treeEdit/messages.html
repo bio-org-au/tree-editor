@@ -1,8 +1,0 @@
-<i ng-if="msg && msg.length > 0" ng-click="clearMessages()" class="pull-right fa fa-close fabutton"></i>
-<div ng-if="msg && msg.length > 0" class="alert alert-default" style="border-color: darkgray;">
-    <row ng-repeat="i in msg track by $index">
-        <div ng-class="'alert-' + i.status" role="alert">
-            <strong>{{i.msg}}</strong><span ng-if="i.body"><strong>:</strong> {{i.body}}</span>
-        </div>
-    </row>
-</div>
