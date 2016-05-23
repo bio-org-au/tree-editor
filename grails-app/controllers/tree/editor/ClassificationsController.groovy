@@ -17,7 +17,4 @@ class ClassificationsController {
         redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
     }
 
-    def findNameIn() {
-        redirect controller: "Search", action: 'findNameInClassification', params: params
-    }
 }
