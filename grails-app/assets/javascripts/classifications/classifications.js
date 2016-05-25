@@ -1,4 +1,4 @@
-var ClassificationslistController = function ($scope, $rootScope, $http) {
+var ClassificationslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -37,25 +37,20 @@ var ClassificationslistController = function ($scope, $rootScope, $http) {
     $scope.$on('nsl-tree-edit.namespace-changed', $scope.reload);
 
     $scope.reload();
-};
-
-ClassificationslistController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Classificationslist', ClassificationslistController);
 
-var classificationslistDirective = function() {
+app.directive('classificationslist', [ function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/classifications/list.html",
         controller: ClassificationslistController,
         scope: {
         },
     };
-};
+}]);
 
-classificationslistDirective.$inject = [];
-app.directive('classificationslist', classificationslistDirective);
-
-var ClassificationslistrowController = function ($scope, $rootScope, $http) {
+var ClassificationslistrowController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -92,14 +87,12 @@ var ClassificationslistrowController = function ($scope, $rootScope, $http) {
     };
 
     $scope.reload();
-};
+}];
 
-
-ClassificationslistController.$inject = ['$scope', '$rootScope', '$http'];
 
 app.controller('Classificationslistrow', ClassificationslistrowController);
 
-var classificationslistrowDirective = function() {
+var classificationslistrowDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/classifications/row.html",
         controller: ClassificationslistrowController,
@@ -107,8 +100,7 @@ var classificationslistrowDirective = function() {
             uri: "@uri"
         },
     };
-};
+}];
 
-classificationslistrowDirective.$inject = [];
 app.directive('classificationslistrow', classificationslistrowDirective);
 

@@ -2,7 +2,7 @@
 //= require get-preferred-link
 //= require utility/get-json-controller
 
-var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
+var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', function ($scope, $rootScope, $http, $element) {
     setupJsonCache($rootScope, $http);
 
 
@@ -26,7 +26,7 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
         }
     };
 
-    GetJsonController($scope, $rootScope);
+    inheritJsonController($scope, $rootScope);
     $scope.resetForm();
 
     if ($scope.withTopNode) {
@@ -140,17 +140,12 @@ var WorkspaceformController = function ($scope, $rootScope, $http, $element) {
             }
         });
     };
+}];
 
-
-};
-
-
-WorkspaceformController.$inject = ['$scope', '$rootScope', '$http', '$element'];
 
 app.controller('Workspaceform', WorkspaceformController);
 
-
-var workspaceformDirective = function() {
+var workspaceformDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/workspaces/form.html",
         controller: WorkspaceformController,
@@ -159,7 +154,7 @@ var workspaceformDirective = function() {
             withTopNode: "@withTopNode"
         },
     };
-}
+}];
 
 app.directive('workspaceform', workspaceformDirective);
 

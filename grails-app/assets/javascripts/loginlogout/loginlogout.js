@@ -1,4 +1,4 @@
-var LoginlogoutController = function ($scope, $rootScope, $http) {
+var LoginlogoutController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.login = function() {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
         localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
@@ -37,13 +37,11 @@ var LoginlogoutController = function ($scope, $rootScope, $http) {
     $scope.getJwt = $rootScope.getJwt;
 
     $scope.form = {name: $scope.isLoggedIn() ? $scope.getUser() : '', password: ''};
-};
-
-LoginlogoutController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Loginlogout', LoginlogoutController);
 
-function loginlogoutDirective() {
+var loginlogoutDirective = [function () {
     return {
         templateUrl: pagesUrl + "/assets/ng/loginlogout/loginlogout.html",
         controller: LoginlogoutController,
@@ -51,6 +49,6 @@ function loginlogoutDirective() {
             servicesUrl: '@servicesUrl'
         },
     };
-}
+}];
 
 app.directive('loginlogout', loginlogoutDirective);

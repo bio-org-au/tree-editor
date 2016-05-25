@@ -1,4 +1,4 @@
-var NamespaceselectController = function ($scope, $rootScope, $http) {
+var NamespaceselectController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $rootScope.namespace = localStorage.getItem('nsl-tree-editor.namespaces.namespace');
     if(!$rootScope.namespace || $rootScope.namespace=='') {
         $rootScope.namespace = null;
@@ -55,14 +55,11 @@ var NamespaceselectController = function ($scope, $rootScope, $http) {
     $scope.getNamespace = function() { return $rootScope.namespace; };
 
     $scope.reloadNamespaces();
-}
-
-
-NamespaceselectController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Namespaceselect', NamespaceselectController);
 
-function namespacesdropdownDirective() {
+var namespacesdropdownDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/namespaces/dropdown.html",
         controller: NamespaceselectController,
@@ -70,6 +67,6 @@ function namespacesdropdownDirective() {
             namespace: '&'
         },
     };
-}
+}];
 
 app.directive('namespacesdropdown', namespacesdropdownDirective);

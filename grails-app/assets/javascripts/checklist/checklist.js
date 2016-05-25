@@ -219,7 +219,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
 }
 
-var ChecklistController = function ($scope, $rootScope, $http) {
+var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.foo = "I AM A CHECKLIST!";
     $scope.cl_scope = $scope;
 
@@ -437,13 +437,11 @@ var ChecklistController = function ($scope, $rootScope, $http) {
 
     CanAcceptDrops($scope, $rootScope, $http);
 
-};
-
-ChecklistController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Checklist', ChecklistController);
 
-var checklistDirective = function () {
+var checklistDirective = [function () {
     return {
         templateUrl: pagesUrl + "/assets/ng/checklist/checklist.html",
         controller: ChecklistController,
@@ -453,15 +451,13 @@ var checklistDirective = function () {
             focusUri: "@"
         },
     };
-}
+}];
 
 app.directive('checklist', checklistDirective);
 
-var NodelistController = function ($scope, $rootScope, $http) {
-    $scope.foo = "I AM A NODE LIST!";
-
+var NodelistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.cl_scope = $scope.$parent.cl_scope;
-    GetJsonController($scope, $rootScope);
+    inheritJsonController($scope, $rootScope);
 
     $scope.getRootUri = function () {
         return "I am a root uri!"
@@ -474,13 +470,11 @@ var NodelistController = function ($scope, $rootScope, $http) {
         $scope.$parent.clickSubPath(a);
     }
 
-};
-
-NodelistController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Nodelist', NodelistController);
 
-var nodelistDirective = function (RecursionHelper) {
+var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
     return {
         templateUrl: pagesUrl + "/assets/ng/checklist/nodelist.html",
         controller: NodelistController,
@@ -496,13 +490,11 @@ var nodelistDirective = function (RecursionHelper) {
             });
         },
     };
-};
-
-nodelistDirective.$inject = ['RecursionHelper'];
+}];
 
 app.directive('nodelist', nodelistDirective);
 
-var NodeitemController = function ($scope, $rootScope, $http) {
+var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.foo = "I AM A NODE ITEM!";
 
     $scope.cl_scope = $scope.$parent.cl_scope;
@@ -516,7 +508,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         }
     };
 
-    GetJsonController($scope, $rootScope);
+    inheritJsonController($scope, $rootScope);
 
     $scope.getRootUri = function () {
         "I, also, am a root uri!"
@@ -569,13 +561,11 @@ var NodeitemController = function ($scope, $rootScope, $http) {
         window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
 
-};
-
-NodeitemController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Nodeitem', NodeitemController);
 
-var nodeitemDirective = function () {
+var nodeitemDirective = [function () {
     return {
         templateUrl: pagesUrl + "/assets/ng/checklist/nodeitem.html",
         controller: NodeitemController,
@@ -585,15 +575,14 @@ var nodeitemDirective = function () {
             uri: "@"
         },
     };
-};
+}];
 
 app.directive('nodeitem', nodeitemDirective);
 
-
-var droptargetDirective = function () {
+var droptargetDirective = [function () {
     return {
         templateUrl: pagesUrl + "/assets/ng/checklist/droptarget.html"
     };
-};
+}];
 
 app.directive('droptarget', droptargetDirective);

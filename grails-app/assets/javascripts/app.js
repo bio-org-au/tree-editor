@@ -4,7 +4,7 @@
 
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
-var AppbodyController = function ($rootScope, $element) {
+var AppbodyController = ['$rootScope', '$element', function($rootScope, $element) {
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
@@ -127,8 +127,6 @@ var AppbodyController = function ($rootScope, $element) {
         $rootScope.$broadcast('nsl-tree-edit.bookmark-changed', category, uri, true);
     };
 
-};
-
-AppbodyController.$inject = ['$rootScope', '$element'];
+}];
 
 app.controller('appbody', AppbodyController);

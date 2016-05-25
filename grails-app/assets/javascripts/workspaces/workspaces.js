@@ -1,4 +1,4 @@
-var WorkspaceslistController = function ($scope, $rootScope, $http) {
+var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -37,24 +37,22 @@ var WorkspaceslistController = function ($scope, $rootScope, $http) {
     $scope.$on('nsl-tree-edit.namespace-changed', $scope.reload);
 
     $scope.reload();
-};
-
-WorkspaceslistController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Workspaceslist', WorkspaceslistController);
 
-var workspaceslistDirective = function() {
+var workspaceslistDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/workspaces/list.html",
         controller: WorkspaceslistController,
         scope: {
         },
     };
-}
+}];
 
 app.directive('workspaceslist', workspaceslistDirective);
 
-var WorkspaceslistrowController = function ($scope, $rootScope, $http) {
+var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -98,15 +96,11 @@ var WorkspaceslistrowController = function ($scope, $rootScope, $http) {
     };
 
     $scope.reload();
-};
-
-
-WorkspaceslistrowController.$inject = ['$scope', '$rootScope', '$http'];
+}];
 
 app.controller('Workspaceslistrow', WorkspaceslistrowController);
 
-
-var workspaceslistrowDirective = function() {
+var workspaceslistrowDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/workspaces/row.html",
         controller: WorkspaceslistrowController,
@@ -114,7 +108,7 @@ var workspaceslistrowDirective = function() {
             uri: "@uri"
         },
     };
-}
+}];
 
 app.directive('workspaceslistrow', workspaceslistrowDirective);
 

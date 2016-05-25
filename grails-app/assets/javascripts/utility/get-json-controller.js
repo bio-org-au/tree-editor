@@ -128,7 +128,7 @@ function setupJsonCache($rootScope, $http) {
 
 };
 
-var GetJsonController = function ($scope, $rootScope) {
+var GetJsonController = ['$scope', '$rootScope', function ($scope, $rootScope) {
     // everyone needs this
     $scope.getPreferredLink = getPreferredLink;
     $scope.json = $rootScope.needJson($scope.uri);
@@ -146,13 +146,13 @@ var GetJsonController = function ($scope, $rootScope) {
             }
         }
     });
-}
+}];
 
-GetJsonController.$inject = ['$scope', '$rootScope'];
+var inheritJsonController = GetJsonController[2];
 
 app.controller('GetJsonController', GetJsonController);
 
-var shortnodetextDirective = function() {
+var shortnodetextDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortnodetext.html",
         controller: GetJsonController,
@@ -160,12 +160,11 @@ var shortnodetextDirective = function() {
             uri: '@uri'
         },
     };
-};
+}];
 
-shortnodetextDirective.$inject = [];
 app.directive('shortnodetext', shortnodetextDirective);
 
-var shortnametextDirective = function() {
+var shortnametextDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortnametext.html",
         controller: GetJsonController,
@@ -173,11 +172,10 @@ var shortnametextDirective = function() {
             uri: '@uri'
         },
     };
-};
-shortnametextDirective.$inject = [];
+}];
 app.directive('shortnametext', shortnametextDirective);
 
-var shortarrangementtextDirective = function() {
+var shortarrangementtextDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortarrangementtext.html",
         controller: GetJsonController,
@@ -185,11 +183,10 @@ var shortarrangementtextDirective = function() {
             uri: '@uri'
         },
     };
-};
-shortarrangementtextDirective.$inject = [];
+}];
 app.directive('shortarrangementtext', shortarrangementtextDirective);
 
-var shortinstreftextDirective = function() {
+var shortinstreftextDirective = [function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortinstreftext.html",
         controller: GetJsonController,
@@ -197,6 +194,5 @@ var shortinstreftextDirective = function() {
             uri: '@uri'
         },
     };
-};
-shortinstreftextDirective.$inject = [];
+}];
 app.directive('shortinstreftext', shortinstreftextDirective);
