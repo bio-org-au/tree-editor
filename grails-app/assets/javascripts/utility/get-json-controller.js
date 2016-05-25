@@ -154,7 +154,7 @@ app.controller('GetJsonController', GetJsonController);
 
 app.directive('shortnodetext', function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/utility/shortnodetext.html",
+        templateUrl: pagesUrl + "/assets/ng/utility/shortnodetext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -164,7 +164,7 @@ app.directive('shortnodetext', function() {
 
 app.directive('shortnametext', function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/utility/shortnametext.html",
+        templateUrl: pagesUrl + "/assets/ng/utility/shortnametext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -174,7 +174,7 @@ app.directive('shortnametext', function() {
 
 app.directive('shortarrangementtext', function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/utility/shortarrangementtext.html",
+        templateUrl: pagesUrl + "/assets/ng/utility/shortarrangementtext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -184,7 +184,7 @@ app.directive('shortarrangementtext', function() {
 
 app.directive('shortinstreftext', function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/utility/shortinstreftext.html",
+        templateUrl: pagesUrl + "/assets/ng/utility/shortinstreftext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'

@@ -45,7 +45,7 @@ app.controller('Workspaceslist', WorkspaceslistController);
 
 var workspaceslistDirective = function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/workspaces/list.html",
+        templateUrl: pagesUrl + "/assets/ng/workspaces/list.html",
         controller: WorkspaceslistController,
         scope: {
         },
@@ -108,7 +108,7 @@ app.controller('Workspaceslistrow', WorkspaceslistrowController);
 
 var workspaceslistrowDirective = function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/workspaces/row.html",
+        templateUrl: pagesUrl + "/assets/ng/workspaces/row.html",
         controller: WorkspaceslistrowController,
         scope: {
             uri: "@uri"

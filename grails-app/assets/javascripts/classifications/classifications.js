@@ -45,12 +45,12 @@ app.controller('Classificationslist', ClassificationslistController);
 
 var classificationslistDirective = function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/classifications/list.html",
+        templateUrl: pagesUrl + "/assets/ng/classifications/list.html",
         controller: ClassificationslistController,
         scope: {
         },
     };
-}
+};
 
 app.directive('classificationslist', classificationslistDirective);
 
@@ -100,13 +100,13 @@ app.controller('Classificationslistrow', ClassificationslistrowController);
 
 var classificationslistrowDirective = function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/classifications/row.html",
+        templateUrl: pagesUrl + "/assets/ng/classifications/row.html",
         controller: ClassificationslistrowController,
         scope: {
             uri: "@uri"
         },
     };
-}
+};
 
 app.directive('classificationslistrow', classificationslistrowDirective);
 

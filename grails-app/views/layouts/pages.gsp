@@ -22,6 +22,11 @@
     <link rel="stylesheet" href="/Users/ibis/Software/WebCache/font-awesome.min.css">
 -->
 
+    <script type="application/javascript">
+        var servicesUrl = "${grailsApplication.config.treeEditor.servicesUrl}";
+        var pagesUrl = "${grailsApplication.config.treeEditor.pagesUrl}";
+    </script>
+
     <asset:stylesheet src="pages.css"/>
     <asset:javascript src="pages.js"/>
     <asset:javascript src="app.js"/>

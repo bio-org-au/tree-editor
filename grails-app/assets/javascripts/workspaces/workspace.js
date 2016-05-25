@@ -152,7 +152,7 @@ app.controller('Workspaceform', WorkspaceformController);
 
 var workspaceformDirective = function() {
     return {
-        templateUrl: "/tree-editor/assets/ng/workspaces/form.html",
+        templateUrl: pagesUrl + "/assets/ng/workspaces/form.html",
         controller: WorkspaceformController,
         scope: {
             uri: "@uri",

@@ -64,7 +64,7 @@ app.controller('Namespaceselect', NamespaceselectController);
 
 function namespacesdropdownDirective() {
     return {
-        templateUrl: "/tree-editor/assets/ng/namespaces/dropdown.html",
+        templateUrl: pagesUrl + "/assets/ng/namespaces/dropdown.html",
         controller: NamespaceselectController,
         scope: {
             namespace: '&'

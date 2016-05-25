@@ -445,7 +445,7 @@ app.controller('Checklist', ChecklistController);
 
 var checklistDirective = function () {
     return {
-        templateUrl: "/tree-editor/assets/ng/checklist/checklist.html",
+        templateUrl: pagesUrl + "/assets/ng/checklist/checklist.html",
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
@@ -482,7 +482,7 @@ app.controller('Nodelist', NodelistController);
 
 var nodelistDirective = function (RecursionHelper) {
     return {
-        templateUrl: "/tree-editor/assets/ng/checklist/nodelist.html",
+        templateUrl: pagesUrl + "/assets/ng/checklist/nodelist.html",
         controller: NodelistController,
         scope: {
             uri: "@",
@@ -577,7 +577,7 @@ app.controller('Nodeitem', NodeitemController);
 
 var nodeitemDirective = function () {
     return {
-        templateUrl: "/tree-editor/assets/ng/checklist/nodeitem.html",
+        templateUrl: pagesUrl + "/assets/ng/checklist/nodeitem.html",
         controller: NodeitemController,
         scope: {
             linkSuper: "@",
@@ -592,7 +592,7 @@ app.directive('nodeitem', nodeitemDirective);
 
 var droptargetDirective = function () {
     return {
-        templateUrl: "/tree-editor/assets/ng/checklist/droptarget.html"
+        templateUrl: pagesUrl + "/assets/ng/checklist/droptarget.html"
     };
 };
 
