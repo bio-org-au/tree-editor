@@ -52,6 +52,7 @@ var classificationslistDirective = function() {
     };
 };
 
+classificationslistDirective.$inject = [];
 app.directive('classificationslist', classificationslistDirective);
 
 var ClassificationslistrowController = function ($scope, $rootScope, $http) {
@@ -108,5 +109,6 @@ var classificationslistrowDirective = function() {
     };
 };
 
+classificationslistrowDirective.$inject = [];
 app.directive('classificationslistrow', classificationslistrowDirective);
 
