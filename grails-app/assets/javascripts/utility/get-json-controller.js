@@ -152,7 +152,7 @@ GetJsonController.$inject = ['$scope', '$rootScope'];
 
 app.controller('GetJsonController', GetJsonController);
 
-app.directive('shortnodetext', function() {
+var shortnodetextDirective = function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortnodetext.html",
         controller: GetJsonController,
@@ -160,9 +160,12 @@ app.directive('shortnodetext', function() {
             uri: '@uri'
         },
     };
-});
+};
 
-app.directive('shortnametext', function() {
+shortnodetextDirective.$inject = [];
+app.directive('shortnodetext', shortnodetextDirective);
+
+var shortnametextDirective = function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortnametext.html",
         controller: GetJsonController,
@@ -170,9 +173,11 @@ app.directive('shortnametext', function() {
             uri: '@uri'
         },
     };
-});
+};
+shortnametextDirective.$inject = [];
+app.directive('shortnametext', shortnametextDirective);
 
-app.directive('shortarrangementtext', function() {
+var shortarrangementtextDirective = function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortarrangementtext.html",
         controller: GetJsonController,
@@ -180,9 +185,11 @@ app.directive('shortarrangementtext', function() {
             uri: '@uri'
         },
     };
-});
+};
+shortarrangementtextDirective.$inject = [];
+app.directive('shortarrangementtext', shortarrangementtextDirective);
 
-app.directive('shortinstreftext', function() {
+var shortinstreftextDirective = function() {
     return {
         templateUrl: pagesUrl + "/assets/ng/utility/shortinstreftext.html",
         controller: GetJsonController,
@@ -190,4 +197,6 @@ app.directive('shortinstreftext', function() {
             uri: '@uri'
         },
     };
-});
+};
+shortinstreftextDirective.$inject = [];
+app.directive('shortinstreftext', shortinstreftextDirective);
