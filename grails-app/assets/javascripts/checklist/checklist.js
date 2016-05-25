@@ -281,7 +281,7 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     };
 
     $scope.clickPathNewWindow = function (i) {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?root=" + $scope.rootUri + "&focus=" + $scope.path[i], '_blank');
+        window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.rootUri + "&focus=" + $scope.path[i], '_blank');
     };
 
     $scope.clickSubPath = function (a) {
@@ -294,17 +294,13 @@ var ChecklistController = function ($scope, $rootScope, $http) {
     }
 
     $scope.clickBookmark = function (uri) {
-        window.location = $rootScope.pagesUrl + "/editnode/checklist?focus=" + uri;
+        window.location = $rootScope.pagesUrl + "/checklist/checklist?focus=" + uri;
     };
     $scope.clickTrashBookmark = function (uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);
     };
     $scope.clickClearBookmarks = function (uri) {
         $rootScope.clearBookmarks('taxa-nodes');
-    };
-
-    $scope.clickSearchAddNames = function () {
-        window.open($rootScope.pagesUrl + "/editnode/searchEmbedded?root=" + $scope.rootUri + "&focus=" + $scope.focusUri);
     };
 
     // bookmark gear
@@ -570,7 +566,7 @@ var NodeitemController = function ($scope, $rootScope, $http) {
     }
 
     $scope.clickNewWindow = function () {
-        window.open($rootScope.pagesUrl + "/editnode/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
+        window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
 
 };
