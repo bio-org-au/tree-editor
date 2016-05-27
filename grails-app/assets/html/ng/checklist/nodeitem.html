@@ -27,9 +27,30 @@
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
         <a href="#" ng-click="clickNewWindow()">new window</a>
-        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit">
-        <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
-        <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
+        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && json.type=='T'">
+            <div style="display: inline-block;">
+                <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
+                <ul ng-if="nodeTypeDropdown"
+                    ng-mouseleave="closeNodeTypeDropdown()"
+                style="position: absolute; z-index:1000; width:100%; top:.95em;
+                background: white;
+                padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+                "
+                >
+                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
+                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
+                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Not treated</span></a></li>
+                  </ul>
+
+            </div>
+            <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
+            <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
         </span>
     </span>
 

@@ -102,6 +102,19 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.sendServersideOperation();
     };
 
+    $scope.nodeTypeDropdown = false;
+    $scope.toggleNodeTypeDropdown = function() { $scope.nodeTypeDropdown = ! $scope.nodeTypeDropdown;};
+    $scope.closeNodeTypeDropdown = function() { $scope.nodeTypeDropdown = false;};
+    $scope.clickNodeType = function (nsPart, idPart) {
+        if ($scope.serversideOperationState.open) return; // we have another operation in progress
+        $scope.clearServersideOperationState();
+        $scope.serversideOperationState.open = true;
+        $scope.serversideOperationState.action = 'setNodeType';
+        $scope.serversideOperationState.params.nsPart = nsPart;
+        $scope.serversideOperationState.params.idPart = idPart;
+        $scope.sendServersideOperation();
+    };
+
     $scope.clickRevert = function () {
         if ($scope.serversideOperationState.open) return; // we have another operation in progress
         $scope.clearServersideOperationState();
@@ -495,8 +508,6 @@ var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
 app.directive('nodelist', nodelistDirective);
 
 var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
-    $scope.foo = "I AM A NODE ITEM!";
-
     $scope.cl_scope = $scope.$parent.cl_scope;
 
     $scope.afterUpdateJson = function () {
@@ -560,7 +571,6 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     $scope.clickNewWindow = function () {
         window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
-
 }];
 
 app.controller('Nodeitem', NodeitemController);
