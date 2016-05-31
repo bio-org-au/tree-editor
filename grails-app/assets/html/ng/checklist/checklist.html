@@ -42,7 +42,7 @@
         <span class="controls" >
 
             <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
-            <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && focus.type=='T'">
+            <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'">
             <div style="display: inline-block;">
                 <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
                 <ul ng-if="nodeTypeDropdown"
@@ -60,7 +60,7 @@
                 >
                     <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
                     <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
-                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Not treated</span></a></li>
+                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
                   </ul>
 
             </div>
