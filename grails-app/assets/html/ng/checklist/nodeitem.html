@@ -27,7 +27,7 @@
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
         <a href="#" ng-click="clickNewWindow()">new window</a>
-        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && json.type=='T'">
+        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace">
             <div style="display: inline-block;">
                 <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
                 <ul ng-if="nodeTypeDropdown"
@@ -47,10 +47,10 @@
                     <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
                     <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
                   </ul>
-
             </div>
             <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
             <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
+            <i title="check in" class="fabutton fa fa-sign-in" ng-if="json.fetched && !json.checkedInAt && json.prev" ng-click="clickCheckin()"></i>
         </span>
     </span>
 

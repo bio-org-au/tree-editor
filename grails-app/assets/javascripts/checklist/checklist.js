@@ -102,6 +102,11 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.sendServersideOperation();
     };
 
+    $scope.clickCheckin = function() {
+        window.open($rootScope.pagesUrl + "/workspaces/checkinVerify?uri=" + $scope.getTargetUri());
+    };
+
+
     $scope.nodeTypeDropdown = false;
     $scope.toggleNodeTypeDropdown = function() { $scope.nodeTypeDropdown = ! $scope.nodeTypeDropdown;};
     $scope.closeNodeTypeDropdown = function() { $scope.nodeTypeDropdown = false;};
