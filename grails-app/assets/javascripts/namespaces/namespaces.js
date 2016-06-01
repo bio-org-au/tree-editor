@@ -1,3 +1,9 @@
+/***********************************
+ * namespaces.js
+ */
+
+console.log("loading namespaces.js")
+
 var NamespaceselectController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $rootScope.namespace = localStorage.getItem('nsl-tree-editor.namespaces.namespace');
     if(!$rootScope.namespace || $rootScope.namespace=='') {

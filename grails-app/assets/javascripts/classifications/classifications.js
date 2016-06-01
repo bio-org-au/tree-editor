@@ -1,3 +1,10 @@
+/***********************************
+ * classifications.js
+ */
+
+console.log("loading classifications.js")
+
+
 var ClassificationslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;

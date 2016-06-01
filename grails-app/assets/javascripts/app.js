@@ -1,14 +1,15 @@
-//= require angular
-//= require recursionhelper
-//= require angular-sanitize
+/***********************************
+ * app.js
+ */
 
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
-var AppbodyController = ['$rootScope', '$element', function($rootScope, $element) {
+var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope, $element, $http) {
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
 
+    setupJsonCache($rootScope, $http);
 
     $rootScope.isLoggedIn = function() {
         return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn')=='Y';

@@ -64,8 +64,8 @@
                   </ul>
 
             </div>
-
-                <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
+            <i title="revert" class="fabutton fa fa-undo" ng-if="focus.fetched && !focus.checkedInAt" ng-click="clickRevert()"></i>
+            <i title="check in" class="fabutton fa fa-sign-in" ng-if="focus.fetched && !focus.checkedInAt && focus.prev" ng-click="clickCheckin()"></i>
             </span>
         </span>
     </h1>

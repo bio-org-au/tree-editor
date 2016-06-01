@@ -1,12 +1,14 @@
+/***********************************
+ * checklist.js
+ */
+
+console.log("loading checklist.js")
+
 // a checklist holds a context and a focus. it displays a breadcrumb trail and the tree
 
 // it is initialised with a uri and a 'workspace or classsification' setting.
 // if it is initialised with a classigiction, it navigates to the root node.
 // if it is initialised with a workspace, it goes to the workspaceRoot.
-
-//= require get-preferred-link
-//= require utility/get-json-controller
-//= require utility/get-uri-permissions
 
 function dragUriStart(ev) {
     var s = $(ev.target).scope();
@@ -240,8 +242,6 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.foo = "I AM A CHECKLIST!";
     $scope.cl_scope = $scope;
-
-    setupJsonCache($rootScope, $http);
 
     $scope.rootPermissions = {};
 
@@ -601,3 +601,4 @@ var droptargetDirective = [function () {
 }];
 
 app.directive('droptarget', droptargetDirective);
+

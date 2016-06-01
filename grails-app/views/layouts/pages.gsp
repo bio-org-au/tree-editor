@@ -27,11 +27,19 @@
         var pagesUrl = "${grailsApplication.config.treeEditor.pagesUrl}";
     </script>
 
-    <asset:stylesheet src="pages.css"/>
-    <asset:javascript src="pages.js"/>
+    <asset:javascript src="jquery"/>
+    <asset:javascript src="angular/angular"/>
+    <asset:javascript src="angular/angular-sanitize"/>
+    <asset:javascript src="angular/recursionhelper"/>
     <asset:javascript src="app.js"/>
+    <asset:javascript src="utility/get-preferred-link"/>
+    <asset:javascript src="utility/get-json-controller"/>
+    <asset:javascript src="utility/get-uri-permissions"/>
     <asset:javascript src="loginlogout/loginlogout.js"/>
     <asset:javascript src="namespaces/namespaces.js"/>
+
+    <asset:stylesheet src="pages.css"/>
+
     <g:layoutHead/>
 </head>
 

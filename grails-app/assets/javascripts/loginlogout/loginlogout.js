@@ -1,3 +1,10 @@
+/***********************************
+ * loginlogout.js
+ */
+
+
+console.log("loading loginlogout.js")
+
 var LoginlogoutController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.login = function() {
         localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');

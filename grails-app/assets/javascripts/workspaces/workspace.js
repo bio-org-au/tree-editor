@@ -1,11 +1,10 @@
+/***********************************
+ * workspace.js
+ */
 
-//= require get-preferred-link
-//= require utility/get-json-controller
+console.log("loading workspace.js")
 
 var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', function ($scope, $rootScope, $http, $element) {
-    setupJsonCache($rootScope, $http);
-
-
     $scope.can_edit = false;
     $scope.form = {};
 

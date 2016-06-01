@@ -1,3 +1,8 @@
+/***********************************
+ * get-json-controller.js
+ */
+
+console.log("loading get-json-controller.js")
 
 // this should be an angular "service". Too busy to servicify it now.
 

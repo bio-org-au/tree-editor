@@ -1,5 +1,10 @@
+/***********************************
+ * get-uri-permissions.js
+ */
 
-// this shhould be an angular service
+console.log("loading get-uri-permissions.js")
+
+// this should be an angular service
 function get_uri_permissions($rootScope, $http, uri, callback)
 {
 

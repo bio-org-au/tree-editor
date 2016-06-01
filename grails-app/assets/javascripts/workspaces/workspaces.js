@@ -1,3 +1,9 @@
+/***********************************
+ * workspaces.js
+ */
+
+console.log("loading workspaces.js")
+
 var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.loading = false;
     $scope.loaded = false;

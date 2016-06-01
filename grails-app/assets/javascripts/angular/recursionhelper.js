@@ -1,5 +1,3 @@
-//= require angular
-
 try {
 	
 	/* 

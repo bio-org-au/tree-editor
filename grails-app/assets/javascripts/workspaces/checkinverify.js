@@ -1,3 +1,6 @@
-//= require get-preferred-link
-//= require utility/get-json-controller
+/***********************************
+ * checkinverify.js
+ */
+
+console.log("loading checkinverify.js")
 

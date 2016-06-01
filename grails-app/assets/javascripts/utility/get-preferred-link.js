@@ -1,3 +1,9 @@
+/***********************************
+ * get-preferred-link.js
+ */
+
+console.log("loading get-preferred-link.js")
+
 
 function getPreferredLink(linkedThing) {
     if (!linkedThing || !linkedThing._links) {
