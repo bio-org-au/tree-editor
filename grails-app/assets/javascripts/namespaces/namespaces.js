@@ -61,6 +61,9 @@ var NamespaceselectController = ['$scope', '$rootScope', '$http', function ($sco
     $scope.getNamespace = function() { return $rootScope.namespace; };
 
     $scope.reloadNamespaces();
+
+    $rootScope.$broadcast('nsl-tree-edit.namespace-changed', $rootScope.namespace);
+
 }];
 
 app.controller('Namespaceselect', NamespaceselectController);

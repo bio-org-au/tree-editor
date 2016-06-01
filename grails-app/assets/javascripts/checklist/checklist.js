@@ -311,28 +311,6 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
         $scope.focus = $rootScope.needJson($scope.focusUri);
     }
 
-    $scope.clickBookmark = function (uri) {
-        window.location = $rootScope.pagesUrl + "/checklist/checklist?focus=" + uri;
-    };
-    $scope.clickTrashBookmark = function (uri) {
-        $rootScope.removeBookmark('taxa-nodes', uri);
-    };
-    $scope.clickClearBookmarks = function (uri) {
-        $rootScope.clearBookmarks('taxa-nodes');
-    };
-
-    // bookmark gear
-    $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
-    $scope.$on('nsl-tree-edit.bookmark-changed', function (event, category, uri, status) {
-        if (category == 'taxa-nodes') {
-            $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
-        }
-    });
-    $scope.$on('nsl-tree-edit.namespace-changed', function (event) {
-        $scope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
-    });
-
-
     // ok. deal with initialisation.
 
     $scope.arrangement = $rootScope.needJson($scope.arrangementUri);

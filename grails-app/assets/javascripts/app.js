@@ -8,6 +8,8 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
+    
+    $rootScope.namespace = 'init'; // this gets overwritten once the namespaces component comes alive
 
     setupJsonCache($rootScope, $http);
 
@@ -127,6 +129,29 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
         localStorage.setItem('nsl-tree-editor.bookmarks', JSON.stringify(bm));
         $rootScope.$broadcast('nsl-tree-edit.bookmark-changed', category, uri, true);
     };
+
+
+    $rootScope.clickBookmark = function (uri) {
+        window.location = $rootScope.pagesUrl + "/checklist/checklist?focus=" + uri;
+    };
+    $rootScope.clickTrashBookmark = function (uri) {
+        $rootScope.removeBookmark('taxa-nodes', uri);
+    };
+    $rootScope.clickClearBookmarks = function (uri) {
+        $rootScope.clearBookmarks('taxa-nodes');
+    };
+
+    // bookmark gear
+    $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+    $rootScope.$on('nsl-tree-edit.bookmark-changed', function (event, category, uri, status) {
+        if (category == 'taxa-nodes') {
+            $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+        }
+    });
+    $rootScope.$on('nsl-tree-edit.namespace-changed', function (event) {
+        $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
+    });
+
 
 }];
 

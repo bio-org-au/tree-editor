@@ -54,6 +54,15 @@
         <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
     </ul>
 
+    <div ng-if="taxanodes_bookmarks.vec.length > 0" style="font-size: smaller;">
+        <span ng-repeat="uri in taxanodes_bookmarks.vec track by $index">
+            <a href="#" ng-click="clickBookmark(uri)"><span shortnodetext uri="{{uri}}"></span></a> <i
+                class="fa fa-remove fabutton" ng-click="clickTrashBookmark(uri)"></i>
+        </span>
+        <a ng-if="taxanodes_bookmarks.vec.length > 1" href="#" ng-click="clickClearBookmarks()" class="btn btn-sm">clear
+        {{taxanodes_bookmarks.vec.length}} bookmarks</a>
+    </div>
+
     <div ng-if="msg && msg.msg" class="alert" ng-class="'alert-' + msg.status">
         <strong>{{msg.msg}}</strong> {{msg.body}}
     </div>
