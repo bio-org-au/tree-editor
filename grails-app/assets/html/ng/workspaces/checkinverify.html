@@ -1,0 +1,33 @@
+<h1>Confirm checkin</h1>
+
+<div>
+    <span shortnodetext uri="{{checkinUri}}"></span> from  ???
+    <br/>
+    to replace
+    <br/>
+    ??? in  ???
+</div>
+
+<div ng-if="verifying">
+Validating <i class="fa fa-spinner fa-spin"></i>
+</div>
+
+<div ng-if="!verifying && !checkingIn && verificationResults">
+    <hr/>
+    Validation Results:  {{verificationResults}}
+</div>
+
+<div ng-if="checkingIn">
+    Performing checkin <i class="fa fa-spinner fa-spin"></i>
+</div>
+
+<div ng-if="!verifying && !checkingIn && checkinResults">
+    <hr/>
+        Checkin Results:  {{checkinResults}}
+</div>
+
+<div ng-if="!checkinResults">
+    <hr/>
+    <button ng-disabled="verifying || checkingIn" class="btn btn-large btn-info" ng-click="performVerification()">Revalidate Checkin</button>
+    <button ng-disabled="verifying || checkingIn || !verificationResults.goodToGo" class="btn btn-large btn-warning" ng-click="performCheckin()">Perform Checkin</button>
+</div>
