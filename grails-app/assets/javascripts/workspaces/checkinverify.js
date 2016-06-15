@@ -83,8 +83,41 @@ var CheckinverifyController = ['$scope', '$rootScope', '$http', '$element', func
         });
     };
 
-    $scope.performVerification();
+    var deregisterInitializationListener = [];
+    
+    var initializationListener = function(oldvalue, newvalue) {
+        if($scope.checkinJson && $scope.checkinJson.fetched && $scope.checkinJson.arrangement._uri && !$scope.checkinTreeUri) {
+            $scope.checkinTreeUri = $scope.checkinJson.arrangement._uri;
+            $scope.checkinTreeJson = $rootScope.needJson($scope.checkinTreeUri);
+        }
 
+        if($scope.checkinJson && $scope.checkinJson.fetched && $scope.checkinJson.prev._uri && !$scope.targetUri) {
+            $scope.targetUri = $scope.checkinJson.prev._uri;
+            $scope.targetJson = $rootScope.needJson($scope.targetUri);
+        }
+
+        if($scope.targetJson && $scope.targetJson.fetched && $scope.targetJson.arrangement._uri && !$scope.targetTreeUri) {
+            $scope.targetTreeUri = $scope.targetJson.arrangement._uri;
+            $scope.targetTreeJson = $rootScope.needJson($scope.targetTreeUri);
+        }
+
+        if($scope.checkinJson.fetched && (!$scope.checkinJson.prev._uri || $scope.targetJson.fetched)) {
+            for (var i in deregisterInitializationListener) {
+                deregisterInitializationListener[i]();
+            }
+        }
+
+    }
+
+    deregisterInitializationListener.push($scope.$watch("checkinJson", initializationListener));
+    deregisterInitializationListener.push($scope.$watch("checkinJson.fetched", initializationListener));
+    deregisterInitializationListener.push($scope.$watch("targetJson", initializationListener));
+    deregisterInitializationListener.push($scope.$watch("targetJson.fetched", initializationListener));
+
+    $scope.checkinJson = $rootScope.needJson($scope.checkinUri);
+    initializationListener();
+
+    $scope.performVerification();
 }];
 
 

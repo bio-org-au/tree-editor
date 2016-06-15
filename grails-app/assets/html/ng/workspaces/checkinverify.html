@@ -1,20 +1,49 @@
 <h1>Confirm checkin</h1>
 
 <div>
-    <span shortnodetext uri="{{checkinUri}}"></span> from  ???
-    <br/>
+    Checking in
+    <div style="margin-left: 2em;">
+    <span shortnodetext uri="{{checkinUri}}"></span>
+    from
+    <span ng-if="checkinTreeJson">
+        <strong ng-switch="checkinTreeJson.arrangementType.name">
+            <span ng-switch-when="P">Classification </span>
+            <span ng-switch-when="U">Workspace </span>
+            <span ng-switch-default>Unrecognised tree type {{checkinTreeJson.arrangementType.name}}</span>
+        </strong>
+        <u>
+        {{checkinTreeJson.label}}
+        {{checkinTreeJson.title}}
+            </u>
+        <span ng-bind-html="checkinTreeJson.decriptionHtml"/>
+    </span>
+    </div>
     to replace
-    <br/>
-    ??? in  ???
+    <div style="margin-left: 2em;">
+    <span shortnodetext uri="{{targetUri}}"></span>
+    in
+    <span ng-if="targetTreeJson">
+        <strong ng-switch="targetTreeJson.arrangementType.name">
+            <span ng-switch-when="P">Classification </span>
+            <span ng-switch-when="U">Workspace </span>
+            <span ng-switch-default>Unrecognised tree type {{checkinTreeJson.arrangementType.name}}</span>
+        </strong>
+        <u>
+        {{targetTreeJson.label}}
+        {{targetTreeJson.title}}
+        </u>
+        <span ng-bind-html="targetTreeJson.decriptionHtml"/>
+    </span>
+    </div>
 </div>
 
 <div ng-if="verifying">
-Validating <i class="fa fa-spinner fa-spin"></i>
+    Validating <i class="fa fa-spinner fa-spin"></i>
 </div>
 
 <div ng-if="!verifying && !checkingIn && verificationResults">
     <hr/>
-    Validation Results:  {{verificationResults}}
+    Validation Results: {{verificationResults}}
 </div>
 
 <div ng-if="checkingIn">
@@ -23,11 +52,15 @@ Validating <i class="fa fa-spinner fa-spin"></i>
 
 <div ng-if="!verifying && !checkingIn && checkinResults">
     <hr/>
-        Checkin Results:  {{checkinResults}}
+    Checkin Results: {{checkinResults}}
 </div>
 
 <div ng-if="!checkinResults">
     <hr/>
-    <button ng-disabled="verifying || checkingIn" class="btn btn-large btn-info" ng-click="performVerification()">Revalidate Checkin</button>
-    <button ng-disabled="verifying || checkingIn || !verificationResults.goodToGo" class="btn btn-large btn-warning" ng-click="performCheckin()">Perform Checkin</button>
+    <button ng-disabled="verifying || checkingIn" class="btn btn-large btn-info" ng-click="performVerification()">
+        Revalidate Checkin
+    </button>
+    <button ng-disabled="verifying || checkingIn || !verificationResults.goodToGo" class="btn btn-large btn-warning"
+            ng-click="performCheckin()">Perform Checkin
+    </button>
 </div>
