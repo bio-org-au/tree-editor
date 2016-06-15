@@ -15,7 +15,9 @@
         {{checkinTreeJson.label}}
         {{checkinTreeJson.title}}
             </u>
-        <span ng-bind-html="checkinTreeJson.decriptionHtml"/>
+                <a target="viewnode" href="{{checkinUri}}"><i class="fa fabutton fa-link"></i></a>
+
+        <div ng-bind-html="checkinTreeJson.decriptionHtml"/>
     </span>
     </div>
     to replace
@@ -32,7 +34,8 @@
         {{targetTreeJson.label}}
         {{targetTreeJson.title}}
         </u>
-        <span ng-bind-html="targetTreeJson.decriptionHtml"/>
+        <a target="viewnode" href="{{targetUri}}"><i class="fa fabutton fa-link"></i></a>
+        <div ng-bind-html="targetTreeJson.decriptionHtml"/>
     </span>
     </div>
 </div>
