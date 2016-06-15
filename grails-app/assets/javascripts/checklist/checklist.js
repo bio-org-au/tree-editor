@@ -15,6 +15,7 @@ function dragUriStart(ev) {
     ev.dataTransfer.setData("text/uri-list", s.getDragUriList().join('\n'));
 }
 
+
 function dragUriEnd(ev) {
 }
 
@@ -554,6 +555,10 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     $scope.clickNewWindow = function () {
         window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
+
+    $scope.clickShowSynonyms = function() {
+        $scope.UI.showSynonyms = ! $scope.UI.showSynonyms;
+    }
 }];
 
 app.controller('Nodeitem', NodeitemController);
@@ -579,4 +584,24 @@ var droptargetDirective = [function () {
 }];
 
 app.directive('droptarget', droptargetDirective);
+
+var NodesynonymlistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+    $scope.cl_scope = $scope.$parent.cl_scope;
+    inheritJsonController($scope, $rootScope);
+
+}];
+
+app.controller('NodeSynonymList', NodesynonymlistController);
+
+var nodeSynonymListDirective = [function () {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/checklist/nodesynonymlist.html",
+        controller: NodesynonymlistController,
+        scope: {
+            uri: "@"
+        }
+    };
+}];
+
+app.directive('nodeSynonymList', nodeSynonymListDirective);
 
