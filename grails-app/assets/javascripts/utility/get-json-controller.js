@@ -201,3 +201,25 @@ var shortinstreftextDirective = [function() {
     };
 }];
 app.directive('shortinstreftext', shortinstreftextDirective);
+
+var shortinsttextDirective = [function() {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/shortinsttext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        },
+    };
+}];
+app.directive('shortinsttext', shortinsttextDirective);
+
+var shortinstcitestextDirective = [function() {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/shortinstcitestext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        },
+    };
+}];
+app.directive('shortinstcitestext', shortinstcitestextDirective);

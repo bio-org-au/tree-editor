@@ -25,6 +25,7 @@
     </span>
     <span class="controls">
         <small class='text-muted' uri="{{json.arrangement._uri}}" shortarrangementtext></small>
+        <a href="{{uri}}"><i class="fa fa-link"></i></a>
         <i ng-if="hasSynonyms" title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>

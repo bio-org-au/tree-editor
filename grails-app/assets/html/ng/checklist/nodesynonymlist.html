@@ -1,5 +1,9 @@
 <div ng-repeat="citedBy in json.instancesForCitedBy">
-    <small >
-    <span ng-bind-html="citedBy.name"></span> .s ref goes here <small class="text-muted">{{citedBy.instanceType}}</small>
+    <small class="controlholder">
+        <span shortinstcitestext uri="{{citedBy._uri}}"></span>
+        <small class="text-muted">{{citedBy.instanceType}}</small>
+        <span class="controls">
+            <a href="{{citedBy._uri}}"><i class="fa fa-link"></i></a>
+        </span>
     </small>
 </div>

@@ -1,0 +1,8 @@
+<span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
+<span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
+<span ng-if="json.fetched">
+    <span uri="{{json.name._uri}}" shortnametext></span>
+    <small ng-if="json.reference">
+        s. <span ng-bind-html="json.reference.authYear"></span>
+    </small>
+</span>
