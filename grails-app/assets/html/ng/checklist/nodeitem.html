@@ -25,6 +25,7 @@
     </span>
     <span class="controls">
         <small class='text-muted' uri="{{json.arrangement._uri}}" shortarrangementtext></small>
+        <i ng-if="hasSynonyms" title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
         <a href="#" ng-click="clickNewWindow()">new window</a>
@@ -49,14 +50,13 @@
                     <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
                   </ul>
             </div>
-            <i title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
             <i title="remove" class="fabutton fa fa-remove" ng-click="clickRemove()"></i>
             <i title="revert" class="fabutton fa fa-undo" ng-if="json.fetched && !json.checkedInAt" ng-click="clickRevert()"></i>
             <i title="check in" class="fabutton fa fa-sign-in" ng-if="json.fetched && !json.checkedInAt && json.prev" ng-click="clickCheckin()"></i>
         </span>
     </span>
 
-    <div node-synonym-list ng-if="UI.showSynonyms" uri="{{json.instance._uri}}" style="margin-left: 2.5em; padding-left: .5em; border-left: thin solid lightgrey;">
+    <div node-synonym-list ng-if="hasSynonyms" ng-class="UI.showSynonyms ? '' : 'hidden'" uri="{{json.instance._uri}}" style="margin-left: 2.5em; padding-left: .5em; border-left: thin solid lightgrey;">
     </div>
 
     <div droptarget/>

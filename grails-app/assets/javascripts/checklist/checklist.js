@@ -557,8 +557,38 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     };
 
     $scope.clickShowSynonyms = function() {
-        $scope.UI.showSynonyms = ! $scope.UI.showSynonyms;
+        $scope.$broadcast('tree-editor.show-synonyms', !$scope.UI.showSynonyms);
     }
+
+    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show; console.log(show);});
+
+    $scope.UI.showSynonyms = $scope.$parent.UI ? $scope.$parent.UI.showSynonyms : false;
+
+    var deregisterInitializationListener = [];
+
+    function initializationListener() {
+        if($scope.json.fetched && $scope.json.instance._uri && !$scope.instanceJson) {
+            if($scope.json.instance._uri) {
+                $scope.instanceJson = $rootScope.needJson($scope.json.instance._uri);
+            }
+        }
+
+        if($scope.instanceJson && $scope.instanceJson.fetched) {
+            $scope.hasSynonyms = $scope.instanceJson.instancesForCitedBy && $scope.instanceJson.instancesForCitedBy.length > 0;
+        }
+
+        if ($scope.json && $scope.json.fetched && (!$scope.instanceJson || $scope.instanceJson.fetched)) {
+            for (var i in deregisterInitializationListener) {
+                deregisterInitializationListener[i]();
+            }
+        }
+    }
+
+    deregisterInitializationListener.push($scope.$watch("json.fetched", initializationListener));
+    deregisterInitializationListener.push($scope.$watch("instanceJson.fetched", initializationListener));
+
+    initializationListener();
+
 }];
 
 app.controller('Nodeitem', NodeitemController);
