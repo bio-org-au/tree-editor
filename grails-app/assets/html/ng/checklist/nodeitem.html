@@ -57,13 +57,10 @@
         </span>
     </span>
 
-    <div node-synonym-list ng-if="hasSynonyms" ng-class="UI.showSynonyms ? '' : 'hidden'" uri="{{json.instance._uri}}" style="margin-left: 2.5em; padding-left: .5em; border-left: thin solid lightgrey;">
-    </div>
-
     <div droptarget/>
-
 </div>
-
+<div node-synonym-list ng-if="hasSynonyms" ng-class="UI.showSynonyms ? '' : 'hidden'" uri="{{json.instance._uri}}" style="margin-left: 3.5em;">
+</div>
 <div ng-if="json.fetched && hasSubnodes && UI.open" class="nodeitem-list">
     <div uri="{{uri}}" class="nodelist" nodelist></div>
 </div>

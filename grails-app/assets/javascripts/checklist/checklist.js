@@ -19,6 +19,20 @@ function dragUriStart(ev) {
 function dragUriEnd(ev) {
 }
 
+function dragCitedStart(ev) {
+    ev.dataTransfer.setData("text/uri-list", $(ev.target).data('uri'));
+}
+
+function dragCitedEnd(ev) {
+}
+
+function dragCitationStart(ev) {
+    ev.dataTransfer.setData("text/uri-list", $(ev.target).data('uri'));
+}
+
+function dragCitationEnd(ev) {
+}
+
 
 function dropUriOver(ev) {
     if (!ev.dataTransfer.types.contains("text/uri-list")) return;
@@ -243,6 +257,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.foo = "I AM A CHECKLIST!";
     $scope.cl_scope = $scope;
+    $scope.ni_scope = $scope;
 
     $scope.rootPermissions = {};
 
@@ -271,6 +286,8 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
     $scope.$watch('rootUri', $scope.refreshPermissions);
 
     $scope.$watch('focusUri', $scope.refreshPermissions);
+
+    $scope.$watch('focusUri', function(){$scope.UI = $scope.getNodeUI($scope.focusUri)});
 
     $rootScope.$on('nsl-tree-editor.loginlogout', $scope.refreshPermissions);
 
@@ -329,7 +346,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
             // set the arrangement to the root arrangement if we can and need to
 
             if (!$scope.arrangementUri && $scope.rootUri && $scope.root.fetched) {
-                $scope.arrangementUri = getPreferredLink(root.arrangement);
+                $scope.arrangementUri = getPreferredLink($scope.root.arrangement);
                 $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
                 madeAChange = true;
             }
@@ -432,6 +449,12 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
         return null;
     }
 
+    $scope.clickShowSynonyms = function() {
+        $scope.$broadcast('tree-editor.show-synonyms', !$scope.UI.showSynonyms);
+    }
+
+    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show;});
+
     CanAcceptDrops($scope, $rootScope, $http);
 
 }];
@@ -454,6 +477,7 @@ app.directive('checklist', checklistDirective);
 
 var NodelistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.cl_scope = $scope.$parent.cl_scope;
+    $scope.ni_scope = $scope.$parent.ni_scope;
     inheritJsonController($scope, $rootScope);
 
     $scope.getRootUri = function () {
@@ -493,6 +517,8 @@ app.directive('nodelist', nodelistDirective);
 
 var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.cl_scope = $scope.$parent.cl_scope;
+    $scope.parent_ni_scope = $scope.$parent.ni_scope;
+    $scope.ni_scope = $scope;
 
     $scope.afterUpdateJson = function () {
         if ($scope.json && $scope.json.fetched) {
@@ -560,9 +586,9 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
         $scope.$broadcast('tree-editor.show-synonyms', !$scope.UI.showSynonyms);
     }
 
-    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show; console.log(show);});
+    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show;});
 
-    $scope.UI.showSynonyms = $scope.$parent.UI ? $scope.$parent.UI.showSynonyms : false;
+    $scope.UI.showSynonyms = $scope.parent_ni_scope.UI.showSynonyms;
 
     var deregisterInitializationListener = [];
 
@@ -574,7 +600,8 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
         }
 
         if($scope.instanceJson && $scope.instanceJson.fetched) {
-            $scope.hasSynonyms = $scope.instanceJson.instancesForCitedBy && $scope.instanceJson.instancesForCitedBy.length > 0;
+            $scope.hasSynonyms = ($scope.instanceJson.instancesForCitedBy && $scope.instanceJson.instancesForCitedBy.length > 0) ||
+                ($scope.instanceJson.instancesForCites && $scope.instanceJson.instancesForCites.length > 0) ;
         }
 
         if ($scope.json && $scope.json.fetched && (!$scope.instanceJson || $scope.instanceJson.fetched)) {

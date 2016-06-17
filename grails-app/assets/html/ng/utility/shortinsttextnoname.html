@@ -2,4 +2,5 @@
 <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
 <span ng-if="json.fetched">
     s. <span ng-bind-html="json.reference.authYear"></span>
+    <span class="text-muted">{{json.instanceType.name}}</span>
 </span>

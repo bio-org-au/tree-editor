@@ -191,16 +191,16 @@ var shortarrangementtextDirective = [function() {
 }];
 app.directive('shortarrangementtext', shortarrangementtextDirective);
 
-var shortinstreftextDirective = [function() {
+var shortinsttextnonameDirective = [function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortinstreftext.html",
+        templateUrl: pagesUrl + "/assets/ng/utility/shortinsttextnoname.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
         },
     };
 }];
-app.directive('shortinstreftext', shortinstreftextDirective);
+app.directive('shortinsttextnoname', shortinsttextnonameDirective);
 
 var shortinsttextDirective = [function() {
     return {
@@ -223,3 +223,14 @@ var shortinstcitestextDirective = [function() {
     };
 }];
 app.directive('shortinstcitestext', shortinstcitestextDirective);
+
+var shortinstcitedbytextDirective = [function() {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/shortinstcitedbytext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        },
+    };
+}];
+app.directive('shortinstcitedbytext', shortinstcitedbytextDirective);

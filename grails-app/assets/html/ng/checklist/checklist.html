@@ -17,7 +17,7 @@
             <a href="#" ng-click="clickPathNewWindow($index)">new window</a>
         </span>
     </div>
-    <h1
+    <h2
             div class="controlholder"
     >
         <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
@@ -31,7 +31,8 @@
                                                                 shortarrangementtext></small>
         </span>
         <span class="controls" >
-
+            <a href="{{focus._uri}}"><i class="fa fa-link"></i></a>
+            <i title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
             <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
             <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'">
             <div style="display: inline-block;">
@@ -59,7 +60,7 @@
             <i title="check in" class="fabutton fa fa-sign-in" ng-if="focus.fetched && !focus.checkedInAt && focus.prev" ng-click="clickCheckin()"></i>
             </span>
         </span>
-    </h1>
+    </h2>
 
     <div droptarget/>
 

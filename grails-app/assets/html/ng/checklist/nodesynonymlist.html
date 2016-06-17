@@ -1,9 +1,32 @@
-<div ng-repeat="citedBy in json.instancesForCitedBy">
+<div ng-repeat="cited in json.instancesForCitedBy">
     <small class="controlholder">
-        <span shortinstcitestext uri="{{citedBy._uri}}"></span>
-        <small class="text-muted">{{citedBy.instanceType}}</small>
+        <small class="text-muted">has {{cited.instanceType}}</small>
+        <span class="draggable-uri droppable-uri"
+              draggable="true"
+              ondragstart="dragCitedStart(event)"
+              ondragend="dragCitedEnd(event)"
+              data-uri="{{cited._uri}}"
+        >
+            <span shortinstcitestext uri="{{cited._uri}}"></span>
+        </span>
         <span class="controls">
-            <a href="{{citedBy._uri}}"><i class="fa fa-link"></i></a>
+            <a href="{{cited._uri}}"><i class="fa fa-link"></i></a>
+        </span>
+    </small>
+</div>
+<div ng-repeat="citation in json.instancesForCites">
+    <small class="controlholder">
+        <small class="text-muted">{{citation.instanceType}} of</small>
+        <span class="draggable-uri droppable-uri"
+              draggable="true"
+              ondragstart="dragCitationStart(event)"
+              ondragend="dragCitationEnd(event)"
+              data-uri="{{citation._uri}}"
+        >
+            <span shortinstcitedbytext uri="{{citation._uri}}"></span>
+        </span>
+        <span class="controls">
+            <a href="{{citation._uri}}"><i class="fa fa-link"></i></a>
         </span>
     </small>
 </div>
