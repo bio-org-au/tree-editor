@@ -21,6 +21,7 @@ function dragUriEnd(ev) {
 
 function dragCitedStart(ev) {
     ev.dataTransfer.setData("text/uri-list", $(ev.target).data('uri'));
+    ev.dataTransfer.setData("text/tree-editor-drag", 'citing');
 }
 
 function dragCitedEnd(ev) {
@@ -28,6 +29,7 @@ function dragCitedEnd(ev) {
 
 function dragCitationStart(ev) {
     ev.dataTransfer.setData("text/uri-list", $(ev.target).data('uri'));
+    ev.dataTransfer.setData("text/tree-editor-drag", 'cited');
 }
 
 function dragCitationEnd(ev) {
@@ -65,6 +67,7 @@ function dropUri(ev) {
         throw e;
     }
 
+    var extradata = ev.dataTransfer.getData("text/tree-editor-drag");
 
     var scope;
     for (scope = $(ev.target).closest('.ng-scope').scope(); scope && !scope.dropUriList; scope = scope.$parent) {
@@ -73,7 +76,7 @@ function dropUri(ev) {
     // have to use timeout to get out of the apply loop
     window.setTimeout(function () {
         scope.$apply(function () {
-            scope.dropUriList(uriList);
+            scope.dropUriList(uriList, extradata);
         });
     }, 0);
 }
@@ -145,12 +148,13 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.sendServersideOperation();
     };
 
-    $scope.dropUriList = function (uriList) {
+    $scope.dropUriList = function (uriList, extradata) {
         if ($scope.serversideOperationState.open) return; // we have another operation in progress
         $scope.clearServersideOperationState();
         $scope.serversideOperationState.open = true;
         $scope.serversideOperationState.action = 'dropUrisOntoNode';
         $scope.serversideOperationState.params.uris = uriList;
+        $scope.serversideOperationState.params.relationshipType = extradata;
         $scope.sendServersideOperation();
     };
 
