@@ -26,7 +26,8 @@
     <span class="controls">
         <small class='text-muted' uri="{{json.arrangement._uri}}" shortarrangementtext></small>
         <a href="{{uri}}"><i class="fa fa-link"></i></a>
-        <a ng-if="json.name._uri" target="apni-name" href="{{json.name._uri}}/api/apni-format">APNI <i class="fa fa-external-link"></i></a>
+        <a ng-if="json.name._uri" ng-click="clickToggleApniFormat()" href="#">APNI</a>
+        <a ng-if="json.name._uri" target="apni-name" href="{{json.name._uri}}/api/apni-format"><i class="fa fa-external-link"></i></a>
         <i ng-if="hasSynonyms" title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
@@ -59,6 +60,8 @@
     </span>
 
     <div droptarget/>
+</div>
+<div apni-format-block ng-if="UI.showApniFormat" class="node-name-apni-format" uri="{{json.name._uri}}" style="margin-left: 3.5em;">
 </div>
 <div node-synonym-list ng-if="hasSynonyms && UI.showSynonyms" uri="{{json.instance._uri}}" style="margin-left: 3.5em;">
 </div>

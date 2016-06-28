@@ -32,7 +32,8 @@
         </span>
         <span class="controls" >
             <a href="{{focus._uri}}"><i class="fa fa-link"></i></a>
-            <a ng-if="focus.name._uri" target="apni-name" href="{{focus.name._uri}}/api/apni-format">APNI <i class="fa fa-external-link"></i></a>
+            <a ng-if="focus.name._uri" ng-click="clickToggleApniFormat()" href="#">APNI</a>
+            <a ng-if="focus.name._uri" target="apni-name" href="{{focus.name._uri}}/api/apni-format"><i class="fa fa-external-link"></i></a>
             <i title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
             <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
             <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'">
@@ -74,6 +75,8 @@
                 checklist</a></li>
         </ul>
     </small>
+</div>
+<div apni-format-block ng-if="UI.showApniFormat" class="focus-name-apni-format" uri="{{focus.name._uri}}" style="margin-left: 1.5em;">
 </div>
 <div node-synonym-list ng-if="UI.showSynonyms" uri="{{focus.instance._uri}}" style="margin-left: 1.5em;"></div>
 <div>

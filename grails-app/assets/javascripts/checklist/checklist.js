@@ -333,6 +333,10 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
         $scope.focus = $rootScope.needJson($scope.focusUri);
     }
 
+    $scope.clickToggleApniFormat = function() {
+        $scope.UI.showApniFormat = !$scope.UI.showApniFormat;
+    }
+
     // ok. deal with initialisation.
 
     $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
@@ -594,6 +598,10 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
 
     $scope.UI.showSynonyms = $scope.parent_ni_scope.UI.showSynonyms;
 
+    $scope.clickToggleApniFormat = function() {
+        $scope.UI.showApniFormat = !$scope.UI.showApniFormat;
+    }
+
     var deregisterInitializationListener = [];
 
     function initializationListener() {
@@ -665,4 +673,29 @@ var nodeSynonymListDirective = [function () {
 }];
 
 app.directive('nodeSynonymList', nodeSynonymListDirective);
+
+var ApniFormatBlockController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+    $scope.cl_scope = $scope.$parent.cl_scope;
+    inheritJsonController($scope, $rootScope);
+
+
+}];
+
+app.controller('ApniFormatBlock', ApniFormatBlockController);
+
+var apniFormatBlockDirective = ['$rootScope', function ($rootScope) {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/checklist/apniformatblock.html",
+        controller: ApniFormatBlockController,
+        scope: {
+            uri: "@"
+        },
+        link: function (scope, element, attrs, controller, transcludeFn) {
+            var uriBits = scope.uri.split('/');
+            $(element).find('.apni-format-block').load($rootScope.servicesUrl + '/' + uriBits.slice(uriBits.length - 3).join('/') + '/api/apni-format?embed=true');
+        }
+    };
+}];
+
+app.directive('apniFormatBlock', apniFormatBlockDirective);
 
