@@ -23,6 +23,9 @@
     z-index: 99;
 }
 
+.dragover {
+    background: #fafad2;
+}
 
 .bookmark-off {
     color: lightgray;

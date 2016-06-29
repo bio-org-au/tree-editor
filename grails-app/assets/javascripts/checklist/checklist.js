@@ -43,14 +43,30 @@ function dropUriOver(ev) {
     ev.dataTransfer.dropEffect = 'move';
 }
 
+var currentDropTarget = null;
+
 function dropUriEnter(ev) {
     if (!ev.dataTransfer.types.contains("text/uri-list")) return;
 
     ev.preventDefault();
     ev.dataTransfer.dropEffect = 'move';
+
+    var z = $(ev.target).closest('.droppable-uri');
+    if (currentDropTarget && z != currentDropTarget) {
+        currentDropTarget.removeClass('dragover');
+        currentDropTarget = null;
+    }
+
+    currentDropTarget = z;
+    currentDropTarget.addClass('dragover');
 }
 
 function dropUriLeave(ev) {
+    var z = $(ev.target).closest('.droppable-uri');
+    if (currentDropTarget && z == currentDropTarget) {
+        z.removeClass('dragover');
+        currentDropTarget = null;
+    }
 }
 
 
@@ -58,11 +74,16 @@ function dropUri(ev) {
     if (!ev.dataTransfer.types.contains("text/uri-list")) return;
     ev.preventDefault();
 
-    var uriList
+    if (currentDropTarget) {
+        currentDropTarget.removeClass('dragover');
+        currentDropTarget = null;
+    }
+
+    var uriList;
     try {
         uriList = ev.dataTransfer.getData("text/uri-list").split('\n');
     }
-    catch(e) {
+    catch (e) {
         alert(e);
         throw e;
     }
@@ -122,14 +143,18 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.sendServersideOperation();
     };
 
-    $scope.clickCheckin = function() {
+    $scope.clickCheckin = function () {
         window.open($rootScope.pagesUrl + "/workspaces/checkinVerify?uri=" + $scope.getTargetUri());
     };
 
 
     $scope.nodeTypeDropdown = false;
-    $scope.toggleNodeTypeDropdown = function() { $scope.nodeTypeDropdown = ! $scope.nodeTypeDropdown;};
-    $scope.closeNodeTypeDropdown = function() { $scope.nodeTypeDropdown = false;};
+    $scope.toggleNodeTypeDropdown = function () {
+        $scope.nodeTypeDropdown = !$scope.nodeTypeDropdown;
+    };
+    $scope.closeNodeTypeDropdown = function () {
+        $scope.nodeTypeDropdown = false;
+    };
     $scope.clickNodeType = function (nsPart, idPart) {
         if ($scope.serversideOperationState.open) return; // we have another operation in progress
         $scope.clearServersideOperationState();
@@ -169,7 +194,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
         $scope.serversideOperationState.params.linkSuper = $scope.getTargetLinkSuper();
         $scope.serversideOperationState.params.linkSeq = $scope.getTargetLinkSeq();
 
-        for(c in $scope.serversideOperationState.moreInfoNeeded) {
+        for (c in $scope.serversideOperationState.moreInfoNeeded) {
             var cc = $scope.serversideOperationState.moreInfoNeeded[c];
             $scope.serversideOperationState.params[cc.name] = cc.selected;
         }
@@ -204,7 +229,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
                 for (p in response.data.refetch) {
                     for (pp in response.data.refetch[p]) {
-                        $rootScope.refetchJson(response.data.refetch[p][pp])
+                        $rootScope.refetchJson(response.data.refetch[p][pp]);
                         $scope.cl_scope.getNodeUI(response.data.refetch[p][pp]).open = true;
                     }
                 }
@@ -228,7 +253,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     {
                         msg: 'URL',
                         body: response.config.url,
-                        status: 'info',
+                        status: 'info'
                     },
                     {
                         msg: response.data.status,
@@ -242,7 +267,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     {
                         msg: 'URL',
                         body: response.config.url,
-                        status: 'info',
+                        status: 'info'
                     },
                     {
                         msg: response.status,
@@ -291,7 +316,9 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
     $scope.$watch('focusUri', $scope.refreshPermissions);
 
-    $scope.$watch('focusUri', function(){$scope.UI = $scope.getNodeUI($scope.focusUri)});
+    $scope.$watch('focusUri', function () {
+        $scope.UI = $scope.getNodeUI($scope.focusUri)
+    });
 
     $rootScope.$on('nsl-tree-editor.loginlogout', $scope.refreshPermissions);
 
@@ -331,11 +358,11 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
         }
         $scope.focusUri = a[a.length - 1];
         $scope.focus = $rootScope.needJson($scope.focusUri);
-    }
+    };
 
-    $scope.clickToggleApniFormat = function() {
+    $scope.clickToggleApniFormat = function () {
         $scope.UI.showApniFormat = !$scope.UI.showApniFormat;
-    }
+    };
 
     // ok. deal with initialisation.
 
@@ -443,25 +470,27 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
     $scope.getDragUriList = function () {
         return [$scope.focusUri];
-    }
+    };
 
     $scope.getTargetUri = function () {
         return $scope.focusUri;
-    }
+    };
 
     $scope.getTargetLinkSuper = function () {
         return null;
-    }
+    };
 
     $scope.getTargetLinkSeq = function () {
         return null;
-    }
+    };
 
-    $scope.clickShowSynonyms = function() {
+    $scope.clickShowSynonyms = function () {
         $scope.$broadcast('tree-editor.show-synonyms', !$scope.UI.showSynonyms);
-    }
+    };
 
-    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show;});
+    $scope.$on('tree-editor.show-synonyms', function (evt, show) {
+        $scope.UI.showSynonyms = show;
+    });
 
     CanAcceptDrops($scope, $rootScope, $http);
 
@@ -477,7 +506,7 @@ var checklistDirective = [function () {
             arrangementUri: "@",
             rootUri: "@",
             focusUri: "@"
-        },
+        }
     };
 }];
 
@@ -508,7 +537,7 @@ var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
         templateUrl: pagesUrl + "/assets/ng/checklist/nodelist.html",
         controller: NodelistController,
         scope: {
-            uri: "@",
+            uri: "@"
         },
         compile: function (element) {
             return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
@@ -517,7 +546,7 @@ var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
                 // you can also pass an object with
                 // a 'pre'- and 'post'-link function.
             });
-        },
+        }
     };
 }];
 
@@ -558,19 +587,19 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
 
     $scope.getDragUriList = function () {
         return [$scope.uri];
-    }
+    };
 
     $scope.getTargetUri = function () {
         return $scope.uri;
-    }
+    };
 
     $scope.getTargetLinkSuper = function () {
         return $scope.linkSuper;
-    }
+    };
 
     $scope.getTargetLinkSeq = function () {
         return $scope.linkSeq;
-    }
+    };
 
     $scope.clickAddBookmark = function () {
         $rootScope.addBookmark('taxa-nodes', $scope.uri);
@@ -584,36 +613,38 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     $scope.clickSubPath = function (a) {
         a.unshift($scope.uri);
         $scope.$parent.clickSubPath(a);
-    }
+    };
 
     $scope.clickNewWindow = function () {
         window.open($rootScope.pagesUrl + "/checklist/checklist?root=" + $scope.cl_scope.rootUri + "&focus=" + $scope.uri, '_blank');
     };
 
-    $scope.clickShowSynonyms = function() {
+    $scope.clickShowSynonyms = function () {
         $scope.$broadcast('tree-editor.show-synonyms', !$scope.UI.showSynonyms);
-    }
+    };
 
-    $scope.$on('tree-editor.show-synonyms', function(evt, show) {$scope.UI.showSynonyms = show;});
+    $scope.$on('tree-editor.show-synonyms', function (evt, show) {
+        $scope.UI.showSynonyms = show;
+    });
 
     $scope.UI.showSynonyms = $scope.parent_ni_scope.UI.showSynonyms;
 
-    $scope.clickToggleApniFormat = function() {
+    $scope.clickToggleApniFormat = function () {
         $scope.UI.showApniFormat = !$scope.UI.showApniFormat;
-    }
+    };
 
     var deregisterInitializationListener = [];
 
     function initializationListener() {
-        if($scope.json.fetched && $scope.json.instance._uri && !$scope.instanceJson) {
-            if($scope.json.instance._uri) {
+        if ($scope.json.fetched && $scope.json.instance._uri && !$scope.instanceJson) {
+            if ($scope.json.instance._uri) {
                 $scope.instanceJson = $rootScope.needJson($scope.json.instance._uri);
             }
         }
 
-        if($scope.instanceJson && $scope.instanceJson.fetched) {
+        if ($scope.instanceJson && $scope.instanceJson.fetched) {
             $scope.hasSynonyms = ($scope.instanceJson.instancesForCitedBy && $scope.instanceJson.instancesForCitedBy.length > 0) ||
-                ($scope.instanceJson.instancesForCites && $scope.instanceJson.instancesForCites.length > 0) ;
+                ($scope.instanceJson.instancesForCites && $scope.instanceJson.instancesForCites.length > 0);
         }
 
         if ($scope.json && $scope.json.fetched && (!$scope.instanceJson || $scope.instanceJson.fetched)) {
@@ -640,7 +671,7 @@ var nodeitemDirective = [function () {
             linkSuper: "@",
             linkSeq: "@",
             uri: "@"
-        },
+        }
     };
 }];
 
