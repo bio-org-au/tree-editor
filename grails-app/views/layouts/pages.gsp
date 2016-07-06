@@ -65,9 +65,15 @@
 
     <div ng-if="msg && msg.msg" class="alert" ng-class="'alert-' + msg.status">
         <strong>{{msg.msg}}</strong> {{msg.body}}
+        <div class="well" ng-if="msg.stackTrace">
+            <div ng-repeat="s in msg.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
+        </div>
     </div>
     <div ng-if="msg && msg[0]" ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
         <strong>{{m.msg}}</strong> {{m.body}}
+        <div class="well" ng-if="m.stackTrace">
+            <div ng-repeat="s in m.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
+        </div>
     </div>
 
     <g:layoutBody/>
