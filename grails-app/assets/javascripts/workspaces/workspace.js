@@ -15,12 +15,14 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', func
             $scope.can_edit = $scope.json.owner == $rootScope.getUser();
             $scope.form.title = $scope.json.title;
             $scope.form.description = $scope.json.description;
+            $scope.form.shared = $scope.json.shared;
             $element.find('#formDesc').html($scope.form.description);
         }
         else {
             $scope.can_edit = true;
             $scope.form.title = '';
             $scope.form.description = '';
+            $scope.form.shared = true;
             $element.find('#formDesc').html($scope.form.description);
         }
     };
@@ -54,7 +56,8 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', func
             params: {
                 'uri': $scope.uri,
                 'title': $scope.form.title,
-                'description': $element.find('#formDesc').html()
+                'description': $element.find('#formDesc').html(),
+                'shared': $scope.form.shared
             }
         }).then(function successCallback(response) {
             window.location = $rootScope.pagesUrl + "/workspaces/index";
@@ -90,7 +93,8 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', func
                 'namespace': $rootScope.namespace,
                 'title': $scope.form.title,
                 'description': $element.find('#formDesc').html(),
-                'checkout': $scope.withTopNode
+                'checkout': $scope.withTopNode,
+                'shared': $scope.form.shared
             }
         }).then(function successCallback(response) {
             window.location = $rootScope.pagesUrl + "/workspaces/index";

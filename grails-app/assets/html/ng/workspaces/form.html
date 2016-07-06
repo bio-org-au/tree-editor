@@ -13,10 +13,13 @@
         <input required="true" type="text" class="form-control" id="formTitle" ng-model="form.title" placeholder="required">
     </div>
     <div class="form-group">
+        <label for="formShared">Shared </label>
+        <input required="true" type="checkbox" id="formShared" ng-model="form.shared">
+    </div>
+    <div class="form-group">
         <label for="formDesc">Description</label>
         <div class="form-control" contenteditable="true" id="formDesc" style="height: 10em; overflow-y: scroll;" ng-bind-html="form.description"></div>
     </div>
-
     <div class="form-group" ng-if="uri">
         <button class="btn btn-default" ng-click="clickReset()">Reset</button>
         <button class="btn btn-primary" ng-click="clickSave()" ng-enabled="form.title">Save</button>

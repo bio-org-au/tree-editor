@@ -26,6 +26,10 @@ var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scop
         $http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/TreeJsonView/listWorkspaces',
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
             params: {
                 namespace: $rootScope.namespace
             }
