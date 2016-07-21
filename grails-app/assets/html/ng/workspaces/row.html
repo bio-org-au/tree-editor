@@ -5,7 +5,8 @@
 <td colspan="3" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
 <td>
     <span class="pull-right">
-        <span ng-if="can_edit" ><a href="edit?uri={{uri}}">Edit</a> | </span>
         <a href="checklist?uri={{uri}}">Checklist</a>
+        <span ng-if="can_edit" > | <a href="edit?uri={{uri}}">Admin</a></span>
+        | <a href="../search?tree={{uri}}">Search <i class="fa fa-search"></i></a>
     </span>
 </td>

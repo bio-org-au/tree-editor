@@ -2,4 +2,8 @@
 <td ng-if="loaded">{{data.description}}</td>
 <td ng-if="loading" colspan="2"><i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small></td>
 <td colspan="2" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
-<td><span class="pull-right"><a href="checklist?uri={{uri}}">Checklist</a></span></td>
+<td><span class="pull-right">
+    <a href="checklist?uri={{uri}}">Checklist</a>
+    |
+    <a href="../search?tree={{uri}}">Search <i class="fa fa-search"></i></a></span>
+</td>

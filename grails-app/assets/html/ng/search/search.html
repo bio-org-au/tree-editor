@@ -1,0 +1,30 @@
+<h1>Search <span uri="{{treeUri}}" shortarrangementtext></span> </h1>
+
+<div class="input-group">
+    <input type="text" class="form-control" id="searchFor" placeholder="Find name - use '%' as a wildcard" ng-model="searchText">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" ng-click="clickGoButton()"><i class="fa fa-search"></i></button></button>
+      </span>
+</div>
+
+
+<div ng-if="path.length > 1">
+    <label>Limit search to:</label>
+
+    <div ng-repeat="p in path">
+        <label style="font-weight: 400;"><input type="radio" name="search-subtree" ng-model="searchSubtree" ng-click="clickSearchSubtree(p)" value="{{p}}"/> <span shortnodetext uri="{{p}}" /></label>
+    </div>
+</div>
+
+<div ng-if="results.length > 0">
+    <div ng-repeat="r in results">
+        <span shortinsttext uri="{{r.matchedUri}}"/>
+        <span ng-if="r.matchedUri != r.node.instance._uri">
+            of
+            <span shortinsttext uri="{{r.node.instance._uri}}"/>
+        </span>
+
+        {{node}}
+
+    </div>
+</div>

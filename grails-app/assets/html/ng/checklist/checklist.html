@@ -5,6 +5,7 @@
         ondragenter="dropUriEnter(event)"
         ondragleave="dropUriLeave(event)"
 >
+    <span class="pull-right"><span class="small"><a href="../search?root={{root._uri}}&focus={{focus._uri}}">Search <span uri="{{root.arrangement._uri}}" shortarrangementtext></span><i class="fa fa-search"></i></a></span></span>
     <h4>Checklist</h4>
     <div ng-repeat="uri in path" ng-if="!$last" class="controlholder">
         <span class="nodeitem-handle">
