@@ -7,3 +7,16 @@
 .fabutton {
     cursor: pointer;
 }
+
+.dropdown-item {
+    cursor: default;
+}
+
+.dropdown-item:hover {
+    background-color: lightgoldenrodyellow;
+}
+
+.hanging-indent {
+    padding-left: 1em;
+    text-indent: -1em;
+}

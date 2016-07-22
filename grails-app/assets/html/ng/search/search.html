@@ -1,26 +1,34 @@
-<h1>Search <span uri="{{treeUri}}" shortarrangementtext></span> </h1>
+<h1>Search <span uri="{{treeUri}}" shortarrangementtext></span></h1>
 
 <div class="input-group">
-    <input type="text" class="form-control" id="searchFor" placeholder="Find name - use '%' as a wildcard" ng-model="searchText">
+    <input type="text" class="form-control" id="searchFor" placeholder="Find name - use '%' as a wildcard"
+           ng-model="searchText">
       <span class="input-group-btn">
-        <button class="btn btn-primary" type="button" ng-click="clickGoButton()"><i class="fa fa-search"></i></button></button>
+        <button class="btn btn-primary" type="button" ng-click="clickGoButton()"><i class="fa fa-search"></i></button>
+          </button>
       </span>
 </div>
 
-<div ng-if="path.length > 1">
+<div ng-if="path.length > 1" style="margin-top: 1em;">
     <label>Limit search to:</label>
-
-    <div ng-repeat="p in path">
-        <label style="font-weight: 400;"><input type="radio" name="search-subtree" ng-model="searchSubtree" ng-click="clickSearchSubtree(p)" value="{{p}}"/> <span shortnodetext uri="{{p}}" /></label>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" ng-click="clickToggleDropdown()">
+            <span shortnodetext uri="{{searchSubtree}}"/>
+            <span class="caret"></span>
+        </button>
+        <div class="dropdown-menu" ng-show="showLimitDropdown" style="display: inherit;" ng-mouseleave="hideDropdown()">
+            <div class="dropdown-item hanging-indent" ng-repeat="p in path" ng-click="clickSearchSubtree(p)" shortnodetext
+                 uri="{{p}}"/>
+        </div>
     </div>
 </div>
 
 <div ng-if="results.length > 0">
     <label>Found:</label>
 
-    <div ng-repeat="r in results">
+    <div ng-repeat="r in results" class="hanging-indent">
         <a href="{{pagesUrl}}/checklist/checklist?root={{rootUri}}&focus={{r.nodeUri}}">
-        <span shortinsttext uri="{{r.matchedUri}}"/>
+            <span shortinsttext uri="{{r.matchedUri}}"/>
         <span ng-if="r.matchedUri != r.node.instance._uri">
             of
             <span shortinsttext uri="{{r.node.instance._uri}}"/>

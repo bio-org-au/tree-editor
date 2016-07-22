@@ -14,12 +14,22 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
     $scope.focus = $rootScope.needJson($scope.focusUri);
     $scope.decidedOnPath = false;
 
+    $scope.showLimitDropdown = false;
     $scope.pagesUrl = $rootScope.pagesUrl;
 
     $scope.inProgress = false;
 
     $scope.clickSearchSubtree = function(p) {
-         $scope.searchSubtree = p;
+        $scope.searchSubtree = p;
+        $scope.showLimitDropdown = false;
+    };
+
+    $scope.clickToggleDropdown = function() {
+        $scope.showLimitDropdown = !$scope.showLimitDropdown;
+    };
+
+    $scope.hideDropdown = function() {
+        $scope.showLimitDropdown = false;
     };
 
     $scope.clickGoButton = function() {
