@@ -1,5 +1,6 @@
 <h1>Search <span uri="{{treeUri}}" shortarrangementtext></span></h1>
 
+<form ng-submit="clickGoButton()">
 <div class="input-group">
     <input type="text" class="form-control" id="searchFor" placeholder="Find name - use '%' as a wildcard"
            ng-model="searchText">
@@ -22,6 +23,7 @@
         </div>
     </div>
 </div>
+</form>
 
 <div ng-if="results.length > 0">
     <label>Found:</label>
