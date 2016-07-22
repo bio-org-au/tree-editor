@@ -1,7 +1,13 @@
 <div ng-repeat="cited in json.instancesForCitedBy">
 
     <small class="controlholder">
-        <small class="text-muted">has {{cited.instanceType}}</small>
+        <span ng-switch="cited.instanceType">
+            <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;" ng-switch-when="nomenclatural synonym">&equiv;</b>
+            <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;" ng-switch-when="taxonomic synonym">=</b>
+            <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;" ng-switch-when="misapplied">&ne;</b>
+            <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;" ng-switch-when="pro parte">&cap;</b>
+            <small class="text-muted" ng-switch-default>has {{cited.instanceType}}</small>
+        </span>
         <span class="draggable-uri droppable-uri"
               draggable="true"
               ondragstart="dragCitedStart(event)"

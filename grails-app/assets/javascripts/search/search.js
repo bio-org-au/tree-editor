@@ -14,6 +14,8 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
     $scope.focus = $rootScope.needJson($scope.focusUri);
     $scope.decidedOnPath = false;
 
+    $scope.pagesUrl = $rootScope.pagesUrl;
+
     $scope.inProgress = false;
 
     $scope.clickSearchSubtree = function(p) {
