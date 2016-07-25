@@ -35,6 +35,13 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
     $scope.clickGoButton = function() {
         $rootScope.msg = null;
 
+        if($scope.inProgress) {
+            $rootScope.msg = { msg: 'in progress', status: 'info', body: 'search is already in progress' };
+            return;
+        }
+
+        $scope.inProgress = true;
+
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonView/searchNamesInSubtree',
