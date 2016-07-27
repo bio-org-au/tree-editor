@@ -397,9 +397,10 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
             // get the root off the arrangement if we can and need to
 
             if (!$scope.rootUri && $scope.arrangementUri && $scope.arrangement.fetched) {
-                // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
-                $scope.rootUri = getPreferredLink($scope.arrangement.node);
-                if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.currentRoot);
+                // use the currentroot if the arrangement has one. That is: never work
+                // with the moving persistent node at the top of classification trees.
+                $scope.rootUri = getPreferredLink($scope.arrangement.currentRoot);
+                if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.node);
                 $scope.root = $rootScope.needJson($scope.rootUri);
                 madeAChange = true;
                 return;

@@ -2,8 +2,9 @@
 <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
 <span ng-if="json.fetched">
     <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
-        <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">Classification</span>
-        <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">Workspace</span>
+        <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-node">Classification persistent node <span shortarrangementtext uri="{{json.arrangement._uri}}"></span></span>
+        <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-root">Classification <span shortarrangementtext uri="{{json.arrangement._uri}}"></span></span>
+        <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#workspace-root">Workspace <span shortarrangementtext uri="{{json.arrangement._uri}}"></span></span>
         <span ng-switch-default>
             <span ng-switch="json.type">
                 <span ng-switch-when="T">
