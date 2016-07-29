@@ -4,14 +4,14 @@
 
 console.log("loading search.js");
 
-var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
 
 
     // ok. deal with initialisation.
 
-    $scope.tree = $rootScope.needJson($scope.treeUri);
-    $scope.root = $rootScope.needJson($scope.rootUri);
-    $scope.focus = $rootScope.needJson($scope.focusUri);
+    $scope.tree = jsonCache.needJson($scope.treeUri);
+    $scope.root = jsonCache.needJson($scope.rootUri);
+    $scope.focus = jsonCache.needJson($scope.focusUri);
     $scope.decidedOnPath = false;
 
     $scope.showLimitDropdown = false;
@@ -60,10 +60,9 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
             }
 
             $scope.results = [];
-            for(var i in response.data.results) {
-              var r =  response.data.results[i]
-                var rr = { nodeUri: r.node, node: $rootScope.needJson(r.node), matchedUri: r.matched, matched: $rootScope.needJson(r.matched)};
-                $scope.results[i] = rr
+            for(var results_i in response.data.results) {
+              var r =  response.data.results[results_i];
+                $scope.results[results_i] = { nodeUri: r.node, node: jsonCache.needJson(r.node), matchedUri: r.matched, matched: jsonCache.needJson(r.matched)};
             }
 
         }, function errorCallback(response) {
@@ -112,7 +111,7 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
 
             if (!$scope.treeUri && $scope.rootUri && $scope.root.fetched) {
                 $scope.treeUri = getPreferredLink($scope.root.arrangement);
-                $scope.tree = $rootScope.needJson($scope.treeUri);
+                $scope.tree = jsonCache.needJson($scope.treeUri);
                 madeAChange = true;
             }
 
@@ -120,7 +119,7 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
 
             if (!$scope.treeUri && $scope.focusUri && $scope.focus.fetched) {
                 $scope.treeUri = getPreferredLink($scope.focus.arrangement);
-                $scope.tree = $rootScope.needJson($scope.treeUri);
+                $scope.tree = jsonCache.needJson($scope.treeUri);
                 madeAChange = true;
             }
 
@@ -130,7 +129,7 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
                 // this needs some more logic. if its a workspace but its not one of ours, use the current rather than working root
                 $scope.rootUri = getPreferredLink($scope.tree.node);
                 if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.tree.currentRoot);
-                $scope.root = $rootScope.needJson($scope.rootUri);
+                $scope.root = jsonCache.needJson($scope.rootUri);
                 madeAChange = true;
                 return;
             }
@@ -138,7 +137,7 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
             // set the focus to the root, if we can and need to
             if (!$scope.focusUri && $scope.rootUri) {
                 $scope.focusUri = $scope.rootUri;
-                $scope.focus = $rootScope.needJson($scope.focusUri);
+                $scope.focus = jsonCache.needJson($scope.focusUri);
                 madeAChange = true;
             }
         }
@@ -171,7 +170,7 @@ var SearchController = ['$scope', '$rootScope', '$http', function ($scope, $root
                     }
                     else {
                         for (var i in $scope.path) {
-                            $rootScope.needJson($scope.path[i]);
+                            jsonCache.needJson($scope.path[i]);
                         }
                         $scope.searchSubtree = $scope.path[$scope.path.length-1];
                     }
@@ -214,6 +213,6 @@ app.directive('search', [ function() {
             rootUri: '@rootUri',
             focusUri: '@focusUri',
             treeUri: '@treeUri'
-        },
+        }
     };
 }]);

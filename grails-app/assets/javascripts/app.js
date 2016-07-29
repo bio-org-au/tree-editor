@@ -4,14 +4,12 @@
 
 var app = angular.module('au.org.biodiversity.nsl.tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ngSanitize']);
 
-var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope, $element, $http) {
+var AppbodyController = ['$rootScope', '$element', function($rootScope, $element) {
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
     
     $rootScope.namespace = 'init'; // this gets overwritten once the namespaces component comes alive
-
-    setupJsonCache($rootScope, $http);
 
     $rootScope.isLoggedIn = function() {
         return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn')=='Y';
@@ -34,27 +32,27 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
         var bm = JSON.parse(localStorage.getItem('nsl-tree-editor.bookmarks'));
 
         if(!bm) {
-            bm = new Object;
+            bm = {};
             mod = true;
         }
 
         if(!bm[$rootScope.namespace]) {
-            bm[$rootScope.namespace] = new Object;
+            bm[$rootScope.namespace] = {};
             mod = true;
         }
 
         if(!bm[$rootScope.namespace][category]) {
-            bm[$rootScope.namespace][category] = new Object;
+            bm[$rootScope.namespace][category] = {};
             mod = true;
         }
 
         if(!bm[$rootScope.namespace][category].set) {
-            bm[$rootScope.namespace][category].set = new Object;
+            bm[$rootScope.namespace][category].set = {};
             mod = true;
         }
 
         if(!bm[$rootScope.namespace][category].vec) {
-            bm[$rootScope.namespace][category].vec = new Array;
+            bm[$rootScope.namespace][category].vec = [];
             mod = true;
         }
 
@@ -74,8 +72,8 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
         var bm = getBm(category);
         var thebiz = bm[$rootScope.namespace][category];
 
-        thebiz.set = new Object;
-        thebiz.vec = new Array;
+        thebiz.set = {};
+        thebiz.vec = [];
         localStorage.setItem('nsl-tree-editor.bookmarks', JSON.stringify(bm));
         $rootScope.$broadcast('nsl-tree-edit.bookmark-changed', category);
     };
@@ -87,14 +85,14 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
 
         // i'm going to do this the easy way
         var newVec = new Array;
-        for(var i in thebiz.vec) {
-            if(thebiz.vec[i] != uri) {
-                newVec.push(thebiz.vec[i]);
+        for(var vec_i in thebiz.vec) {
+            if(thebiz.vec[vec_i] != uri) {
+                newVec.push(thebiz.vec[vec_i]);
             }
         }
         newVec.push(uri);
 
-        var newSet = new Object();
+        var newSet = {};
         for(var i in newVec) {
             newSet[newVec[i]] = i;
         }
@@ -111,16 +109,16 @@ var AppbodyController = ['$rootScope', '$element', '$http', function($rootScope,
         var thebiz = bm[$rootScope.namespace][category];
 
         // i'm going to do this the easy way
-        var newVec = new Array;
-        for(var i in thebiz.vec) {
-            if(thebiz.vec[i] != uri) {
-                newVec.push(thebiz.vec[i]);
+        var newVec = [];
+        for(var vec_i in thebiz.vec) {
+            if(thebiz.vec[vec_i] != uri) {
+                newVec.push(thebiz.vec[vec_i]);
             }
         }
 
-        var newSet = new Object();
-        for(var i in newVec) {
-            newSet[newVec[i]] = i;
+        var newSet = {};
+        for(var vec_i in newVec) {
+            newSet[newVec[vec_i]] = vec_i;
         }
 
         thebiz.vec= newVec;

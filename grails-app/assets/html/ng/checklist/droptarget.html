@@ -41,7 +41,7 @@
         </div>
 
 
-        <button class="button btn-sm btn-primary"
+        <button class="button btn-sm btn-primary" ng-if="serversideOperationState.moreInfoNeeded"
                 ng-click="sendServersideOperation()">Ok
         </button>
         <button class="button btn-default btn-sm" ng-click="clearServersideOperationState()">Cancel</button>

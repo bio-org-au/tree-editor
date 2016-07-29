@@ -4,7 +4,7 @@
 
 console.log("loading checkinverify.js")
 
-var CheckinverifyController = ['$scope', '$rootScope', '$http', '$element', function ($scope, $rootScope, $http, $element) {
+var CheckinverifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
 
     $scope.verifying = false;
     $scope.checkingIn = false;
@@ -88,17 +88,17 @@ var CheckinverifyController = ['$scope', '$rootScope', '$http', '$element', func
     var initializationListener = function(oldvalue, newvalue) {
         if($scope.checkinJson && $scope.checkinJson.fetched && $scope.checkinJson.arrangement._uri && !$scope.checkinTreeUri) {
             $scope.checkinTreeUri = $scope.checkinJson.arrangement._uri;
-            $scope.checkinTreeJson = $rootScope.needJson($scope.checkinTreeUri);
+            $scope.checkinTreeJson = jsonCache.needJson($scope.checkinTreeUri);
         }
 
         if($scope.checkinJson && $scope.checkinJson.fetched && $scope.checkinJson.prev._uri && !$scope.targetUri) {
             $scope.targetUri = $scope.checkinJson.prev._uri;
-            $scope.targetJson = $rootScope.needJson($scope.targetUri);
+            $scope.targetJson = jsonCache.needJson($scope.targetUri);
         }
 
         if($scope.targetJson && $scope.targetJson.fetched && $scope.targetJson.arrangement._uri && !$scope.targetTreeUri) {
             $scope.targetTreeUri = $scope.targetJson.arrangement._uri;
-            $scope.targetTreeJson = $rootScope.needJson($scope.targetTreeUri);
+            $scope.targetTreeJson = jsonCache.needJson($scope.targetTreeUri);
         }
 
         if($scope.checkinJson.fetched && (!$scope.checkinJson.prev._uri || $scope.targetJson.fetched)) {
@@ -114,7 +114,7 @@ var CheckinverifyController = ['$scope', '$rootScope', '$http', '$element', func
     deregisterInitializationListener.push($scope.$watch("targetJson", initializationListener));
     deregisterInitializationListener.push($scope.$watch("targetJson.fetched", initializationListener));
 
-    $scope.checkinJson = $rootScope.needJson($scope.checkinUri);
+    $scope.checkinJson = jsonCache.needJson($scope.checkinUri);
     initializationListener();
 
     $scope.performVerification();

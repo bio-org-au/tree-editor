@@ -123,7 +123,7 @@ function dropUri(ev) {
  */
 
 
-function CanAcceptDrops($scope, $rootScope, $http) {
+function CanAcceptDrops($scope, $rootScope, $http, jsonCache) {
     $scope.clearServersideOperationState = function () {
         $scope.serversideOperationState = {
             open: false,
@@ -220,16 +220,16 @@ function CanAcceptDrops($scope, $rootScope, $http) {
                     $scope.cl_scope.path = response.data.focusPath;
                     $scope.cl_scope.focusUri = response.data.focusPath[response.data.focusPath.length - 1];
 
-                    $scope.cl_scope.focus = $rootScope.needJson($scope.cl_scope.focusUri);
+                    $scope.cl_scope.focus = jsonCache.needJson($scope.cl_scope.focusUri);
 
                     for (p in response.data.focusPath) {
-                        $scope.cl_scope.focus = $rootScope.refetchJson(response.data.focusPath[p]);
+                        $scope.cl_scope.focus = jsonCache.refetchJson(response.data.focusPath[p]);
                     }
                 }
 
                 for (p in response.data.refetch) {
                     for (pp in response.data.refetch[p]) {
-                        $rootScope.refetchJson(response.data.refetch[p][pp]);
+                        jsonCache.refetchJson(response.data.refetch[p][pp]);
                         $scope.cl_scope.getNodeUI(response.data.refetch[p][pp]).open = true;
                     }
                 }
@@ -283,7 +283,7 @@ function CanAcceptDrops($scope, $rootScope, $http) {
 
 }
 
-var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.foo = "I AM A CHECKLIST!";
     $scope.cl_scope = $scope;
     $scope.ni_scope = $scope;
@@ -335,7 +335,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
     $scope.clickPath = function (i) {
         $scope.focusUri = $scope.path[i];
-        $scope.focus = $rootScope.needJson($scope.focusUri);
+        $scope.focus = jsonCache.needJson($scope.focusUri);
         $scope.path = $scope.path.slice(0, i + 1);
     };
 
@@ -357,7 +357,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
             $scope.path.push(a[u]);
         }
         $scope.focusUri = a[a.length - 1];
-        $scope.focus = $rootScope.needJson($scope.focusUri);
+        $scope.focus = jsonCache.needJson($scope.focusUri);
     };
 
     $scope.clickToggleApniFormat = function () {
@@ -366,9 +366,9 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
     // ok. deal with initialisation.
 
-    $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
-    $scope.root = $rootScope.needJson($scope.rootUri);
-    $scope.focus = $rootScope.needJson($scope.focusUri);
+    $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
+    $scope.root = jsonCache.needJson($scope.rootUri);
+    $scope.focus = jsonCache.needJson($scope.focusUri);
     $scope.decidedOnPath = false;
 
     var deregisterInitializationListener = [];
@@ -382,7 +382,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
             if (!$scope.arrangementUri && $scope.rootUri && $scope.root.fetched) {
                 $scope.arrangementUri = getPreferredLink($scope.root.arrangement);
-                $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
+                $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
                 madeAChange = true;
             }
 
@@ -390,7 +390,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
 
             if (!$scope.arrangementUri && $scope.focusUri && $scope.focus.fetched) {
                 $scope.arrangementUri = getPreferredLink($scope.focus.arrangement);
-                $scope.arrangement = $rootScope.needJson($scope.arrangementUri);
+                $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
                 madeAChange = true;
             }
 
@@ -401,7 +401,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
                 // with the moving persistent node at the top of classification trees.
                 $scope.rootUri = getPreferredLink($scope.arrangement.currentRoot);
                 if (!$scope.rootUri) $scope.rootUri = getPreferredLink($scope.arrangement.node);
-                $scope.root = $rootScope.needJson($scope.rootUri);
+                $scope.root = jsonCache.needJson($scope.rootUri);
                 madeAChange = true;
                 return;
             }
@@ -409,7 +409,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
             // set the focus to the root, if we can and need to
             if (!$scope.focusUri && $scope.rootUri) {
                 $scope.focusUri = $scope.rootUri;
-                $scope.focus = $rootScope.needJson($scope.focusUri);
+                $scope.focus = jsonCache.needJson($scope.focusUri);
                 madeAChange = true;
             }
         }
@@ -442,7 +442,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
                     }
                     else {
                         for (var i in $scope.path) {
-                            $rootScope.needJson($scope.path[i]);
+                            jsonCache.needJson($scope.path[i]);
                             $scope.getNodeUI($scope.path[i]).open = true;
                         }
                     }
@@ -493,7 +493,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', function ($scope, $r
         $scope.UI.showSynonyms = show;
     });
 
-    CanAcceptDrops($scope, $rootScope, $http);
+    CanAcceptDrops($scope, $rootScope, $http, jsonCache);
 
 }];
 
@@ -513,10 +513,10 @@ var checklistDirective = [function () {
 
 app.directive('checklist', checklistDirective);
 
-var NodelistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var NodelistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.cl_scope = $scope.$parent.cl_scope;
     $scope.ni_scope = $scope.$parent.ni_scope;
-    inheritJsonController($scope, $rootScope);
+    inheritJsonController($scope, jsonCache);
 
     $scope.getRootUri = function () {
         return "I am a root uri!"
@@ -553,7 +553,7 @@ var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
 
 app.directive('nodelist', nodelistDirective);
 
-var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var NodeitemController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.cl_scope = $scope.$parent.cl_scope;
     $scope.parent_ni_scope = $scope.$parent.ni_scope;
     $scope.ni_scope = $scope;
@@ -567,7 +567,7 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
         }
     };
 
-    inheritJsonController($scope, $rootScope);
+    inheritJsonController($scope, jsonCache);
 
     $scope.getRootUri = function () {
         "I, also, am a root uri!"
@@ -576,7 +576,7 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
         $scope.$parent.getFocusUri();
     };
 
-    $scope.node = $rootScope.needJson($scope.uri);
+    $scope.node = jsonCache.needJson($scope.uri);
 
     $scope.UI = $scope.cl_scope.getNodeUI($scope.uri);
 
@@ -584,7 +584,7 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     $scope.focusUri = $scope.$parent.focusUri;
 
 
-    CanAcceptDrops($scope, $rootScope, $http);
+    CanAcceptDrops($scope, $rootScope, $http, jsonCache);
 
     $scope.getDragUriList = function () {
         return [$scope.uri];
@@ -637,9 +637,9 @@ var NodeitemController = ['$scope', '$rootScope', '$http', function ($scope, $ro
     var deregisterInitializationListener = [];
 
     function initializationListener() {
-        if ($scope.json.fetched && $scope.json.instance._uri && !$scope.instanceJson) {
+        if ($scope.json.fetched && $scope.json.instance && $scope.json.instance._uri && !$scope.instanceJson) {
             if ($scope.json.instance._uri) {
-                $scope.instanceJson = $rootScope.needJson($scope.json.instance._uri);
+                $scope.instanceJson = jsonCache.needJson($scope.json.instance._uri);
             }
         }
 
@@ -686,9 +686,9 @@ var droptargetDirective = [function () {
 
 app.directive('droptarget', droptargetDirective);
 
-var NodesynonymlistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var NodesynonymlistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.cl_scope = $scope.$parent.cl_scope;
-    inheritJsonController($scope, $rootScope);
+    inheritJsonController($scope, jsonCache);
 
 }];
 
@@ -706,11 +706,9 @@ var nodeSynonymListDirective = [function () {
 
 app.directive('nodeSynonymList', nodeSynonymListDirective);
 
-var ApniFormatBlockController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var ApniFormatBlockController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.cl_scope = $scope.$parent.cl_scope;
-    inheritJsonController($scope, $rootScope);
-
-
+    inheritJsonController($scope, jsonCache);
 }];
 
 app.controller('ApniFormatBlock', ApniFormatBlockController);

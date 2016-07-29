@@ -2,9 +2,9 @@
  * workspace.js
  */
 
-console.log("loading workspace.js")
+console.log("loading workspace.js");
 
-var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', function ($scope, $rootScope, $http, $element) {
+var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
     $scope.can_edit = false;
     $scope.form = {};
 
@@ -27,15 +27,15 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', func
         }
     };
 
-    inheritJsonController($scope, $rootScope);
+    inheritJsonController($scope, jsonCache);
     $scope.resetForm();
 
     if ($scope.withTopNode) {
-        $rootScope.needJson($scope.withTopNode);
+        jsonCache.needJson($scope.withTopNode);
         var deregisterInitializationListener;
         function initializationListener(event, uri, json) {
-            if(uri == $scope.withTopNode && $rootScope.currentJson($scope.withTopNode).fetched) {
-                $scope.arrangement = $rootScope.needJson($scope.withTopNode).arrangement;
+            if(uri == $scope.withTopNode && jsonCache.currentJson($scope.withTopNode).fetched) {
+                $scope.arrangement = jsonCache.needJson($scope.withTopNode).arrangement;
                 deregisterInitializationListener();
             }
         }
@@ -70,7 +70,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', func
                     {
                         msg: response.data.status,
                         body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'  // we use danger because we got no JSON back at all
                     }
                 ];
             }

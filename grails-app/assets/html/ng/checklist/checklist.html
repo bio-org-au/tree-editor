@@ -38,27 +38,27 @@
             <i title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
             <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
             <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'">
-            <div style="display: inline-block;">
-                <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
-                <ul ng-if="nodeTypeDropdown"
-                    ng-mouseleave="closeNodeTypeDropdown()"
-                    style="position: absolute; z-index:1000; width:100%; top:.95em;
-                background: white;
-                padding: 5px 0;
-    margin: 2px 0 0;
-    list-style: none;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
-                "
-                >
-                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
-                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
-                    <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
-                  </ul>
+                <span style="display: inline-block;">
+                    <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
+                    <ul ng-if="nodeTypeDropdown"
+                        ng-mouseleave="closeNodeTypeDropdown()"
+                        style="position: absolute; z-index:1000; width:100%; top:.95em;
+                    background: white;
+                    padding: 5px 0;
+        margin: 2px 0 0;
+        list-style: none;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+                    "
+                    >
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
+                      </ul>
 
-            </div>
+                </span>
             <i title="revert" class="fabutton fa fa-undo" ng-if="focus.fetched && !focus.checkedInAt" ng-click="clickRevert()"></i>
             <i title="check in" class="fabutton fa fa-sign-in" ng-if="focus.fetched && !focus.checkedInAt && focus.prev" ng-click="clickCheckin()"></i>
             </span>
