@@ -6,7 +6,7 @@ console.log("loading get-json-controller.js")
 
 // this should be an angular "service". Too busy to servicify it now.
 
-app.factory('jsonCache', ['$http', function ($http) {
+app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $rootScope, $interval) {
     var jsonCache = {};
 
     function currentJson(uri) {
@@ -92,28 +92,68 @@ app.factory('jsonCache', ['$http', function ($http) {
         }
     }
 
+    var bulkUrisPending = [];
+    var bulkUrisInProgress = [];
 
     function refetchJson(uri) {
         if (!uri) return null;
         var json = currentJson(uri);
 
-        if (!json.fetching) {
+        if(!json.fetching) {
             json.fetching = true;
             json._fetchError = null;
-            $http({
-                method: 'GET',
-                url: uri
-            }).then(function successCallback(response) {
-                stampJson(response.data);
-                scanJson(response.data);
-                json.fetching = false;
-            }, function errorCallback(response) {
-                json.fetching = false;
-                json._fetchError = response;
-            });
+
+            bulkUrisPending.push(uri);
+
+            manageBulkState();
         }
 
+
         return json;
+    }
+
+    function manageBulkState() {
+
+        if(bulkUrisInProgress.length > 0) return;
+        if(bulkUrisPending.length == 0) return;
+
+        // ok. time to push.
+        for(var i = 0; i<20; i++) if(bulkUrisPending.length > 0) {
+            var json = currentJson(bulkUrisPending.shift());
+            json.fetching = true;
+            json._fetchError = null;
+            bulkUrisInProgress.push(json._uri);
+        }
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + "/api/bulk-fetch",
+            data: bulkUrisInProgress
+        }).then(function successCallback(response) {
+            stampJson(response.data);
+            scanJson(response.data);
+
+            while(bulkUrisInProgress.length > 0) {
+                var json = currentJson(bulkUrisInProgress.shift());
+                json.fetching = false;
+                json._fetchError = null;
+            }
+
+            // re-fire immediately after the HTTP comes back
+            manageBulkState();
+        }, function errorCallback(response) {
+            console.log(response);
+            while(bulkUrisInProgress.length > 0) {
+                var json = currentJson(bulkUrisInProgress.shift());
+                json.fetching = false;
+                json._fetchError = response;
+            }
+
+            // re-fire immediately after the HTTP comes back
+            manageBulkState();
+        });
+
+
     }
 
     // loads a uri, with a callback
