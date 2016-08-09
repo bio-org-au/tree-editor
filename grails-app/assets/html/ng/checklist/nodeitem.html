@@ -12,7 +12,8 @@
         <span ng-if="json.fetched">
             <small ng-if="!json.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
             <small ng-if="json.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
-            <span class="draggable-uri droppable-uri"
+            <span class="draggable-uri"
+                  ng-class="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && json.type=='T' ? 'droppable-uri' : ''"
                   draggable="true"
                   ondragstart="dragUriStart(event)"
                   ondragend="dragUriEnd(event)"
@@ -32,7 +33,7 @@
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
         <a href="#" ng-click="clickNewWindow()">new window</a>
-        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace">
+        <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && json.type=='T'">
             <div style="display: inline-block;">
                 <i class="fabutton fa fa-edit" ng-click="toggleNodeTypeDropdown()"></i>
                 <ul ng-if="nodeTypeDropdown"
@@ -59,7 +60,7 @@
         </span>
     </span>
 
-    <div droptarget/>
+    <div droptarget ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && json.type=='T'"/>
 </div>
 <div apni-format-block ng-if="UI.showApniFormat" class="node-name-apni-format" uri="{{json.name._uri}}" style="margin-left: 3.5em;">
 </div>

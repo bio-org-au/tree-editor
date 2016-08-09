@@ -21,11 +21,18 @@ function getPreferredLink(linkedThing) {
         return null;
     }
 
+    if(!linkedThing._links.permalink && (!linkedThing._links.permalinks || linkedThing._links.permalinks.length==0)) {
+        console.log("Thing has no links!");
+        console.log(linkedThing);
+        return null;
+    }
+
     if(linkedThing._links.permalink) {
         if (linkedThing._links.permalink.link) {
             linkedThing._uri = linkedThing._links.permalink.link;
         }
     }
+
 
     if(!linkedThing._uri) {
         for (i in linkedThing._links.permalinks) {

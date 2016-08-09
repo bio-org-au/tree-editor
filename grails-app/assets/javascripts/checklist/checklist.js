@@ -184,6 +184,9 @@ function CanAcceptDrops($scope, $rootScope, $http, jsonCache) {
     };
 
     $scope.sendServersideOperation = function () {
+
+        if(!$scope.isTargetEditable()) return; // meh
+
         if ($scope.serversideOperationState.inProgress) return; // we have another drop in progress
 
         $scope.serversideOperationState.inProgress = true;
@@ -473,6 +476,15 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         return [$scope.focusUri];
     };
 
+    $scope.isTargetEditable = function () {
+        return true &&
+            $scope.cl_scope  && $scope.cl_scope.rootPermissions && $scope.cl_scope.rootPermissions.uriPermissions &&
+            $scope.cl_scope.rootPermissions.uriPermissions.canEdit &&
+            $scope.cl_scope.rootPermissions.uriPermissions.isWorkspace &&
+            $scope.focus && $scope.focus.type=='T';
+    };
+
+
     $scope.getTargetUri = function () {
         return $scope.focusUri;
     };
@@ -588,6 +600,14 @@ var NodeitemController = ['$scope', '$rootScope', '$http', 'jsonCache', function
 
     $scope.getDragUriList = function () {
         return [$scope.uri];
+    };
+
+    $scope.isTargetEditable = function () {
+        return true &&
+            $scope.cl_scope && $scope.cl_scope.rootPermissions && $scope.cl_scope.rootPermissions.uriPermissions &&
+            $scope.cl_scope.rootPermissions.uriPermissions.canEdit &&
+            $scope.cl_scope.rootPermissions.uriPermissions.isWorkspace &&
+            $scope.json && $scope.json.type=='T'
     };
 
     $scope.getTargetUri = function () {

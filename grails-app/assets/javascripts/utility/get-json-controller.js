@@ -118,7 +118,7 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
         if(bulkUrisPending.length == 0) return;
 
         // ok. time to push.
-        for(var i = 0; i<20; i++) if(bulkUrisPending.length > 0) {
+        for(var i = 0; i<50; i++) if(bulkUrisPending.length > 0) {
             var json = currentJson(bulkUrisPending.shift());
             json.fetching = true;
             json._fetchError = null;

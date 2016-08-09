@@ -1,5 +1,5 @@
 <div
-        class="droppable-uri"
+        ng-class="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T' ? 'droppable-uri' : ''"
         ondrop="dropUri(event)"
         ondragover="dropUriOver(event)"
         ondragenter="dropUriEnter(event)"
@@ -65,9 +65,10 @@
         </span>
     </h2>
 
-    <div droptarget/>
+    <div droptarget ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'"/>
 
 </div>
+
 <div>
     <small>
         <ul>
