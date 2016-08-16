@@ -69,15 +69,6 @@
 
 </div>
 
-<div>
-    <small>
-        <ul>
-            <li ng-if="rootPermissions.userPermissions.canCreateWorkspaces"><a
-                    href="newWorkspaceFromChecklist?focusUri={{focusUri}}">Create a new workspace using this
-                checklist</a></li>
-        </ul>
-    </small>
-</div>
 <div apni-format-block ng-if="UI.showApniFormat" class="focus-name-apni-format" uri="{{focus.name._uri}}" style="margin-left: 1.5em;">
 </div>
 <div node-synonym-list ng-if="UI.showSynonyms" uri="{{focus.instance._uri}}" style="margin-left: 1.5em;"></div>

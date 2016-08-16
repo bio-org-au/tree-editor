@@ -2,12 +2,30 @@
    <i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small>
 </div>
 <form ng-if="!json || json.fetched">
-    <div class="form-group" ng-if="withTopNode">
-        <label for="topNode">Starting with checklist</label>
+
+    <div class="form-group" ng-if="json">
+        <label for="topNode">Base classification</label>
         <div class="form-control form-control-static" id="topNode" style="border-radius: 0;">
-            <span uri="{{withTopNode}}" shortnodetext></span> <small ng-if="arrangement">({{arrangement.label}}{{arrangement.title}})</small>
+            <span shortarrangementtext uri="{{baseClassification}}"></span>
         </div>
     </div>
+
+    <div class="form-group" ng-if="!json">
+        <label for="pickBaseClassification">Base classification</label>
+        <div class="input-group">
+        <div id="pickBaseClassification" class="form-control" ng-class="baseClassificationDropdown_visible ? 'open' : ''"
+
+           ><span ng-click="baseClassificationDropdown_toggle()" style="cursor:pointer;"><span shortarrangementtext uri="{{form.baseClassification}}"></span><span ng-if="!form.baseClassification" class="text-muted">required</span></span>
+            <div class="dropdown-menu visible" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">
+                <div style="cursor: pointer;" ng-repeat="i in classifications" ng-click="baseClassificationDropdown_click(i)">
+                     <span shortarrangementtext uri="{{i}}"></span>
+                </div>
+            </div>
+        </div>
+            <span style="cursor:pointer;" class="input-group-addon" id="basic-addon1" ng-click="baseClassificationDropdown_toggle()"><i class="fa fa-caret-down"></i></span>
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="formTitle">Title *</label>
         <input required="true" type="text" class="form-control" id="formTitle" ng-model="form.title" placeholder="required">

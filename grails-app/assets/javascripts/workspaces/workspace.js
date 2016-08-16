@@ -8,6 +8,46 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
     $scope.can_edit = false;
     $scope.form = {};
 
+    $scope.baseClassificationDropdown_toggle = function() {
+        $scope.baseClassificationDropdown_visible = ! $scope.baseClassificationDropdown_visible;
+    };
+    $scope.baseClassificationDropdown_click = function(uri) {
+        $scope.form.baseClassification = uri;
+        $scope.baseClassificationDropdown_visible = false;
+    };
+    $scope.baseClassificationDropdown_visible = false;
+
+    $scope.reloadWorkspaces = function() {
+        $scope.classifications  = {};
+
+        if(!$rootScope.namespace) {
+            return;
+        }
+
+        console.log("FETCHIONG classifications");
+
+        $http({
+            method: 'GET',
+            url: $rootScope.servicesUrl + '/TreeJsonView/listClassifications',
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
+            params: {
+                namespace: $rootScope.namespace
+            }
+        }).then(function successCallback(response) {
+            console.log("GOT classifications");
+            console.log(response.data);
+            $scope.classifications = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    };
+
+    $scope.$on('nsl-tree-edit.namespace-changed', $scope.reloadWorkspaces);
+    $scope.reloadWorkspaces();
+
     $scope.resetForm = $scope.clickReset = $scope.afterUpdateJson = function() {
         if($scope.json) {
             // TODO: we should be asking the service layer what permissions we have,
@@ -16,12 +56,14 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             $scope.form.title = $scope.json.title;
             $scope.form.description = $scope.json.description;
             $scope.form.shared = $scope.json.shared;
+            $scope.form.baseClassification = $scope.json.root;
             $element.find('#formDesc').html($scope.form.description);
         }
         else {
             $scope.can_edit = true;
             $scope.form.title = '';
             $scope.form.description = '';
+            $scope.form.baseClassification = null;
             $scope.form.shared = true;
             $element.find('#formDesc').html($scope.form.description);
         }
@@ -45,7 +87,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
     }
 
     $scope.clickSave = function() {
-        if(!$scope.form.title) return;
+        console.log("clickSave");
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
@@ -57,7 +99,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 'uri': $scope.uri,
                 'title': $scope.form.title,
                 'description': $element.find('#formDesc').html(),
-                'shared': $scope.form.shared
+                'shared': $scope.form.shared,
             }
         }).then(function successCallback(response) {
             window.location = $rootScope.pagesUrl + "/workspaces/index";
@@ -75,12 +117,13 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 ];
             }
         });
+
     };
 
     $scope.clickCreate = function() {
         if(!$scope.form.title) return;
 
-        console.log("ABOUT TO CREATE!");
+        console.log("clickCreate");
 
         $http({
             method: 'POST',
@@ -94,10 +137,11 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 'title': $scope.form.title,
                 'description': $element.find('#formDesc').html(),
                 'checkout': $scope.withTopNode,
-                'shared': $scope.form.shared
+                'shared': $scope.form.shared,
+                'baseTree': $scope.form.baseClassification
             }
         }).then(function successCallback(response) {
-            window.location = $rootScope.pagesUrl + "/workspaces/index";
+            window.location = $rootScope.pagesUrl + "/workspaces/checklist?uri=" + response.data.uri;
         }, function errorCallback(response) {
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
