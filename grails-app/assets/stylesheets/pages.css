@@ -20,3 +20,11 @@
     padding-left: 1em;
     text-indent: -1em;
 }
+
+.clickable-text {
+    cursor: default;
+}
+
+.clickable-text:hover {
+    text-decoration: underline;
+}

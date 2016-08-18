@@ -281,3 +281,25 @@ var shortinstcitedbytextDirective = [function () {
     };
 }];
 app.directive('shortinstcitedbytext', shortinstcitedbytextDirective);
+
+var nameonlytextDirective = [function () {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/nameonlytext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        }
+    };
+}];
+app.directive('nameonlytext', nameonlytextDirective);
+
+var nameonlynodetextDirective = [function () {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/nameonlynodetext.html",
+        controller: GetJsonController,
+        scope: {
+            uri: '@uri'
+        }
+    };
+}];
+app.directive('nameonlynodetext', nameonlynodetextDirective);

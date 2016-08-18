@@ -16,7 +16,7 @@
         <div id="pickBaseClassification" class="form-control" ng-class="baseClassificationDropdown_visible ? 'open' : ''"
 
            ><span ng-click="baseClassificationDropdown_toggle()" style="cursor:pointer;"><span shortarrangementtext uri="{{form.baseClassification}}"></span><span ng-if="!form.baseClassification" class="text-muted">required</span></span>
-            <div class="dropdown-menu visible" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">
+            <div class="dropdown-menu" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">
                 <div style="cursor: pointer;" ng-repeat="i in classifications" ng-click="baseClassificationDropdown_click(i)">
                      <span shortarrangementtext uri="{{i}}"></span>
                 </div>

@@ -5,22 +5,37 @@
         ondragenter="dropUriEnter(event)"
         ondragleave="dropUriLeave(event)"
 >
-    <span class="pull-right"><span class="small"><a href="../search?root={{root._uri}}&focus={{focus._uri}}">Search <span uri="{{root.arrangement._uri}}" shortarrangementtext></span><i class="fa fa-search"></i></a></span></span>
-    <h4>Checklist</h4>
-    <div ng-repeat="uri in path" ng-if="!$last" class="controlholder">
-        <span class="nodeitem-handle">
-                <i class="fabutton fa fa-level-down" ng-click="clickPath($index)"></i>
-        </span>
-        <span class="nodeitem-content" uri="{{uri}}" shortnodetext></span>
-        <span class="controls">
-            <i title="bookmark this placement" ng-if="!$first" class="fabutton fa fa-bookmark"
-               ng-click="clickPathAddBookmark($index)"></i>
-            <a href="#" ng-click="clickPathNewWindow($index)">new window</a>
-        </span>
-    </div>
-    <h2
+
+
+
+    <span class="pull-right"><span class="small"><a href="../search?root={{root._uri}}&focus={{focus._uri}}">Full Search <i
+            class="fa fa-search"></i></a></span></span>
+
+    <span class="input-group pull-right small "  ng-class="quicksearch.open ? 'open' : ''" style="width: 170px; margin-right: 1em;">
+        <span class="input-group-addon" style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
+            <i class="fa" ng-class="quicksearch.inProgress? 'fa-spin fa-spinner' : 'fa-search'"></i></span>
+        <input ng-model="quicksearch.text" ng-change="quicksearch.onchange()" class="form-control" style="padding: 2px; font-size: inherit; height:100%; width: 160px;">
+        <span class="input-group-addon fabutton" ng-if="quicksearch.hasResults" style="padding: 2px;" ng-click="quicksearch.onclickDropdownbutton()">
+            <i class="fa" ng-class="quicksearch.open ? 'fa-caret-down' : 'fa-caret-left'">&nbsp;</i></span>
+        <div class="dropdown-menu" style="left: auto; margin: 0; padding: 5px 3px; right: 0;">
+            <div ng-if="quicksearch.noMatches" class="text-muted small">No matches</div>
+            <div class="dropdown-item hanging-indent small" ng-repeat="r in quicksearch.results" ng-click="quicksearch.onclickSearchResult($index)">{{r.simpleName}}</div>
+            <div ng-if="quicksearch.hasMore" class="text-muted small">&hellip; {{quicksearch.more}} more matches</div>
+        </div>
+    </span>
+
+    <h4 class="nav">Checklist <span class="nodeitem-content" uri="{{path[0]}}" nameonlynodetext
+                                    ng-click="clickPath(0)"></span></h4>
+
+    <span ng-repeat="uri in path" ng-if="!$last" class="controlholder small">
+        <i ng-if="!$first" class="fa fa-angle-right"></i> <span class="nodeitem-content clickable-text" uri="{{uri}}"
+                                                                nameonlynodetext ng-click="clickPath($index)"></span>
+    </span>
+    <div
             div class="controlholder"
     >
+
+        <span class="h3">
         <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
         <small ng-if="focus.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
         <span class="draggable-uri"
@@ -31,10 +46,12 @@
         <span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}"
                                                                 shortarrangementtext></small>
         </span>
-        <span class="controls" >
+            </span>
+        <span class="controls">
             <a href="{{focus._uri}}"><i class="fa fa-link"></i></a>
             <a ng-if="focus.name._uri" ng-click="clickToggleApniFormat()" href="#">APNI</a>
-            <a ng-if="focus.name._uri" target="apni-name" href="{{focus.name._uri}}/api/apni-format"><i class="fa fa-external-link"></i></a>
+            <a ng-if="focus.name._uri" target="apni-name" href="{{focus.name._uri}}/api/apni-format"><i
+                    class="fa fa-external-link"></i></a>
             <i title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
             <i title="bookmark this placement" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
             <span ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'">
@@ -53,23 +70,32 @@
         box-shadow: 0 6px 12px rgba(0,0,0,.175);
                     "
                     >
-                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
-                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="apc-excluded">Excluded</span></a></li>
-                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton" ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span class="declared-bt">Untreated name</span></a></li>
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcConcept')"><i class="fa fabutton"
+                                                                                             ng-class="json.typeUri.idPart == 'ApcConcept' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span>Accepted</span></a></li>
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'ApcExcluded')"><i class="fa fabutton"
+                                                                                              ng-class="json.typeUri.idPart == 'ApcExcluded' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span
+                                class="apc-excluded">Excluded</span></a></li>
+                        <li><a href="#" ng-click="clickNodeType('apc-voc', 'DeclaredBt')"><i class="fa fabutton"
+                                                                                             ng-class="json.typeUri.idPart == 'DeclaredBt' ? 'fa-check-circle-o' : 'fa-circle-o'"></i> <span
+                                class="declared-bt">Untreated name</span></a></li>
                       </ul>
 
                 </span>
-            <i title="revert" class="fabutton fa fa-undo" ng-if="focus.fetched && !focus.checkedInAt" ng-click="clickRevert()"></i>
-            <i title="check in" class="fabutton fa fa-sign-in" ng-if="focus.fetched && !focus.checkedInAt && focus.prev" ng-click="clickCheckin()"></i>
+            <i title="revert" class="fabutton fa fa-undo" ng-if="focus.fetched && !focus.checkedInAt"
+               ng-click="clickRevert()"></i>
+            <i title="check in" class="fabutton fa fa-sign-in" ng-if="focus.fetched && !focus.checkedInAt && focus.prev"
+               ng-click="clickCheckin()"></i>
             </span>
         </span>
-    </h2>
+    </div>
 
-    <div droptarget ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'"/>
+    <div droptarget
+         ng-if="cl_scope.rootPermissions.uriPermissions.canEdit && cl_scope.rootPermissions.uriPermissions.isWorkspace && focus.type=='T'"/>
 
 </div>
 
-<div apni-format-block ng-if="UI.showApniFormat" class="focus-name-apni-format" uri="{{focus.name._uri}}" style="margin-left: 1.5em;">
+<div apni-format-block ng-if="UI.showApniFormat" class="focus-name-apni-format" uri="{{focus.name._uri}}"
+     style="margin-left: 1.5em;">
 </div>
 <div node-synonym-list ng-if="UI.showSynonyms" uri="{{focus.instance._uri}}" style="margin-left: 1.5em;"></div>
 <div>
