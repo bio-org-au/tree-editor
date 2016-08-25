@@ -7,7 +7,6 @@
         <i ng-if="!json.fetched || !hasSubnodes" class="fa fabutton">&nbsp;</i>
     </span>
     <span class="nodeitem-content">
-        <span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
         <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
         <span ng-if="json.fetched">
             <small ng-if="!json.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
@@ -23,6 +22,7 @@
                   ondragleave="dropUriLeave(event)"
             ><span uri="{{uri}}" shortnodetext></span></span>
         </span>
+        <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
     </span>
     <span class="controls">
         <small class='text-muted' uri="{{json.arrangement._uri}}" shortarrangementtext></small>

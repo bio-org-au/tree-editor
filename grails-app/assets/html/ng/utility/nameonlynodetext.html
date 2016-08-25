@@ -1,5 +1,4 @@
-<span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
-<span ng-if="!json.fetched"></span>
+<span ng-if="!json.fetched">&nbsp;</span>
 <span ng-if="json.fetched">
     <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
         <span ng-switch-when="http://biodiversity.org.au/voc/boatree/BOATREE#classification-node"><span shortarrangementtext uri="{{json.arrangement._uri}}"></span></span>
@@ -16,3 +15,4 @@
         </span>
     </span>
 </span>
+<span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>

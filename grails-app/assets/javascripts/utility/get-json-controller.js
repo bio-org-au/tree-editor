@@ -99,9 +99,8 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
         if (!uri) return null;
         var json = currentJson(uri);
 
-        if(!json.fetching) {
-            json.fetching = true;
-            json._fetchError = null;
+        if(!json.fetching && !json.queued_for_fetching) {
+            json.queued_for_fetching = true;
 
             bulkUrisPending.push(uri);
 
@@ -121,6 +120,7 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
         for(var i = 0; i<50; i++) if(bulkUrisPending.length > 0) {
             var json = currentJson(bulkUrisPending.shift());
             json.fetching = true;
+            json.queued_for_fetching = false;
             json._fetchError = null;
             bulkUrisInProgress.push(json._uri);
         }

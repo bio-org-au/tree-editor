@@ -1,4 +1,3 @@
-<span ng-if="json.fetching"><i class="fa fa-reload fa-spin"></i> </span>
 <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
 <span ng-if="json.fetched">
     <span ng-switch="json.typeUri.uri" ng-class="json.typeUri.css">
@@ -19,3 +18,4 @@
         </span>
     </span>
 </span>
+<span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>

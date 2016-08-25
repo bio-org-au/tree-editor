@@ -526,6 +526,9 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
             window.setTimeout(function() {
                 if(mySerial == $scope.quicksearch.serial) {
                     console.log("searching " + mySerial + " text " + myText);
+                    if(myText.indexOf('%')==-1 && myText.indexOf('_')==-1) {
+                        myText = myText + '%';
+                    }
                     $scope.doSearch(myText, mySerial);
                 }
                 else {
