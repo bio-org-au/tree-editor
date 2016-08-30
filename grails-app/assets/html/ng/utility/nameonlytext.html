@@ -1,3 +1,4 @@
 <span ng-if="!json.fetched">&nbsp;</span>
 <span ng-if="json.fetched"><span ng-bind-html="json.simpleName"></span></span>
 <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
+<span ng-if="json.queued_for_fetching"> <i class="fa fa-spinner"></i></span>
