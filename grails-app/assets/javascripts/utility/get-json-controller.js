@@ -189,9 +189,11 @@ var GetJsonController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
         if ($scope.afterUpdateJson) {
             $scope.afterUpdateJson();
             if ($scope.json) {
-                var deregisterLoading = $scope.$watch('json.fetching', function () {
+                var deregisterLoading = $scope.$watch(
+                        '(json.fetching?0:1) + (json.queued_for_fetching?0:2)',
+                    function () {
                     $scope.afterUpdateJson();
-                    if (!$scope.json || !$scope.json.fetching) {
+                    if (!$scope.json || (!$scope.json.fetching && !$scope.json.queued_for_fetching)) {
                         deregisterLoading();
                     }
                 });
