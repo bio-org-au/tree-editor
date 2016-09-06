@@ -1,7 +1,17 @@
-<td ng-if="loaded">{{data.label}}</td>
-<td ng-if="loaded">{{data.description}}</td>
-<td ng-if="loading" colspan="2"><i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small></td>
-<td colspan="2" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
+<td colspan="2" ng-if="!json.fetched">
+    <small class="text-muted">{{uri}}</small>
+    <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
+    <span ng-if="json.queued_for_fetching"> <i class="fa fa-spinner"></i></span>
+</td>
+<td ng-if="json.fetched">{{json.label}}
+    <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
+    <span ng-if="json.queued_for_fetching"> <i class="fa fa-spinner"></i></span>
+</td>
+<td ng-if="json.fetched">{{json.description}}</td>
+
+<td colspan="2" ng-if="failedtoload">
+    <small>Could not fetch {{uri}}</small>
+</td>
 <td><span class="pull-right">
     <a href="checklist?uri={{uri}}">Checklist</a>
     |

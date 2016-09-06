@@ -1,3 +1,5 @@
+<div ng-if="failedtoload" class="alert alert-danger"><strong>{{response.status}}</strong> {{response.statusText}}</div>
+
 <div ng-if="loaded">
     <table class="table">
         <tr ng-repeat="uri in data" classificationslistrow uri="{{uri}}"></tr>

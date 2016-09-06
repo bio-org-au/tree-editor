@@ -38,6 +38,7 @@ var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scop
             $scope.loaded = true;
             $scope.data = response.data;
         }, function errorCallback(response) {
+            console.log(response);
             $scope.loading = false;
             $scope.failedtoload = true;
             $scope.response = response;
@@ -62,50 +63,27 @@ var workspaceslistDirective = [function() {
 
 app.directive('workspaceslist', workspaceslistDirective);
 
-var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
-    $scope.loading = false;
-    $scope.loaded = false;
-    $scope.failedtoload = false;
-    $scope.data = null;
-    $scope.response = null;
+var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+    inheritJsonController($scope, jsonCache);
 
-    $scope.can_edit = false;
-
-    $scope.reload = function() {
-        $scope.loading = false;
-        $scope.loaded = false;
-        $scope.failedtoload = false;
-        $scope.data = null;
-        $scope.response = null;
-
-        $scope.can_edit = false;
-
-        if(!$scope.uri) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            return;
-        }
-
-        $scope.loading = true;
-
+    $scope.afterUpdateJson = function(){
+        $scope.permissions = null;
         $http({
             method: 'GET',
-            url: $scope.uri
+            url: $rootScope.servicesUrl + '/TreeJsonView/permissions',
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
+            params: {
+                uri: $scope.uri
+            }
         }).then(function successCallback(response) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            $scope.data = response.data;
-            // TODO: we should be asking the service layer what permissions we have,
-            // rather than figuring this out clientside
-            $scope.can_edit = $scope.data.owner == $rootScope.getUser();
+            $scope.permissions = response.data;
         }, function errorCallback(response) {
-            $scope.loading = false;
-            $scope.failedtoload = true;
-            $scope.response = response;
+            console.log(response);
         });
-    };
-
-    $scope.reload();
+    };        
 }];
 
 app.controller('Workspaceslistrow', WorkspaceslistrowController);

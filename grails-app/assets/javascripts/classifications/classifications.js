@@ -35,6 +35,7 @@ var ClassificationslistController = ['$scope', '$rootScope', '$http', function (
             $scope.loaded = true;
             $scope.data = response.data;
         }, function errorCallback(response) {
+            console.log(response);
             $scope.loading = false;
             $scope.failedtoload = true;
             $scope.response = response;
@@ -57,43 +58,8 @@ app.directive('classificationslist', [ function() {
     };
 }]);
 
-var ClassificationslistrowController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
-    $scope.loading = false;
-    $scope.loaded = false;
-    $scope.failedtoload = false;
-    $scope.data = null;
-    $scope.response = null;
-
-    $scope.reload = function() {
-        $scope.loading = false;
-        $scope.loaded = false;
-        $scope.failedtoload = false;
-        $scope.data = null;
-        $scope.response = null;
-
-        if(!$scope.uri) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            return;
-        }
-
-        $scope.loading = true;
-
-        $http({
-            method: 'GET',
-            url: $scope.uri
-        }).then(function successCallback(response) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            $scope.data = response.data;
-        }, function errorCallback(response) {
-            $scope.loading = false;
-            $scope.failedtoload = true;
-            $scope.response = response;
-        });
-    };
-
-    $scope.reload();
+var ClassificationslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+    inheritJsonController($scope, jsonCache);
 }];
 
 
