@@ -129,7 +129,10 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
             method: 'POST',
             url: $rootScope.servicesUrl + "/api/bulk-fetch",
             data: bulkUrisInProgress
-        }).then(function successCallback(response) {
+        }).then(function (response) {
+            console.log("BULK FETCH SUCCESS");
+            console.log(response);
+
             stampJson(response.data);
             scanJson(response.data);
 
@@ -141,7 +144,8 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
 
             // re-fire immediately after the HTTP comes back
             manageBulkState();
-        }, function errorCallback(response) {
+        }, function (response) {
+            console.log("BULK FETCH FAIL");
             console.log(response);
             while(bulkUrisInProgress.length > 0) {
                 var json = currentJson(bulkUrisInProgress.shift());
