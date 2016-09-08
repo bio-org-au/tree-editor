@@ -1,3 +1,5 @@
+<td>This is a workspace row</td>
+<td>My URI is {{uri}}, aka {{json._uri}}</td>
 <td colspan="2" ng-if="!json.fetched">
     <small class="text-muted">{{uri}}</small>
     <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
@@ -9,6 +11,7 @@
 </td>
 <td ng-if="json.fetched">{{json.owner}}</td>
 <td colspan="2" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
+<td>{{json}}</td>
 <td>
     <span class="pull-right">
         <a href="checklist?uri={{uri}}">Checklist</a>
