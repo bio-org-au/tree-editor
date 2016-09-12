@@ -1,0 +1,135 @@
+{
+  "class": "au.org.biodiversity.nsl.Instance",
+  "_links": {
+    "permalinks": [
+      {
+        "link": "http://localhost:7070/nsl-mapper/851466",
+        "preferred": false,
+        "resources": 1
+      },
+      {
+        "link": "http://localhost:7070/nsl-mapper/instance/apni/851466",
+        "preferred": true,
+        "resources": 1
+      },
+      {
+        "link": "http://localhost:7070/nsl-mapper/Babiana%20stricta%20%28Aiton%29%20Ker%20Gawl.",
+        "preferred": false,
+        "resources": 18
+      }
+    ]
+  },
+  "audit": {
+    "created": {
+      "by": "KIRSTENC",
+      "at": "2006-10-15T14:00:00Z"
+    },
+    "updated": {
+      "by": "KIRSTENC",
+      "at": "2006-10-15T14:00:00Z"
+    }
+  },
+  "namespace": "APNI",
+  "verbatimNameString": null,
+  "page": null,
+  "pageQualifier": null,
+  "nomenclaturalStatus": null,
+  "bhlUrl": null,
+  "instanceType": {
+    "name": "misapplied",
+    "flags": {
+      "primaryInstance": false,
+      "secondaryInstance": false,
+      "relationship": true,
+      "protologue": false,
+      "taxonomic": false,
+      "nomenclatural": false,
+      "synonym": false,
+      "proParte": false,
+      "doubtful": false,
+      "misapplied": true,
+      "standalone": false,
+      "unsourced": false,
+      "citing": true,
+      "deprecated": false
+    },
+    "sortOrder": 400,
+    "rdfId": "misapplied",
+    "descriptionHtml": "(description of <b>misapplied</b>)"
+  },
+  "name": {
+    "class": "au.org.biodiversity.nsl.Name",
+    "_links": {
+      "permalink": {
+        "link": "http://localhost:7070/nsl-mapper/name/apni/103078",
+        "preferred": true,
+        "resources": 1
+      }
+    },
+    "nameElement": "stricta",
+    "fullNameHtml": "<scientific><name id='103078'><scientific><name id='103060'><element class='Babiana'>Babiana</element></name></scientific> <element class='stricta'>stricta</element> <authors>(<base id='7086' title='Aiton, W.'>Aiton</base>) <author id='6890' title='Ker Gawler, J.B.'>Ker Gawl.</author></authors></name></scientific>",
+    "_uri": "http://localhost:7070/nsl-mapper/name/apni/103078",
+    "_hasNoPermalink": false
+  },
+  "reference": {
+    "class": "au.org.biodiversity.nsl.Reference",
+    "_links": {
+      "permalink": {
+        "link": "http://localhost:7070/nsl-mapper/reference/apni/42942",
+        "preferred": true,
+        "resources": 1
+      }
+    },
+    "citation": "CHAH (2006), Australian Plant Census",
+    "citationHtml": "CHAH (2006), <i>Australian Plant Census</i>",
+    "authYear": "CHAH, 2006",
+    "_uri": "http://localhost:7070/nsl-mapper/reference/apni/42942",
+    "_hasNoPermalink": false
+  },
+  "parent": {},
+  "cites": {
+    "class": "au.org.biodiversity.nsl.Instance",
+    "_links": {
+      "permalink": {
+        "link": "http://localhost:7070/nsl-mapper/instance/apni/611522",
+        "preferred": true,
+        "resources": 1
+      }
+    },
+    "instanceType": "secondary reference",
+    "page": "t. 621",
+    "name": "<scientific><name id='103078'><scientific><name id='103060'><element class='Babiana'>Babiana</element></name></scientific> <element class='stricta'>stricta</element> <authors>(<base id='7086' title='Aiton, W.'>Aiton</base>) <author id='6890' title='Ker Gawler, J.B.'>Ker Gawl.</author></authors></name></scientific>",
+    "protologue": false,
+    "citation": "Curtis, W. in Sims, J. (1803), Botanical Magazine 16",
+    "citationHtml": "Curtis, W. in Sims, J. (1803), <i>Botanical Magazine</i> 16",
+    "_uri": "http://localhost:7070/nsl-mapper/instance/apni/611522",
+    "_hasNoPermalink": false
+  },
+  "citedBy": {
+    "class": "au.org.biodiversity.nsl.Instance",
+    "_links": {
+      "permalink": {
+        "link": "http://localhost:7070/nsl-mapper/instance/apni/611528",
+        "preferred": true,
+        "resources": 1
+      }
+    },
+    "instanceType": "secondary reference",
+    "page": null,
+    "name": "<scientific><name id='167702'><scientific><name id='103060'><element class='Babiana'>Babiana</element></name></scientific> <element class='angustifolia'>angustifolia</element> <authors><author id='6965' title='Sweet, R.'>Sweet</author></authors></name></scientific>",
+    "protologue": false,
+    "citation": "CHAH (2006), Australian Plant Census",
+    "citationHtml": "CHAH (2006), <i>Australian Plant Census</i>",
+    "_uri": "http://localhost:7070/nsl-mapper/instance/apni/611528",
+    "_hasNoPermalink": false
+  },
+  "externalRefs": [],
+  "instancesForCitedBy": [],
+  "instancesForCites": [],
+  "instancesForParent": [],
+  "instanceNotes": [],
+  "_uri": "http://localhost:7070/nsl-mapper/instance/apni/851466",
+  "_hasNoPermalink": false,
+  "fetching": false,
+  "fetched": true
+}
