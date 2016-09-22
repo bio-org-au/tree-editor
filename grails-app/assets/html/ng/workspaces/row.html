@@ -7,7 +7,7 @@
     <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
     <span ng-if="json.queued_for_fetching"> <i class="fa fa-spinner"></i></span>
 </td>
-<td ng-if="json.fetched">{{json.owner}}</td>
+<td ng-if="json.fetched">{{json.baseArrangement.label}}</td>
 <td colspan="2" ng-if="failedtoload"><small>Could not fetch {{uri}}</small></td>
 <td>
     <span class="pull-right">
