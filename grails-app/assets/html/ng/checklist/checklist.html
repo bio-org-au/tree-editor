@@ -11,6 +11,7 @@
     <span class="pull-right"><span class="small"><a href="../search?root={{root._uri}}&focus={{focus._uri}}">Full Search <i
             class="fa fa-search"></i></a></span></span>
 
+
     <span class="input-group pull-right small "  ng-class="quicksearch.open ? 'open' : ''" style="width: 170px; margin-right: 1em;">
         <span class="input-group-addon" style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
             <i class="fa" ng-class="quicksearch.inProgress? 'fa-spin fa-spinner' : 'fa-search'"></i></span>
@@ -23,6 +24,8 @@
             <div ng-if="quicksearch.hasMore" class="text-muted small">&hellip; {{quicksearch.more}} more matches</div>
         </div>
     </span>
+
+    <span class="pull-right small" style="display: inline; margin-right: 1em;">Untreated names <input id="showUntreatedNamesChk" ng-model="showUntreatedNames" type="checkbox" class="form-control" style="display: inline; width: auto; padding: 2px; font-size: inherit; height:100%;"/></span>
 
     <h4 class="nav">Checklist <span class="nodeitem-content" uri="{{path[0]}}" nameonlynodetext
                                     ng-click="clickPath(0)"></span></h4>

@@ -291,6 +291,8 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     $scope.cl_scope = $scope;
     $scope.ni_scope = $scope;
 
+    $scope.showUntreatedNames = false;
+
     $scope.rootPermissions = {};
 
     $scope.focusPermissions = {};
