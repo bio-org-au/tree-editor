@@ -1,4 +1,4 @@
-<div ng-repeat="lk in json.subnodes" class="nodelist-item" ng-if="lk.subNode.type='T' && (cl_scope.showUntreatedNames || lk.subNode.typeUri.idPart != 'DeclaredBt')">
+<div ng-repeat="lk in json.subnodes" class="nodelist-item" ng-if="lk.subNode.type='T' && (!cl_scope.acceptedNamesOnly || lk.subNode.typeUri.idPart == 'ApcConcept')">
     <i ng-if="lk.versioningMethod.name=='F'" class="pull-left fa fa-anchor"></i>
     <div nodeitem class="nodeitem" link-super="{{uri}}" link-seq="{{lk.linkSeq}}" uri="{{getPreferredLink(lk.subNode)}}">{{lk}}</div>
 </div>
