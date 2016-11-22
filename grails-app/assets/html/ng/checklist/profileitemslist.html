@@ -1,0 +1,16 @@
+<h5>Values</h5>
+<table class="table">
+    <tr ng-repeat="lk in json.values">
+        <td>
+            {{lk.title ? lk.title : (lk.linkTypeUri.nsPart+':'+lk.linkTypeUri.idPart) }}
+        </td>
+        <td ng-if="lk.valueUri">
+            <a href="{{lk.valueUri.uri}}">
+                {{lk.valueUri.nsPart}}:{{lk.valueUri.idPart}}
+            </a>
+        </td>
+        <td ng-if="lk.value">
+            {{lk.value}}
+        </td>
+    </tr>
+</table>

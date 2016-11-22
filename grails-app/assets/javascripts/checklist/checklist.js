@@ -929,3 +929,36 @@ var apniFormatBlockDirective = ['$rootScope', function ($rootScope) {
 
 app.directive('apniFormatBlock', apniFormatBlockDirective);
 
+
+
+var ProfileitemslistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+    $scope.cl_scope = $scope.$parent.cl_scope;
+    $scope.ni_scope = $scope.$parent.ni_scope;
+    inheritJsonController($scope, jsonCache);
+
+    $scope.getRootUri = function () {
+        return "I am a root uri!"
+    };
+    $scope.getFocusUri = function () {
+        $scope.$parent.getFocusUri();
+    };
+
+    $scope.clickSubPath = function (a) {
+        $scope.$parent.clickSubPath(a);
+    }
+
+}];
+
+app.controller('Profileitemslist', ProfileitemslistController);
+
+var profileitemslistDirective = ['$rootScope', function ($rootScope) {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/checklist/profileitemslist.html",
+        controller: ProfileitemslistController,
+        scope: {
+            uri: "@"
+        }
+    };
+}];
+
+app.directive('profileitemslist', profileitemslistDirective);
