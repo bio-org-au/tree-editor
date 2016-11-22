@@ -12,20 +12,27 @@
             class="fa fa-search"></i></a></span></span>
 
 
-    <span class="input-group pull-right small "  ng-class="quicksearch.open ? 'open' : ''" style="width: 170px; margin-right: 1em;">
-        <span class="input-group-addon" style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
+    <span class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
+          style="width: 170px; margin-right: 1em;">
+        <span class="input-group-addon"
+              style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
             <i class="fa" ng-class="quicksearch.inProgress? 'fa-spin fa-spinner' : 'fa-search'"></i></span>
-        <input ng-model="quicksearch.text" ng-change="quicksearch.onchange()" class="form-control" style="padding: 2px; font-size: inherit; height:100%; width: 160px;">
-        <span class="input-group-addon fabutton" ng-if="quicksearch.hasResults" style="padding: 2px;" ng-click="quicksearch.onclickDropdownbutton()">
+        <input ng-model="quicksearch.text" ng-change="quicksearch.onchange()" class="form-control"
+               style="padding: 2px; font-size: inherit; height:100%; width: 160px;">
+        <span class="input-group-addon fabutton" ng-if="quicksearch.hasResults" style="padding: 2px;"
+              ng-click="quicksearch.onclickDropdownbutton()">
             <i class="fa" ng-class="quicksearch.open ? 'fa-caret-down' : 'fa-caret-left'">&nbsp;</i></span>
         <div class="dropdown-menu" style="left: auto; margin: 0; padding: 5px 3px; right: 0;">
             <div ng-if="quicksearch.noMatches" class="text-muted small">No matches</div>
-            <div class="dropdown-item hanging-indent small" ng-repeat="r in quicksearch.results" ng-click="quicksearch.onclickSearchResult($index)">{{r.simpleName}}</div>
+            <div class="dropdown-item hanging-indent small" ng-repeat="r in quicksearch.results"
+                 ng-click="quicksearch.onclickSearchResult($index)">{{r.simpleName}}</div>
             <div ng-if="quicksearch.hasMore" class="text-muted small">&hellip; {{quicksearch.more}} more matches</div>
         </div>
     </span>
 
-    <span class="pull-right small" style="display: inline; margin-right: 1em;">Accepted names only <input ng-model="acceptedNamesOnly" type="checkbox" class="form-control" style="display: inline; width: auto; padding: 2px; font-size: inherit; height:100%;"/></span>
+    <span class="pull-right small" style="display: inline; margin-right: 1em;">Accepted names only <input
+            ng-model="acceptedNamesOnly" type="checkbox" class="form-control"
+            style="display: inline; width: auto; padding: 2px; font-size: inherit; height:100%;"/></span>
 
     <h4 class="nav">Checklist <span class="nodeitem-content" uri="{{path[0]}}" nameonlynodetext
                                     ng-click="clickPath(0)"></span></h4>
@@ -39,17 +46,18 @@
     >
 
         <span class="h3">
-        <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
-        <small ng-if="focus.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
-        <span class="draggable-uri"
-              draggable="true"
-              ondragstart="dragUriStart(event)"
-              ondragend="dragUriEnd(event)"
-        >
-        <span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}"
-                                                                shortarrangementtext></small>
-        </span>
+            <small ng-if="!focus.checkedInAt" class="draft-node"><i class="fa fa-asterisk"></i></small>
+            <small ng-if="focus.replacedAt" class="replaced-node"><i class="fa fa-ban-circle"></i></small>
+            <span class="draggable-uri"
+                  draggable="true"
+                  ondragstart="dragUriStart(event)"
+                  ondragend="dragUriEnd(event)"
+            >
+            <span uri="{{focus._uri}}" shortnodetext></span> <small uri="{{root.arrangement._uri}}"
+                                                                    shortarrangementtext></small>
             </span>
+        </span>
+
         <span class="controls">
             <a href="{{focus._uri}}"><i class="fa fa-link"></i></a>
             <a ng-if="focus.name._uri" ng-click="clickToggleApniFormat()" href="#">APNI</a>
@@ -101,7 +109,8 @@
      style="margin-left: 1.5em;">
 </div>
 <div node-synonym-list ng-if="UI.showSynonyms" uri="{{focus.instance._uri}}" style="margin-left: 1.5em;"></div>
-<div>
-    <div nodelist uri="{{focusUri}}"></div>
+<div class="container-fluid">
+    <div nodelist class="col-md-8" uri="{{focusUri}}"></div>
+    <div profileitemslist class="col-md-4" uri="{{focusUri}}"></div>
 </div>
 
