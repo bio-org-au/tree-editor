@@ -1,0 +1,9 @@
+<div ng-class="'text-' + msg.status">
+    <strong>{{msg.msg}}</strong> {{msg.body}}
+    <div ng-if="msg.nested" style="margin-left: 2em;">
+        <div ng-repeat="m in msg.nested" nested-message usemessage="m"></div>
+    </div>
+    <div class="well" ng-if="msg.stackTrace">
+        <div ng-repeat="s in msg.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
+    </div>
+</div>

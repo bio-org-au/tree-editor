@@ -154,3 +154,28 @@ var AppbodyController = ['$rootScope', '$element', function($rootScope, $element
 }];
 
 app.controller('appbody', AppbodyController);
+
+var NestedMessageController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+    $scope.msg = $scope.usemessage();
+}];
+
+
+app.controller('NestedMessage', NestedMessageController);
+
+app.directive('nestedMessage', [ 'RecursionHelper', function(RecursionHelper) {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/nestedmessage.html",
+        controller: NestedMessageController,
+        scope: {
+            usemessage: "&"
+        },
+        compile: function (element) {
+            return RecursionHelper.compile(element, function (scope, iElement, iAttrs, controller, transcludeFn) {
+                // Define your normal link function here.
+                // Alternative: instead of passing a function,
+                // you can also pass an object with
+                // a 'pre'- and 'post'-link function.
+            });
+        }
+    };
+}]);
