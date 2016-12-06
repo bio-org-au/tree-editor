@@ -46,13 +46,18 @@
 
 <div ng-if="!verifying && !checkingIn && verificationResults">
     <hr/>
-    <div ng-if="verificationResults.goodToGo">
+    <div ng-if="!verificationResults.problems && !verificationResults.warnings">
         No problems found with this proposed checkin. Click 'Perform Checkin' to proceed.
     </div>
-    <div ng-if="!verificationResults.goodToGo">
+    <div ng-if="verificationResults.problems">
         This checkin cannot be performed due to the following problems:
         <div ng-repeat="p in verificationResults.problems" nested-message usemessage="p"></div>
     </div>
+    <div ng-if="verificationResults.warnings">
+        This checkin will result in the following issues:
+        <div ng-repeat="p in verificationResults.warnings" nested-message usemessage="p"></div>
+    </div>
+
 </div>
 
 <div ng-if="checkingIn">
