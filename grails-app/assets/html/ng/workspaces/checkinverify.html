@@ -1,4 +1,4 @@
-<h1>Confirm checkin</h1>
+<h1>Confirm check-in</h1>
 
 <div>
     Checking in
@@ -46,35 +46,34 @@
 
 <div ng-if="!verifying && !checkingIn && verificationResults">
     <hr/>
-    <div ng-if="!verificationResults.problems && !verificationResults.warnings">
-        No problems found with this proposed checkin. Click 'Perform Checkin' to proceed.
+    <div ng-if="(!verificationResults.problems || verificationResults.problems.length == 0)
+                && (!verificationResults.warnings || verificationResults.warnings.length == 0)">
+        No problems found with this proposed check-in. Click 'Perform Check-in' to proceed.
     </div>
-    <div ng-if="verificationResults.problems">
-        This checkin cannot be performed due to the following problems:
+    <div ng-if="verificationResults.problems && verificationResults.problems.length != 0">
+        <h3>This check-in cannot be performed due to the following problems</h3>
         <div ng-repeat="p in verificationResults.problems" nested-message usemessage="p"></div>
     </div>
-    <div ng-if="verificationResults.warnings">
-        This checkin will result in the following issues:
+    <div ng-if="verificationResults.warnings && verificationResults.warnings.length != 0">
+        <h3>This check-in will result in the following issues</h3>
         <div ng-repeat="p in verificationResults.warnings" nested-message usemessage="p"></div>
     </div>
-
 </div>
 
 <div ng-if="checkingIn">
-    Performing checkin <i class="fa fa-spinner fa-spin"></i>
+    Performing check-in <i class="fa fa-spinner fa-spin"></i>
 </div>
 
 <div ng-if="!verifying && !checkingIn && checkinResults">
     <hr/>
-    Checkin Results: {{checkinResults}}
+    Check-in Results: {{checkinResults}}
 </div>
 
 <div ng-if="!checkinResults">
     <hr/>
     <button ng-disabled="verifying || checkingIn" class="btn btn-large btn-info" ng-click="performVerification()">
-        Revalidate Checkin
+        Revalidate Check-in
     </button>
     <button ng-disabled="verifying || checkingIn || !verificationResults.goodToGo" class="btn btn-large btn-warning"
-            ng-click="performCheckin()">Perform Checkin
-    </button>
+            ng-click="performCheckin()">Perform Check-in</button>
 </div>
