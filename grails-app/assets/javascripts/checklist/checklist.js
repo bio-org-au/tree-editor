@@ -617,6 +617,8 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     $scope.doSearch = function(myText, mySerial) {
         $rootScope.msg = null;
 
+        if(!$scope.path[0]) return;
+
         $scope.quicksearch.inProgress = mySerial;
         $scope.quicksearch.open = false;
         $scope.quicksearch.hasResults = false;
@@ -632,7 +634,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
                 'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             data: {
-                searchSubtree: $scope.focusUri,
+                searchSubtree: $scope.path[0], // $scope.focusUri,
                 searchText: myText
             }
         }).then(function successCallback(response) {
