@@ -1,7 +1,0 @@
-<a ng-class="namespaceDropdown_visible ? 'open' : ''" style="cursor:pointer;" ng-click="namespaceDropdown_toggle()">{{getNamespace()}} <i class="fa fa-caret-down"></i>
-    <div class="dropdown-menu visible" style="background-color: red;">
-        <div style="cursor: pointer;" ng-repeat="i in namespaces track by i.name" ng-click="namespaceDropdown_click(i)">
-            {{i.name}} <span ng-bind-html="i.descriptionHtml"></span>
-        </div>
-    </div>
-</a>

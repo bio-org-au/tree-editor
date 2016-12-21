@@ -8,8 +8,7 @@ var AppbodyController = ['$rootScope', '$element', function($rootScope, $element
     // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
-    
-    $rootScope.namespace = 'init'; // this gets overwritten once the namespaces component comes alive
+    $rootScope.namespace = $element[0].getAttribute('data-namespace');
 
     $rootScope.isLoggedIn = function() {
         return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn')=='Y';

@@ -43,12 +43,15 @@
     <g:layoutHead/>
 </head>
 
-<body ng-app="au.org.biodiversity.nsl.tree-edit-app" data-services-url="${grailsApplication.config.treeEditor.servicesUrl}" data-pages-url="${grailsApplication.config.treeEditor.pagesUrl}" ng-controller="appbody" >
+<body ng-app="au.org.biodiversity.nsl.tree-edit-app"
+      data-namespace="${grailsApplication.config.treeEditor.shard}"
+      data-services-url="${grailsApplication.config.treeEditor.servicesUrl}"
+      data-pages-url="${grailsApplication.config.treeEditor.pagesUrl}"
+      ng-controller="appbody" >
 
 <div class="container-fluid">
     <ul class="nav nav-pills" >
         <span class="pull-right" loginlogout></span>
-        <li role="presentation" namespacesdropdown></li>
         <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>
         <li role="presentation"><a href="${createLink(controller: 'Classifications', action: 'index')}">Classifications</a></li>
         <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
