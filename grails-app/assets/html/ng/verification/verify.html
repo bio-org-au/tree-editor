@@ -1,0 +1,28 @@
+<H1>Verifying</H1>
+<div ng-if="prevUri">
+    <span shortnametext uri="{{json.name._uri}}"/> and names below it in <span shortarrangementtext uri="{{treeUri}}"/>
+    will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{prevTreeUri}}"/>.
+</div>
+<div ng-if="!prevUri">
+    <span shortnametext uri="{{json.name._uri}}"/> and names below it in <span shortarrangementtext uri="{{treeUri}}"/>
+    will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{treeUri}}"/>.
+</div>
+
+<div ng-if="verifying">
+    (This may take some time <i class="fa fa-spinner fa-spin"></i>)
+</div>
+<div ng-if="verificationResults">
+    <hr/>
+    <div ng-if="(!verificationResults.problems || verificationResults.problems.length == 0)
+            && (!verificationResults.warnings || verificationResults.warnings.length == 0)">
+        No problems found.
+    </div>
+    <div ng-if="verificationResults.problems && verificationResults.problems.length != 0">
+        <h3>This check-in cannot be performed due to the following problems</h3>
+        <div ng-repeat="p in verificationResults.problems" nested-message usemessage="p"></div>
+    </div>
+    <div ng-if="verificationResults.warnings && verificationResults.warnings.length != 0">
+        <h3>Found the following issues</h3>
+        <div ng-repeat="p in verificationResults.warnings" nested-message usemessage="p"></div>
+    </div>
+</div>

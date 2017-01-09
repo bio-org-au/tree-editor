@@ -147,6 +147,9 @@ function CanAcceptDrops($scope, $rootScope, $http, jsonCache) {
         window.open($rootScope.pagesUrl + "/workspaces/checkinVerify?uri=" + $scope.getTargetUri());
     };
 
+    $scope.clickRunChecks = function() {
+        window.open($rootScope.pagesUrl + "/verification/verify?uri=" + $scope.getTargetUri());
+    }
 
     $scope.nodeTypeDropdown = false;
     $scope.toggleNodeTypeDropdown = function () {
@@ -283,7 +286,6 @@ function CanAcceptDrops($scope, $rootScope, $http, jsonCache) {
     };
 
     $scope.clearServersideOperationState();
-
 }
 
 var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {

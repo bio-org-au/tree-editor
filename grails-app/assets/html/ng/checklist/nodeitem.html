@@ -30,6 +30,7 @@
         <a ng-if="json.name._uri" ng-click="clickToggleApniFormat()" href="#">APNI</a>
         <a ng-if="json.name._uri" target="apni-name" href="{{json.name._uri}}/api/apni-format"><i class="fa fa-external-link"></i></a>
         <i ng-if="hasSynonyms" title="synonyms" class="fabutton" ng-click="clickShowSynonyms()">=</i>
+        <a ng-if="json.type=='T'" title="run checks" class="fabutton" ng-click="clickRunChecks()">run checks</a>
         <i title="focus here" class="fabutton fa fa-level-up" ng-click="clickUpArrow()"></i>
         <i title="bookmark this placement" ng-if="json.type=='T'" class="fabutton fa fa-bookmark" ng-click="clickAddBookmark()"></i>
         <a href="#" ng-click="clickNewWindow()">new window</a>
