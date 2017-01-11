@@ -6,4 +6,5 @@
     <div class="well" ng-if="msg.stackTrace">
         <div ng-repeat="s in msg.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
     </div>
+    <div ng-if="msg.html" ng-bind-html="msg.html"/>
 </div>

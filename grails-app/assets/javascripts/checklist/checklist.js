@@ -151,6 +151,10 @@ function CanAcceptDrops($scope, $rootScope, $http, jsonCache) {
         window.open($rootScope.pagesUrl + "/verification/verify?uri=" + $scope.getTargetUri());
     }
 
+    $scope.clickListChanges = function() {
+        window.open($rootScope.pagesUrl + "/verification/changes?uri=" + $scope.getTargetUri());
+    }
+
     $scope.nodeTypeDropdown = false;
     $scope.toggleNodeTypeDropdown = function () {
         $scope.nodeTypeDropdown = !$scope.nodeTypeDropdown;

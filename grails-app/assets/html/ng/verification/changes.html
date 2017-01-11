@@ -1,0 +1,22 @@
+<H1>Finding changes</H1>
+
+This is the angular template for changes.
+
+<div ng-if="changes">
+    <hr>
+
+    <div ng-repeat="change in changes">
+        {{change.name}}
+        <ul>
+        <li ng-repeat="s in change.changes">
+            {{s}}
+        </li>
+        </ul>
+    </div>
+
+
+    <hr>
+    And here's the raw JSON:
+    <div>{{changes}}</div>
+
+</div>

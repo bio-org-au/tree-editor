@@ -12,4 +12,13 @@ class VerificationController {
         [uri: u.uri]
 
     }
+
+    def changes(UriParam u) {
+        if (!u.validate()) {
+            return render(view: '/validationerror', model: [bean: u])
+        }
+
+        [uri: u.uri]
+
+    }
 }
