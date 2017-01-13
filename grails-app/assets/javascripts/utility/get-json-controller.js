@@ -309,3 +309,28 @@ var nameonlynodetextDirective = [function () {
     };
 }];
 app.directive('nameonlynodetext', nameonlynodetextDirective);
+
+var EventtextController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
+    inheritJsonController($scope, jsonCache);
+
+    $scope.afterUpdateJson = function() {
+        if($scope.json && $scope.json.fetched && $scope.json.timeStamp) {
+            var d = new Date(Date.parse($scope.json.timeStamp))
+            $scope.timestampString = d.toLocaleString();
+        }
+        else {
+            $scope.timestampString = null;
+        }
+    }
+}];
+
+var eventextDirective = [function () {
+    return {
+        templateUrl: pagesUrl + "/assets/ng/utility/eventtext.html",
+        controller: EventtextController,
+        scope: {
+            uri: '@uri'
+        }
+    };
+}];
+app.directive('eventtext', eventextDirective);

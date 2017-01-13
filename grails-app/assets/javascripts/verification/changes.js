@@ -63,7 +63,7 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
             $scope.prevTreeJson = jsonCache.needJson($scope.prevTreeUri);
         }
 
-        if($scope.json.fetched && (!$scope.json.prev._uri || $scope.prevJson.fetched)) {
+        if($scope.json && $scope.json.fetched && (!$scope.json.prev._uri || $scope.prevJson.fetched)) {
             for (var i in deregisterInitializationListener) {
                 deregisterInitializationListener[i]();
             }
@@ -76,9 +76,17 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
     deregisterInitializationListener.push($scope.$watch("prevJson", initializationListener));
     deregisterInitializationListener.push($scope.$watch("prevJson.fetched", initializationListener));
 
-    $scope.json = jsonCache.needJson($scope.uri);
-    initializationListener();
+    $scope.json = null;
+    $scope.treeJson = null;
+    $scope.prevJson = null;
+    $scope.prevTreeJson = null;
+    $scope.treeJsonUri = null;
+    $scope.prevJsonUri = null;
+    $scope.prevTreeJsonUri = null;
 
+
+    initializationListener();
+    $scope.json = jsonCache.needJson($scope.uri);
     $scope.findChanges();
 }];
 
