@@ -5,14 +5,14 @@ Finding changes from
     <span nameonlynodetext uri="{{json.prev._uri}}"/>
     in <span shortarrangementtext  uri="{{prevJson.arrangement._uri}}"/>
     <span ng-if="prevJson && prevJson.fetched && !prevJson.checkedInAt">(draft placement)</span>
-    <span ng-if="prevJson && prevJson.fetched && prevJson.checkedInAt">(last updated <span eventtext uri="{{prevJson.checkedInAt._uri}}"/>)</span>
+    <div ng-if="prevJson && prevJson.fetched && prevJson.checkedInAt">last updated <span eventtext uri="{{prevJson.checkedInAt._uri}}"/></div>
 </div>
 to
 <div style="margin-left: 2em;">
     <span nameonlynodetext uri="{{uri}}"/>
     in <span shortarrangementtext uri="{{json.arrangement._uri}}"/>
     <span ng-if="json && json.fetched && !json.checkedInAt">(draft placement)</span>
-    <span ng-if="json && json.fetched && json.checkedInAt">(last updated <span eventtext uri="{{json.checkedInAt._uri}}"/>)</span>
+    <div ng-if="json && json.fetched && json.checkedInAt">last updated <span eventtext uri="{{json.checkedInAt._uri}}"/></div>
 </div>
 
 <div ng-if="changes">
