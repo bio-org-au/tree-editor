@@ -15,6 +15,11 @@ to
     <div ng-if="json && json.fetched && json.checkedInAt">last updated <span eventtext uri="{{json.checkedInAt._uri}}"/></div>
 </div>
 
+<div ng-if="findingChanges">
+    (This may take some time <i class="fa fa-spinner fa-spin"></i>)
+</div>
+
+
 <div ng-if="changes">
     <hr>
 
@@ -29,3 +34,6 @@ to
 </div>
 
 
+<div ng-if="!findingChanges && !changes">
+No changes found.
+</div>
