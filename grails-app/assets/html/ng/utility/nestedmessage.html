@@ -1,5 +1,18 @@
-<div ng-class="'text-' + msg.status">
-    <strong>{{msg.msg}}</strong> {{msg.body}}
+<div>
+    <strong ng-class="'text-' + msg.status">{{msg.msg}}</strong> {{msg.body}}
+    <span ng-if="msg.args">
+        <i class="fabutton fa fa-compass" ng-click="toggleLinksDropdown()"></i>
+        <ul ng-mouseleave="closeLinksDropdown()" ng-if="linksDropdown">
+            <a ng-repeat=" a in msg.args" ng-if="a.uri" href="{{a.uri}}">
+                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Node'" shortnodetext uri="{{a.uri}}"/>
+                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Name'" shortnametext uri="{{a.uri}}"/>
+                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Instance'" shortinsttext uri="{{a.uri}}"/>
+                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Event'" eventtext uri="{{a.uri}}"/>
+                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Arrangement'" arrangementtext uri="{{a.uri}}"/>
+            </a>
+        </ul>
+    </span>
+
     <div ng-if="msg.nested" style="margin-left: 2em;">
         <div ng-repeat="m in msg.nested" nested-message usemessage="m"></div>
     </div>

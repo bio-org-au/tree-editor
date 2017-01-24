@@ -156,6 +156,12 @@ app.controller('appbody', AppbodyController);
 
 var NestedMessageController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.msg = $scope.usemessage();
+    
+    $scope.linksDropdown = false;
+
+    $scope.closeLinksDropdown = function() { $scope.linksDropdown = false;}
+    $scope.toggleLinksDropdown = function() { $scope.linksDropdown = !$scope.linksDropdown; }
+
 }];
 
 
