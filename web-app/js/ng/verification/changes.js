@@ -4,38 +4,40 @@
 
 console.log("loading verify.js")
 
-var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
+var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
 
-    $scope.verifying = false;
-    $scope.verificationResults = null;
+    $scope.findingChanges = false;
+    $scope.changes = null;
 
-    $scope.performVerification = function() {
-        $scope.verifying = true;
-        $scope.verificationResults = null;
+    $scope.findChanges = function() {
+        $scope.findingChanges = true;
+        $scope.changes = null;
         $http({
             method: 'POST',
-            url: $rootScope.servicesUrl + '/TreeJsonEdit/verifyCheckin',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
-            },
+            url: $rootScope.servicesUrl + '/TreeJsonView/listChanges',
+            // headers: {
+            //     'Access-Control-Request-Headers': 'Authorization',
+            //     'Authorization': 'JWT ' + $rootScope.getJwt()
+            // },
             params: {
                 'uri': $scope.uri,
             }
         }).then(function successCallback(response) {
             $rootScope.msg = response.data.msg;
-            $scope.verifying = false;
-            $scope.verificationResults = response.data.verificationResults;
+            $scope.findingChanges = false;
+            $scope.changes = response.data.changes;
         }, function errorCallback(response) {
-            $scope.verifying = false;
+            console.log(response);
+            $scope.findingChanges = false;
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
             }
             else {
                 $rootScope.msg = [
                     {
-                        msg: response.data.status,
-                        body: response.data.reason,
+                        msg: response.status,
+                        body: response.statusText,
+                        html: response.data,
                         status: 'danger',  // we use danger because we got no JSON back at all
                     }
                 ];
@@ -61,7 +63,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
             $scope.prevTreeJson = jsonCache.needJson($scope.prevTreeUri);
         }
 
-        if($scope.json.fetched && (!$scope.json.prev._uri || $scope.prevJson.fetched)) {
+        if($scope.json && $scope.json.fetched && (!$scope.json.prev._uri || $scope.prevJson.fetched)) {
             for (var i in deregisterInitializationListener) {
                 deregisterInitializationListener[i]();
             }
@@ -74,24 +76,32 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
     deregisterInitializationListener.push($scope.$watch("prevJson", initializationListener));
     deregisterInitializationListener.push($scope.$watch("prevJson.fetched", initializationListener));
 
-    $scope.json = jsonCache.needJson($scope.uri);
-    initializationListener();
+    $scope.json = null;
+    $scope.treeJson = null;
+    $scope.prevJson = null;
+    $scope.prevTreeJson = null;
+    $scope.treeJsonUri = null;
+    $scope.prevJsonUri = null;
+    $scope.prevTreeJsonUri = null;
 
-    $scope.performVerification();
+
+    initializationListener();
+    $scope.json = jsonCache.needJson($scope.uri);
+    $scope.findChanges();
 }];
 
 
-app.controller('Verify', VerifyController);
+app.controller('Changes', ChangesController);
 
-var verifyDirective = [function() {
+var changesDirective = [function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/verification/verify.html",
-        controller: VerifyController,
+        templateUrl: pagesUrl + "/ng/verification/changes.html",
+        controller: ChangesController,
         scope: {
             uri: '@'
         },
     };
 }];
 
-app.directive('verify', verifyDirective);
+app.directive('changes', changesDirective);
 

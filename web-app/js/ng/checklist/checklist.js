@@ -701,7 +701,7 @@ app.controller('Checklist', ChecklistController);
 
 var checklistDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/checklist.html",
+        templateUrl: pagesUrl + "/ng/checklist/checklist.html",
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
@@ -735,7 +735,7 @@ app.controller('Nodelist', NodelistController);
 
 var nodelistDirective = ['RecursionHelper', function (RecursionHelper) {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/nodelist.html",
+        templateUrl: pagesUrl + "/ng/checklist/nodelist.html",
         controller: NodelistController,
         scope: {
             uri: "@"
@@ -874,7 +874,7 @@ app.controller('Nodeitem', NodeitemController);
 
 var nodeitemDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/nodeitem.html",
+        templateUrl: pagesUrl + "/ng/checklist/nodeitem.html",
         controller: NodeitemController,
         scope: {
             linkSuper: "@",
@@ -888,7 +888,7 @@ app.directive('nodeitem', nodeitemDirective);
 
 var droptargetDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/droptarget.html"
+        templateUrl: pagesUrl + "/ng/checklist/droptarget.html"
     };
 }];
 
@@ -904,7 +904,7 @@ app.controller('NodeSynonymList', NodesynonymlistController);
 
 var nodeSynonymListDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/nodesynonymlist.html",
+        templateUrl: pagesUrl + "/ng/checklist/nodesynonymlist.html",
         controller: NodesynonymlistController,
         scope: {
             uri: "@"
@@ -923,7 +923,7 @@ app.controller('ApniFormatBlock', ApniFormatBlockController);
 
 var apniFormatBlockDirective = ['$rootScope', function ($rootScope) {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/apniformatblock.html",
+        templateUrl: pagesUrl + "/ng/checklist/apniformatblock.html",
         controller: ApniFormatBlockController,
         scope: {
             uri: "@"
@@ -961,7 +961,7 @@ app.controller('Profileitemslist', ProfileitemslistController);
 
 var profileitemslistDirective = ['$rootScope', function ($rootScope) {
     return {
-        templateUrl: pagesUrl + "/assets/ng/checklist/profileitemslist.html",
+        templateUrl: pagesUrl + "/ng/checklist/profileitemslist.html",
         controller: ProfileitemslistController,
         scope: {
             uri: "@"

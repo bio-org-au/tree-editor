@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="search/search.js"/>
+    <g:javascript src="ng/search/search.js"/>
 </head>
 
 <body>

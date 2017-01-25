@@ -51,7 +51,7 @@ app.controller('Classificationslist', ClassificationslistController);
 
 app.directive('classificationslist', [ function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/classifications/list.html",
+        templateUrl: pagesUrl + "/ng/classifications/list.html",
         controller: ClassificationslistController,
         scope: {
         },
@@ -67,7 +67,7 @@ app.controller('Classificationslistrow', ClassificationslistrowController);
 
 var classificationslistrowDirective = [function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/classifications/row.html",
+        templateUrl: pagesUrl + "/ng/classifications/row.html",
         controller: ClassificationslistrowController,
         scope: {
             uri: "@uri"

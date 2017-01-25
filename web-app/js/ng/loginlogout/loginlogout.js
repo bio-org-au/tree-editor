@@ -50,7 +50,7 @@ app.controller('Loginlogout', LoginlogoutController);
 
 var loginlogoutDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/loginlogout/loginlogout.html",
+        templateUrl: pagesUrl + "/ng/loginlogout/loginlogout.html",
         controller: LoginlogoutController,
         scope: {
             servicesUrl: '@servicesUrl'

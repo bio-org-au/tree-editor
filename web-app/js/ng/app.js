@@ -169,7 +169,7 @@ app.controller('NestedMessage', NestedMessageController);
 
 app.directive('nestedMessage', [ 'RecursionHelper', function(RecursionHelper) {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/nestedmessage.html",
+        templateUrl: pagesUrl + "/ng/utility/nestedmessage.html",
         controller: NestedMessageController,
         scope: {
             usemessage: "&"

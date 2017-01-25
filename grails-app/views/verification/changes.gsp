@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="verification/changes.js"/>
+    <g:javascript src="ng/verification/changes.js"/>
 </head>
 
 <body>

@@ -212,7 +212,7 @@ app.controller('GetJsonController', GetJsonController);
 
 var shortnodetextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortnodetext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortnodetext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -224,7 +224,7 @@ app.directive('shortnodetext', shortnodetextDirective);
 
 var shortnametextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortnametext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortnametext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -235,7 +235,7 @@ app.directive('shortnametext', shortnametextDirective);
 
 var shortarrangementtextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortarrangementtext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortarrangementtext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -246,7 +246,7 @@ app.directive('shortarrangementtext', shortarrangementtextDirective);
 
 var shortinsttextnonameDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortinsttextnoname.html",
+        templateUrl: pagesUrl + "/ng/utility/shortinsttextnoname.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -257,7 +257,7 @@ app.directive('shortinsttextnoname', shortinsttextnonameDirective);
 
 var shortinsttextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortinsttext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortinsttext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -268,7 +268,7 @@ app.directive('shortinsttext', shortinsttextDirective);
 
 var shortinstcitestextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortinstcitestext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortinstcitestext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -279,7 +279,7 @@ app.directive('shortinstcitestext', shortinstcitestextDirective);
 
 var shortinstcitedbytextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/shortinstcitedbytext.html",
+        templateUrl: pagesUrl + "/ng/utility/shortinstcitedbytext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -290,7 +290,7 @@ app.directive('shortinstcitedbytext', shortinstcitedbytextDirective);
 
 var nameonlytextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/nameonlytext.html",
+        templateUrl: pagesUrl + "/ng/utility/nameonlytext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -301,7 +301,7 @@ app.directive('nameonlytext', nameonlytextDirective);
 
 var nameonlynodetextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/nameonlynodetext.html",
+        templateUrl: pagesUrl + "/ng/utility/nameonlynodetext.html",
         controller: GetJsonController,
         scope: {
             uri: '@uri'
@@ -326,7 +326,7 @@ var EventtextController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
 
 var eventextDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/assets/ng/utility/eventtext.html",
+        templateUrl: pagesUrl + "/ng/utility/eventtext.html",
         controller: EventtextController,
         scope: {
             uri: '@uri'

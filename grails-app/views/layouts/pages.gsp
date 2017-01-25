@@ -31,12 +31,11 @@
     <asset:javascript src="angular/angular"/>
     <asset:javascript src="angular/angular-sanitize"/>
     <asset:javascript src="angular/recursionhelper"/>
-    <asset:javascript src="app.js"/>
-    <asset:javascript src="utility/get-preferred-link"/>
-    <asset:javascript src="utility/get-json-controller"/>
-    <asset:javascript src="utility/get-uri-permissions"/>
-    <asset:javascript src="loginlogout/loginlogout.js"/>
-    <asset:javascript src="namespaces/namespaces.js"/>
+    <g:javascript src="ng/app.js"/>
+    <g:javascript src="ng/utility/get-preferred-link.js"/>
+    <g:javascript src="ng/utility/get-json-controller.js"/>
+    <g:javascript src="ng/utility/get-uri-permissions.js"/>
+    <g:javascript src="ng/loginlogout/loginlogout.js"/>
 
     <asset:stylesheet src="pages.css"/>
 

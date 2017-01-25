@@ -207,7 +207,7 @@ app.controller('Search', SearchController);
 
 app.directive('search', [ function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/search/search.html",
+        templateUrl: pagesUrl + "/ng/search/search.html",
         controller: SearchController,
         scope: {
             rootUri: '@rootUri',

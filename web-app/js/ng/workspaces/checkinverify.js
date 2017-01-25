@@ -125,7 +125,7 @@ app.controller('Checkinverify', CheckinverifyController);
 
 var checkinverifyDirective = [function() {
     return {
-        templateUrl: pagesUrl + "/assets/ng/workspaces/checkinverify.html",
+        templateUrl: pagesUrl + "/ng/workspaces/checkinverify.html",
         controller: CheckinverifyController,
         scope: {
             checkinUri: '@'

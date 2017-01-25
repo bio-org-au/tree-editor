@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="workspaces/checkinverify.js"/>
+    <g:javascript src="ng/ng/js/workspaces/checkinverify.js"/>
     <asset:stylesheet src="checkinverify.css"/>
 </head>
 

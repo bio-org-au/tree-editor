@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="checklist/checklist.js"/>
+    <g:javascript src="ng/checklist/checklist.js"/>
     <asset:stylesheet src="checklist.css"/>
 </head>
 

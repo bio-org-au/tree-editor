@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="classifications/classifications.js"/>
+    <g:javascript src="ng/classifications/classifications.js"/>
 </head>
 
 <body>

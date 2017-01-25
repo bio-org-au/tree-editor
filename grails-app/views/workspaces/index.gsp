@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <asset:javascript src="workspaces/workspaces.js"/>
+    <g:javascript src="ng/workspaces/workspaces.js"/>
 </head>
 
 <body>
