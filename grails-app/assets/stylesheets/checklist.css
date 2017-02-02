@@ -65,6 +65,7 @@
 }
 
 .nodeitem-content {
+    cursor: pointer;
 }
 
 .nodeitem-item {
@@ -72,4 +73,18 @@
 
 .nodeitem-list {
   margin-left: 2em;
+}
+
+
+.selected {
+    background: #fafad2;
+    font-weight: bolder;
+}
+
+#breadcrumbs {
+    font-size: smaller;
+}
+
+#breadcrumbs > .crumb {
+    cursor: pointer;
 }

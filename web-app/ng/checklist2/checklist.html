@@ -1,0 +1,17 @@
+<h4 class="nav">
+    <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
+    <span ng-if="arrangement.arrangementType.name=='U'">Workspace </span>
+    <span uri="{{arrangementUri}}" shortarrangementtext />
+    <span ng-if="arrangement.arrangementType.name=='U'"> (<span uri="{{arrangement.baseArrangement._uri}}" shortarrangementtext />)</span>
+</h4>
+
+<div id="breadcrumbs">
+<i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
+<span class="crumb" ng-repeat="item in path"  ng-click="clickPath($index)">
+        <i ng-if="!$first" class="fa fa-angle-right"></i>
+        <span ng-if="item.label">{{item.label}}</span>
+        <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>
+   </span>
+</div>
+
+<div ng-if="arrangementUri && focusJson.uri" arrangement-uri="{{arrangementUri}}" json="focusJson" branch/>

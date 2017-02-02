@@ -1,0 +1,20 @@
+<div class="nodeitem">
+    <div class="nodeitem-item">
+        <span class="nodeitem-handle">
+            <i ng-if="json.subTaxa > 0 && UI.open && !branchState.loading" class="fa fa-angle-down fabutton"
+               ng-click="UI.open = false;"></i>
+            <i ng-if="json.subTaxa > 0  && !UI.open && !branchState.loading" class="fa fa-angle-right fabutton"
+               ng-click="UI.open = true;"></i>
+            <i ng-if="json.subTaxa == 0" class="fa fabutton">&nbsp;</i>
+            <i ng-if="branchState.loading" class="fa fa-spinner fa-spin">&nbsp;</i>
+        </span>
+
+        <span class="nodeitem-content" ng-class="json.uri == checklist_scope.cursorUri ? 'selected' : ''" ng-click="selectMe()">
+            <span ng-if="json.label">{{json.label}}</span>
+            <span ng-if="json.fullNameHtml" ng-bind-html="json.fullNameHtml"/>
+        </span>
+    </div>
+    <div ng-if="json.subTaxa > 0 && UI.open && branchState.loaded" class="nodeitem-list">
+        <div ng-repeat="item in branch.subnodes" class="nodelist-item" arrangement-uri="{{arrangementUri}}" json="item" branch/>
+    </div>
+</div>

@@ -11,21 +11,20 @@ class WorkspacesController {
             return render (view: '/validationerror', model: [ bean: u])
         }
 
-        render view: 'checklist', model: [ uri: u.uri]
-
+        redirect controller: "Checklist2", action: "checklist", params: [arrangement: u.uri]
     }
 
-    def newWorkspaceFromChecklist() {
-        redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
-    }
-
-    def checkinVerify(UriParam u) {
-
-        if(!u.validate()) {
-            return render (view: '/validationerror', model: [ bean: u])
-        }
-
-        [ uri: u.uri]
-    }
+//    def newWorkspaceFromChecklist() {
+//        redirect controller: 'Workspaces', action: 'edit', params: [ withTopNode: params['focusUri']]
+//    }
+//
+//    def checkinVerify(UriParam u) {
+//
+//        if(!u.validate()) {
+//            return render (view: '/validationerror', model: [ bean: u])
+//        }
+//
+//        [ uri: u.uri]
+//    }
 
 }
