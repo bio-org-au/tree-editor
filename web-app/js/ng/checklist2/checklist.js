@@ -1,4 +1,3 @@
-
 function putErrorOnPage($rootScope, response) {
     if (response.data && response.data.msg) {
         $rootScope.msg = response.data.msg;
@@ -41,7 +40,11 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     $scope.pathState = {loading: false, loaded: false};
     $scope.cursorNode = $scope.node;
 
-    $scope.appendBranchToPath = function() {};
+    $scope.nodeUriCache = {};
+
+
+    $scope.appendBranchToPath = function () {
+    };
 
     $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
     $scope.getNodeUI = function (node) {
@@ -51,7 +54,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         return $scope.nodeUI[node];
     };
 
-    $scope.clickPath = function(index) {
+    $scope.clickPath = function (index) {
         console.log("path item " + index + " clicked");
     };
 
@@ -107,14 +110,14 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
     $scope.branchState = {loading: false, loaded: false};
 
     $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node)
-    
-    $scope.selectMe = function() {
+
+    $scope.selectMe = function () {
         $scope.checklist_scope.cursorNode = $scope.json.node;
         $scope.checklist_scope.path = [];
         $scope.appendBranchToPath();
     };
 
-    $scope.appendBranchToPath = function() {
+    $scope.appendBranchToPath = function () {
         $scope.$parent.appendBranchToPath();
         $scope.checklist_scope.path[$scope.checklist_scope.path.length] = $scope.json
     };
@@ -177,4 +180,74 @@ var branchDirective = ['RecursionHelper', function (RecursionHelper) {
 }];
 
 app.directive('branch', branchDirective);
+
+var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+    $scope.checklist_scope = $scope.$parent.checklist_scope;
+
+    $scope.nodeUrisStatus = {fetching: false, fetched: false}
+    $scope.nodeUris = null
+
+    $scope.nodeJson = null
+    $scope.nameJson = null
+    $scope.instanceJson = null
+
+    $scope.$watch("node", function () {
+        if ($scope.node) {
+            if ($scope.checklist_scope.nodeUriCache[$scope.node]) {
+                $scope.nodeUrisStatus = {fetching: false, fetched: true}
+                $scope.nodeUris = $scope.checklist_scope.nodeUriCache[$scope.node]
+                $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
+                $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
+                $scope.instanceJson = jsonCache.needJson($scope.nodeUris.instanceUri)
+            }
+            else {
+                $scope.nodeUrisStatus = {fetching: true, fetched: false}
+                $scope.nodeUris = null
+
+                $scope.nodeJson = null
+                $scope.nameJson = null
+                $scope.instanceJson = null
+
+                $http({
+                    method: 'GET',
+                    url: $rootScope.servicesUrl + "/TreeJsonView/nodeUris",
+                    params: {arrangement: $scope.arrangementUri, node: $scope.node}
+                })
+                    .then(
+                        function (response) {
+                            console.log("GET BRANCH URI SUCCESS");
+                            $scope.nodeUrisStatus.fetching = false;
+                            $scope.nodeUrisStatus.fetched = true;
+                            $scope.nodeUris = response.data.result
+                            $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
+                            $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
+                            $scope.instanceJson = jsonCache.needJson($scope.nodeUris.instanceUri)
+                        },
+                        function (response) {
+                            console.log("GET BRANCH URI FAIL");
+                            console.log(response);
+                            $scope.nodeUrisStatus.fetching = false;
+                            putErrorOnPage($rootScope, response);
+                        });
+            }
+        }
+    });
+
+
+}];
+
+app.controller('InfoPane', InfoPaneController);
+
+var infoPaneDirective = [function () {
+    return {
+        templateUrl: pagesUrl + "/ng/checklist2/infopane.html",
+        controller: InfoPaneController,
+        scope: {
+            arrangementUri: '@',
+            node: '@',
+        }
+    };
+}];
+
+app.directive('infoPane', infoPaneDirective);
 

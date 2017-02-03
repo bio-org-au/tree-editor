@@ -62,17 +62,20 @@
 
 .nodeitem-handle {
     font-size: 95%;
+    float:left;
 }
 
 .nodeitem-content {
     cursor: pointer;
+    margin-left: 1em;
+    display: block;
 }
 
 .nodeitem-item {
 }
 
 .nodeitem-list {
-  margin-left: 2em;
+  margin-left: 1em;
 }
 
 
