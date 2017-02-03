@@ -9,12 +9,11 @@
             <i ng-if="branchState.loading" class="fa fa-spinner fa-spin">&nbsp;</i>
         </span>
 
-        <span class="nodeitem-content" ng-class="json.css + ' ' + ( json.uri == checklist_scope.cursorUri ? 'selected' : '')" ng-click="selectMe()">
+        <span class="nodeitem-content" ng-class="json.css + ' ' + ( json.node == checklist_scope.cursorNode ? 'selected' : '')" ng-click="selectMe()">
             <span ng-if="json.label">{{json.label}}</span>
-            <span ng-if="json.fullNameHtml" ng-bind-html="json.fullNameHtml"/>
+            <span ng-if="json.fullNameHtml" ng-bind-html="json.fullNameHtml" class="name"/>
             <span ng-if="json.authYear" class="authYear">s. {{json.authYear}}</span>
-
-            <span class="text-muted">{{json.instanceType}}</span>
+            <span class="instance-type">{{json.instanceType}}</span>
         </span>
     </div>
     <div ng-if="json.subTaxa > 0 && UI.open && branchState.loaded" class="nodeitem-list">

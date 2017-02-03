@@ -39,16 +39,16 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
     $scope.path = null;
     $scope.pathState = {loading: false, loaded: false};
-    $scope.cursorUri = $scope.focusUri;
+    $scope.cursorNode = $scope.node;
 
     $scope.appendBranchToPath = function() {};
 
     $scope.nodeUI = {}; // this is where I remember which nodes are open, etc
-    $scope.getNodeUI = function (uri) {
-        if (!$scope.nodeUI[uri]) {
-            $scope.nodeUI[uri] = {open: false};
+    $scope.getNodeUI = function (node) {
+        if (!$scope.nodeUI[node]) {
+            $scope.nodeUI[node] = {open: false};
         }
-        return $scope.nodeUI[uri];
+        return $scope.nodeUI[node];
     };
 
     $scope.clickPath = function(index) {
@@ -69,12 +69,12 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
 
             $scope.focusJson = $scope.path[$scope.path.length - 1];
 
-            if (!$scope.cursorUri) {
-                $scope.cursorUri = $scope.focusJson.uri
+            if (!$scope.cursorNode) {
+                $scope.cursorNode = $scope.focusJson.node
             }
 
             for (i in $scope.path) {
-                $scope.getNodeUI($scope.path[i].uri).open = true;
+                $scope.getNodeUI($scope.path[i].node).open = true;
             }
 
         }, function (response) {
@@ -93,7 +93,7 @@ var checklistDirective = [function () {
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
-            focusUri: "@"
+            node: "@"
         }
     };
 }];
@@ -106,10 +106,10 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
 
     $scope.branchState = {loading: false, loaded: false};
 
-    $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.uri)
+    $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node)
     
     $scope.selectMe = function() {
-        $scope.checklist_scope.cursorUri = $scope.json.uri;
+        $scope.checklist_scope.cursorNode = $scope.json.node;
         $scope.checklist_scope.path = [];
         $scope.appendBranchToPath();
     };
@@ -134,7 +134,7 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
                 $http({
                     method: 'GET',
                     url: $rootScope.servicesUrl + "/TreeJsonView/nodeBranch",
-                    params: {arrangement: $scope.arrangementUri, focus: $scope.json.uri}
+                    params: {arrangement: $scope.arrangementUri, node: $scope.json.node}
                 })
                     .then(
                         function (response) {
