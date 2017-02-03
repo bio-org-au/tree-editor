@@ -81,7 +81,6 @@
 
 .selected {
     background: #fafad2;
-    font-weight: bolder;
 }
 
 #breadcrumbs {
@@ -105,3 +104,10 @@
     color: #999;
 }
 
+.tab-pane {
+    margin: 2px;
+    position:absolute;
+    top:0; left:0; bottom:0; right: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+}
