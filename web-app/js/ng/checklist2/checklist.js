@@ -191,6 +191,8 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
     $scope.nameJson = null
     $scope.instanceJson = null
 
+    $scope.checklist_scope.activeTab = "pane1"
+
     $scope.$watch("node", function () {
         if ($scope.node) {
             if ($scope.checklist_scope.nodeUriCache[$scope.node]) {

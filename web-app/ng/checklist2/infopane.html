@@ -1,8 +1,31 @@
 
-<i ng-if="nodeUrisStatus.fetching" class="fa fa-spinner fa-spin"></i>
+<div class="container-fluid" style="position:absolute; width: 100%; height: 100%; margin: 0; padding: 0;" >
+    <ul class="nav nav-tabs">
+        <li role="presentation" ng-class="checklist_scope.activeTab=='pane1' ? 'active' : ''"><a href="#" ng-click="checklist_scope.activeTab='pane1'">Pane1</a></li>
+        <li role="presentation" ng-class="checklist_scope.activeTab=='pane2' ? 'active' : ''"><a href="#" ng-click="checklist_scope.activeTab='pane2'">Pane2</a></li>
+        <li role="presentation" ng-class="checklist_scope.activeTab=='pane3' ? 'active' : ''"><a href="#" ng-click="checklist_scope.activeTab='pane3'">Pane3</a></li>
+    </ul>
 
-<!-- ok. I need some tab pane -->
+    <div style="border-left: 1px solid #ddd; position: absolute; bottom:0; left: 0; right: 0; top:41px; " >
+        <div ng-if="checklist_scope.activeTab=='pane1'" style="margin: 2px; position:absolute; top:0; left:0; bootom:0; right: 0;">
+            This is pane 1
 
-<div ng-if="nodeUrisStatus.fetched" class="position:absolute; width: 100%; height: 100%;">
-    THIS is the info area!
+        </div>
+        <div ng-if="checklist_scope.activeTab=='pane2'" style="margin: 2px; position:absolute; top:0; left:0; bootom:0; right: 0;">
+            This is pane 2
+
+            {{nodeJson}}
+
+        </div>
+        <div ng-if="checklist_scope.activeTab=='pane3'" style="margin: 2px; position:absolute; top:0; left:0; bootom:0; right: 0;">
+            This is pane 3
+
+            {{nameJson}}
+
+        </div>
+
+
+    </div>
+
+
 </div>
