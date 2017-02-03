@@ -88,3 +88,12 @@
 #breadcrumbs > .crumb {
     cursor: pointer;
 }
+
+.nodeitem-content .authYear {
+    font-size: 85%;
+}
+
+.nodeitem-content element {
+    font-face: serif;
+}
+

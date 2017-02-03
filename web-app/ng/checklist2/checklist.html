@@ -7,7 +7,7 @@
 
 <div id="breadcrumbs">
 <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
-<span class="crumb" ng-repeat="item in path"  ng-click="clickPath($index)">
+<span class="crumb" ng-repeat="item in path"  ng-click="clickPath($index)" ng-class="item.css">
         <i ng-if="!$first" class="fa fa-angle-right"></i>
         <span ng-if="item.label">{{item.label}}</span>
         <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>

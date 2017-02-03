@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta name="layout" content="pages"/>
-    <g:javascript src="ng/checklist/checklist.js"/>
+    <g:javascript src="ng/checklist2/checklist.js"/>
     <asset:stylesheet src="checklist.css"/>
 </head>
 
 <body>
-<div data-list-type="Checklist" data-root-uri="${rootUri}" data-focus-uri="${focusUri}" checklist></div>
+<div data-arrangement-uri="${arrangementUri}" data-focus-uri="${focusUri}" checklist></div>
 </body>
 </html>
