@@ -1,5 +1,25 @@
 
-<div style="position: fixed; top:2em;">
+<span class="pull-right small"><a href="../search?arrangement={{arrangementUri}}">Full Search <i class="fa fa-search"></i></a></span>
+
+<span class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
+      style="width: 170px; margin-right: 1em;">
+        <span class="input-group-addon"
+              style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
+            <i class="fa" ng-class="quicksearch.inProgress? 'fa-spin fa-spinner' : 'fa-search'"></i></span>
+        <input ng-model="quicksearch.text" ng-change="quicksearch.onchange()" class="form-control"
+               style="padding: 2px; font-size: inherit; height:100%; width: 160px;">
+        <span class="input-group-addon fabutton" ng-if="quicksearch.hasResults" style="padding: 2px;"
+              ng-click="quicksearch.onclickDropdownbutton()">
+            <i class="fa" ng-class="quicksearch.open ? 'fa-caret-down' : 'fa-caret-left'">&nbsp;</i></span>
+        <div class="dropdown-menu" style="left: auto; margin: 0; padding: 5px 3px; right: 0;">
+            <div ng-if="quicksearch.noMatches" class="text-muted small">No matches</div>
+            <div class="dropdown-item hanging-indent small" ng-repeat="r in quicksearch.results"
+                 ng-click="quicksearch.onclickSearchResult($index)" ng-bind-html="r.simpleNameHtml"></div>
+            <div ng-if="quicksearch.hasMore" class="text-muted small">&hellip; {{quicksearch.more}} more matches</div>
+        </div>
+    </span>
+
+<div style="position: fixed; top:2.5em;">
 
 <h4 class="nav">
     <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
@@ -26,9 +46,9 @@
 
 </div>
 
-<div style="position: fixed; left: 62%; top: 6.5em; bottom: 0px; right: 10px;" arrangement-uri="{{arrangementUri}}" node="{{cursorNode}}" info-pane> </div>
+<div style="position: fixed; left: 62%; top: 7em; bottom: 0px; right: 10px;" arrangement-uri="{{arrangementUri}}" node="{{cursorNode}}" info-pane> </div>
 
 <div  ng-if="arrangementUri && focusJson.node" arrangement-uri="{{arrangementUri}}" json="focusJson"
-      style="width: 62%; position:fixed; left: 0; top: 6.5em; bottom: 0; overflow: auto; border-top: 1px solid #ddd;"
+      style="width: 62%; position:fixed; left: 0; top: 7em; bottom: 0; overflow: auto; border-top: 1px solid #ddd;"
 
       branch/>

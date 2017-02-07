@@ -36,10 +36,6 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     $scope.checklist_scope = $scope;
 
     $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
-    $scope.pathToFocus = null;
-    $scope.pathToSelection = null;
-    $scope.pathState = {loading: false, loaded: false};
-    $scope.cursorNode = $scope.node;
 
     $scope.nodeUriCache = {};
     $scope.branchCache = {};
@@ -75,19 +71,31 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
     };
 
 
-    $http({
-        method: 'GET',
-        url: $rootScope.servicesUrl + "/TreeJsonView/nodePath",
-        params: {arrangement: $scope.arrangementUri, focus: $scope.focusUri}
-    })
+    $scope.reloadNodePath =  function(node) {
+        console.log("LOADING NODE PATH");
+
+        $scope.pathToFocus = null;
+        $scope.pathToSelection = null;
+        $scope.cursorNode = $scope.node;
+
+        $scope.pathState = {loading: true, loaded: false};
+
+        $http({
+            method: 'GET',
+            url: $rootScope.servicesUrl + "/TreeJsonView/nodePath",
+            params: {arrangement: $scope.arrangementUri, node: node}
+        })
         .then(function (response) {
             console.log("GET PATH SUCCESS");
+            console.log(response);
             $scope.pathState.loading = false;
             $scope.pathState.loaded = true;
             $scope.pathToFocus = response.data.result;
 
             $scope.focusJson = $scope.pathToFocus[$scope.pathToFocus.length - 1];
             $scope.focusNode = $scope.focusJson.node;
+
+            $scope.pathToSelection = [$scope.focusJson];
 
             if (!$scope.cursorNode) {
                 $scope.cursorNode = $scope.focusJson.node;
@@ -104,6 +112,129 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
             $scope.pathState.loading = false;
             putErrorOnPage($rootScope, response);
         });
+    };
+
+    $scope.reloadNodePath($scope.node);
+
+    $scope.quicksearch = {
+        serial: 0
+    };
+
+    $scope.quicksearch.onchange = function() {
+        var myText = $scope.quicksearch.text;
+        var mySerial = ++ $scope.quicksearch.serial;
+        $scope.quicksearch.open = false;
+        $scope.quicksearch.hasResults = false;
+        $scope.quicksearch.results = [];
+        $scope.quicksearch.hasMore = false;
+        $scope.quicksearch.noMatches = false;
+
+        if(myText.length >=3) {
+            window.setTimeout(function() {
+                if(mySerial == $scope.quicksearch.serial) {
+                    console.log("searching " + mySerial + " text " + myText);
+                    if(myText.indexOf('%')==-1 && myText.indexOf('_')==-1) {
+                        myText = myText + '%';
+                    }
+                    $scope.doSearch(myText, mySerial);
+                }
+                else {
+                    console.log("not searching " + mySerial + " text " + myText);
+                }
+            }, 1000);
+        }
+
+    };
+
+    $scope.quicksearch.onclickSearchResult = function(i) {
+        console.log("item " + i + " selected");
+        console.log($scope.quicksearch.results[i]);
+        $scope.quicksearch.open = false;
+        $scope.reloadNodePath($scope.quicksearch.results[i].node);
+    };
+
+    $scope.quicksearch.onclickDropdownbutton = function() {
+        if($scope.quicksearch.hasResults) {
+            $scope.quicksearch.open = !$scope.quicksearch.open;
+        }
+    }
+
+    $scope.doSearch = function(myText, mySerial) {
+        $rootScope.msg = null;
+
+        if(!$scope.arrangementUri) return;
+
+        $scope.quicksearch.inProgress = mySerial;
+        $scope.quicksearch.open = false;
+        $scope.quicksearch.hasResults = false;
+        $scope.quicksearch.results = [];
+        $scope.quicksearch.hasMore = false;
+        $scope.quicksearch.noMatches = false;
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + '/TreeJsonView/quickSearch',
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
+            data: {
+                arrangement: $scope.arrangementUri,
+                searchText: myText
+            }
+        }).then(function successCallback(response) {
+            if($scope.quicksearch.inProgress == mySerial) {
+                $scope.quicksearch.open = true;
+                $scope.quicksearch.hasResults = true;
+
+                $scope.quicksearch.inProgress = null;
+                $scope.quicksearch.results = response.data.results;
+                $scope.quicksearch.total = response.data.results;
+                $scope.quicksearch.hasMore =  response.data.total > response.data.results.length;
+                $scope.quicksearch.more =  response.data.total - response.data.results.length;
+                $scope.quicksearch.noMatches = response.data.results.length == 0;
+
+            }
+        }, function errorCallback(response) {
+            if($scope.quicksearch.inProgress == mySerial) {
+                $scope.quicksearch.hasResults = false;
+                $scope.quicksearch.inProgress = null;
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else if (response.data.status) {
+                    $rootScope.msg = [
+                        {
+                            msg: 'URL',
+                            body: response.config.url,
+                            status: 'info'
+                        },
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'
+                        }
+                    ];
+                }
+                else {
+                    $rootScope.msg = [
+                        {
+                            msg: 'URL',
+                            body: response.config.url,
+                            status: 'info'
+                        },
+                        {
+                            msg: response.status,
+                            body: response.statusText,
+                            status: 'danger'
+                        }
+                    ];
+                }
+            }
+        });
+    };
+
+
 }];
 
 app.controller('Checklist', ChecklistController);
