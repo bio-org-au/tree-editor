@@ -6,8 +6,8 @@ console.log("loading checklist.js")
 
 // a checklist holds a context and a focus. it displays a breadcrumb trail and the tree
 
-// it is initialised with a uri and a 'workspace or classsification' setting.
-// if it is initialised with a classigiction, it navigates to the root node.
+// it is initialised with a uri and a 'workspace or classification' setting.
+// if it is initialised with a classification, it navigates to the root node.
 // if it is initialised with a workspace, it goes to the workspaceRoot.
 
 function dragUriStart(ev) {
