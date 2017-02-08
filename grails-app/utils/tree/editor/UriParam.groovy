@@ -10,3 +10,13 @@ class UriParam {
         uri  blank: false
     }
 }
+
+
+@Validateable
+class NodeInTreeParam {
+    String uri
+
+    static constraints = {
+        uri  blank: false
+    }
+}

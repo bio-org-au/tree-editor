@@ -25,6 +25,7 @@
     <script type="application/javascript">
         var servicesUrl = "${grailsApplication.config.treeEditor.servicesUrl}";
         var pagesUrl = "${grailsApplication.config.treeEditor.pagesUrl}";
+        var instanceEditorUrl = "${grailsApplication.config.treeEditor.instanceEditorUrl}";
     </script>
 
     <asset:javascript src="jquery"/>

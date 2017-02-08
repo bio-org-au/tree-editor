@@ -387,6 +387,9 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
 
     $scope.checklist_scope.activeTab = "syn"
 
+    $scope.pagesUrl = pagesUrl;
+    $scope.instanceEditorUrl = instanceEditorUrl;
+
     $scope.$watch("node", function () {
         if ($scope.node) {
             if ($scope.checklist_scope.nodeUriCache[$scope.node]) {

@@ -1,8 +1,8 @@
 <div>
     <strong ng-class="'text-' + msg.status">{{msg.msg}}</strong> {{msg.body}}
     <span ng-if="msg.args">
-        <i class="fabutton fa fa-compass" ng-click="toggleLinksDropdown()"></i>
-        <ul ng-mouseleave="closeLinksDropdown()" ng-if="linksDropdown">
+        <i class="fabutton fa fa-info" ng-click="toggleLinksDropdown()" ng-if="msg.args"></i>
+        <ul ng-if="linksDropdown">
             <a ng-repeat=" a in msg.args" ng-if="a.uri" href="{{a.uri}}">
                 <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Node'" shortnodetext uri="{{a.uri}}"/>
                 <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Name'" shortnametext uri="{{a.uri}}"/>
