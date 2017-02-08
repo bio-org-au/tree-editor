@@ -1,20 +1,52 @@
-
-<div class="container-fluid" style="position:absolute; width: 100%; height: 100%; margin: 0; padding: 0;" >
+<div class="container-fluid" style="position:absolute; width: 100%; height: 100%; margin: 0; padding: 0; font-size: 80%;">
     <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="checklist_scope.activeTab=='pane1' ? 'active' : ''"><a ng-click="checklist_scope.activeTab='pane1'; $event.stopPropagation();">Pane1</a></li>
-        <li role="presentation" ng-class="checklist_scope.activeTab=='pane2' ? 'active' : ''"><a ng-click="checklist_scope.activeTab='pane2'; $event.stopPropagation();">Pane2</a></li>
-        <li role="presentation" ng-class="checklist_scope.activeTab=='pane3' ? 'active' : ''"><a ng-click="checklist_scope.activeTab='pane3'; $event.stopPropagation();">Pane3</a></li>
+        <li role="presentation" ng-class="checklist_scope.activeTab=='syn' ? 'active' : ''"><a
+                ng-click="checklist_scope.activeTab='syn'; $event.stopPropagation();">Synonymy</a></li>
+        <li role="presentation" ng-class="checklist_scope.activeTab=='prof' ? 'active' : ''"><a
+                ng-click="checklist_scope.activeTab='prof'; $event.stopPropagation();">Profile</a></li>
+        <li role="presentation" ng-class="checklist_scope.activeTab=='act' ? 'active' : ''"><a
+                ng-click="checklist_scope.activeTab='act'; $event.stopPropagation();">Actions</a></li>
     </ul>
 
-    <div style="border-left: 1px solid #ddd; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; position: absolute; bottom:1em; left: 0; right: 0; top:41px; " >
-        <div ng-class="checklist_scope.activeTab=='pane1'?'':'hidden'" class="tab-pane">
-            This is pane 1
+    <div style="border-left: 1px solid #ddd; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; position: absolute; bottom:1em; left: 0; right: 0; top:41px; ">
+        <div ng-class="checklist_scope.activeTab=='syn'?'':'hidden'" class="tab-pane">
+
+            <div ng-repeat="cited in instanceJson.instancesForCitedBy" >
+
+                <span ng-switch="cited.instanceType">
+                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                       ng-switch-when="nomenclatural synonym">&equiv;</b>
+                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                       ng-switch-when="taxonomic synonym">=</b>
+                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                       ng-switch-when="misapplied">&ne;</b>
+                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                       ng-switch-when="pro parte">&cap;</b>
+                    <small class="text-muted" ng-switch-default>has {{cited.instanceType}}</small>
+                </span>
+
+                <span shortinstcitestext uri="{{cited._uri}}"></span>
+
+            </div>
+            <div ng-repeat="citation in instanceJson.instancesForCites">
+                    <small class="text-muted">{{citation.instanceType}} of</small>
+                    <span shortinstcitedbytext uri="{{citation._uri}}"></span>
+            </div>
         </div>
-        <div ng-class="checklist_scope.activeTab=='pane2'?'':'hidden'" class="tab-pane">
-            This is pane 2
-            {{nodeJson}}
+        <div ng-class="checklist_scope.activeTab=='prof'?'':'hidden'" class="tab-pane">
+
+                <div ng-repeat="lk in nodeJson.values" style="margin-bottom: 1em;">
+                    <b><u>{{lk.title ? lk.title : (lk.linkTypeUri.nsPart+':'+lk.linkTypeUri.idPart) }}</u></b>
+                    <div ng-if="lk.valueUri" style="padding-left: 2em;">
+                        <a href="{{lk.valueUri.uri}}">
+                            {{lk.valueUri.nsPart}}:{{lk.valueUri.idPart}}
+                        </a>
+                    </div>
+                    <div ng-if="lk.value" style="padding-left: 2em;" ng-bind-html="lk.value"/>
+                </div>
+
         </div>
-        <div ng-class="checklist_scope.activeTab=='pane3'?'':'hidden'" class="tab-pane">
+        <div ng-class="checklist_scope.activeTab=='act'?'':'hidden'" class="tab-pane">
             This is pane 3
 
             {{nameJson}}
