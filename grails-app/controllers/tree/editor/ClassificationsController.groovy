@@ -9,7 +9,7 @@ class ClassificationsController {
             return render (view: '/validationerror', model: [ bean: u])
         }
 
-        redirect controller: "Checklist2", action: "checklist", params: [arrangement: u.uri]
+        redirect controller: "Checklist2", action: "checklist", params: [tree: u.uri]
 
     }
 

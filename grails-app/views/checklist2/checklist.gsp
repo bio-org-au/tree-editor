@@ -7,6 +7,6 @@
 </head>
 
 <body>
-<div data-arrangement-uri="${arrangementUri}" data-focus-uri="${focusUri}" checklist></div>
+<div data-arrangement-uri="${arrangementUri}" data-node="${node}" checklist></div>
 </body>
 </html>

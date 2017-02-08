@@ -29,7 +29,7 @@
     <label>Found:</label>
 
     <div ng-repeat="r in results" class="hanging-indent">
-        <a href="{{pagesUrl}}/checklist/checklist?root={{rootUri}}&focus={{r.nodeUri}}">
+        <a href="{{pagesUrl}}/checklist2/checklist?tree={{treeUri}}&node={{r.node.id}}">
             <span shortinsttext uri="{{r.matchedUri}}"/>
         <span ng-if="r.matchedUri != r.node.instance._uri">
             of

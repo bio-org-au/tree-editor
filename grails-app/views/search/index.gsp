@@ -6,6 +6,6 @@
 </head>
 
 <body>
-<div search tree-uri="${treeUri}" root-uri="${rootUri}" focus-uri="${focusUri}"></div>
+<div search tree-uri="${treeUri}"></div>
 </body>
 </html>

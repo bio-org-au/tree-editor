@@ -8,17 +8,17 @@ class Checklist2Controller {
             return render(view: '/validationerror', model: [bean: p])
         }
 
-        render view: 'checklist', model: [arrangementUri: p.arrangement, focusUri: p.focus]
+        render view: 'checklist', model: [arrangementUri: p.tree, node: p.node]
     }
 }
 
 @Validateable
 class Checklist2Param {
-    String arrangement
-    String focus
+    String tree
+    Long node
 
     static constraints = {
-        arrangement nullable: false
-        focus nullable: true
+        tree nullable: false
+        node nullable: true
     }
 }

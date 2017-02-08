@@ -114,6 +114,8 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         });
     };
 
+    console.log("$scope.reloadNodePath("+$scope.node+");")
+
     $scope.reloadNodePath($scope.node);
 
     $scope.quicksearch = {
