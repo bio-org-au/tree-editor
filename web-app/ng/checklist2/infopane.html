@@ -10,28 +10,45 @@
     </ul>
 
     <div style="border-left: 1px solid #ddd; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; position: absolute; bottom:1em; left: 0; right: 0; top:41px; ">
-        <div ng-class="checklist_scope.activeTab=='syn'?'':'hidden'" class="tab-pane">
-
-            <div ng-repeat="cited in instanceJson.instancesForCitedBy">
-
-                <span ng-switch="cited.instanceType">
-                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
-                       ng-switch-when="nomenclatural synonym">&equiv;</b>
-                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
-                       ng-switch-when="taxonomic synonym">=</b>
-                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
-                       ng-switch-when="misapplied">&ne;</b>
-                    <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
-                       ng-switch-when="pro parte">&cap;</b>
-                    <small class="text-muted" ng-switch-default>has {{cited.instanceType}}</small>
-                </span>
-
-                <span shortinstcitestext uri="{{cited._uri}}"></span>
-
+        <div ng-class="checklist_scope.activeTab=='syn'?'':'hidden'" class="tab-pane-noscroll">
+            <div style="
+                 top: 0;
+                 height: 1.25em;
+                 left: 0;
+                 right: 0;
+                 overflow: hidden;
+                 position: absolute;
+            ">
+            <a style="overflow: hidden;" href="{{servicesUrl}}/name/apni/{{nodeUris.nameId}}/api/apni-format" target=APNI" ><i class="fa fa-share"
+                /><span uri="{{nodeUris.nameUri}}" shortnametext/> in APNI</a>
             </div>
-            <div ng-repeat="citation in instanceJson.instancesForCites">
-                <small class="text-muted">{{citation.instanceType}} of</small>
-                <span shortinstcitedbytext uri="{{citation._uri}}"></span>
+            <div style="
+top: 1.5em;
+bottom: 0;
+left: 0;
+right: 0;
+overflow: auto;
+position: absolute;
+            ">
+                <div ng-repeat="cited in instanceJson.instancesForCitedBy">
+                    <span ng-switch="cited.instanceType">
+                        <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                           ng-switch-when="nomenclatural synonym">&equiv;</b>
+                        <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                           ng-switch-when="taxonomic synonym">=</b>
+                        <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                           ng-switch-when="misapplied">&ne;</b>
+                        <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
+                           ng-switch-when="pro parte">&cap;</b>
+                        <small class="text-muted" ng-switch-default>has {{cited.instanceType}}</small>
+                    </span>
+
+                    <span shortinstcitestext uri="{{cited._uri}}"></span>
+                </div>
+                <div ng-repeat="citation in instanceJson.instancesForCites">
+                    <small class="text-muted">{{citation.instanceType}} of</small>
+                    <span shortinstcitedbytext uri="{{citation._uri}}"></span>
+                </div>
             </div>
         </div>
         <div ng-class="checklist_scope.activeTab=='prof'?'':'hidden'" class="tab-pane">
