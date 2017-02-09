@@ -114,9 +114,32 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         });
     };
 
-    console.log("$scope.reloadNodePath("+$scope.node+");")
 
-    $scope.reloadNodePath($scope.node);
+    if(!$scope.focusUri) {
+        console.log("no focus URI. Using node "+$scope.node)
+        $scope.reloadNodePath($scope.node);
+    }
+    else {
+        console.log("focus URI is "+$scope.focusUri)
+            $scope.pathState = {loading: true, loaded: false};
+        $http({
+            method: 'GET',
+            url: $rootScope.servicesUrl + "/TreeJsonView/focusUris",
+            params: {arrangement: $scope.arrangementUri, uri: $scope.focusUri}
+        })
+            .then(function (response) {
+                console.log("Got focus URIs");
+                console.log(response);
+                $scope.node = response.data.result.nodeId;
+                // reloadNodePath sets pathState
+                $scope.reloadNodePath($scope.node);
+            }, function (response) {
+                console.log("Get focus uris FAIL");
+                console.log(response);
+                // reloadNodePath sets pathState
+                $scope.reloadNodePath($scope.node);
+            });
+    }
 
     $scope.quicksearch = {
         serial: 0
@@ -247,6 +270,7 @@ var checklistDirective = [function () {
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
+            focusUri: "@",
             node: "@"
         }
     };
