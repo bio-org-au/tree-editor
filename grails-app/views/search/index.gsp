@@ -6,6 +6,6 @@
 </head>
 
 <body>
-<div search tree-uri="${treeUri}"></div>
+<div search tree-uri="${params.tree}"></div>
 </body>
 </html>

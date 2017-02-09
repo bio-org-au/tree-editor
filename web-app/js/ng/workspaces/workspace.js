@@ -141,7 +141,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 'baseTree': $scope.form.baseClassification
             }
         }).then(function successCallback(response) {
-            window.location = $rootScope.pagesUrl + "/workspaces/checklist?uri=" + response.data.uri;
+            window.location = $rootScope.pagesUrl + "/workspaces/checklist?tree=" + response.data.uri;
         }, function errorCallback(response) {
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
@@ -197,8 +197,8 @@ var workspaceformDirective = [function() {
         templateUrl: pagesUrl + "/ng/workspaces/form.html",
         controller: WorkspaceformController,
         scope: {
-            uri: "@uri",
-            withTopNode: "@withTopNode"
+            uri: "@",
+            withTopNode: "@"
         },
     };
 }];

@@ -56,12 +56,12 @@
                 </a>
             </div>
             <div style="margin-bottom: 1em;">
-                <a href="{{pagesUrl}}/verification/verify?uri={{nodeUris.nodeUri}}" ng-if="!nodeJson.replacedAt">
+                <a href="{{pagesUrl}}/verification/verify?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}" ng-if="!nodeJson.replacedAt">
                     Verify <span uri="{{nodeUris.instanceUri}}" shortinsttext/>
                 </a>
             </div>
             <div style="margin-bottom: 1em;" ng-if="nodeJson.prev && !nodeJson.checkedInAt">
-                <a href="{{pagesUrl}}/verification/changes?uri={{nodeUris.nodeUri}}">
+                <a href="{{pagesUrl}}/verification/changes?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}">
                     Change list
                 </a>
             </div>

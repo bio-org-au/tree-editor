@@ -6,9 +6,9 @@
 </head>
 
 <body>
-<h1>${!params['uri'] ? 'New' : 'Edit'} Workspace</h1>
+<h1>${!params.tree ? 'New' : 'Edit'} Workspace</h1>
 
-<div workspaceform uri="${params['uri']}"></div>
+<div workspaceform uri="${params.tree}"></div>
 
 <a class="pull-right" href="index">Back</a>
 

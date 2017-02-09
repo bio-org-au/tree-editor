@@ -2,23 +2,15 @@ package tree.editor
 
 class VerificationController {
 
-    def index() {}
-
-    def verify(UriParam u) {
-        if (!u.validate()) {
-            return render(view: '/validationerror', model: [bean: u])
+    def verify(NodeParam p) {
+        if (!p.validate()) {
+            return render(view: '/validationerror', model: [bean: p])
         }
-
-        [uri: u.uri]
-
     }
 
-    def changes(UriParam u) {
-        if (!u.validate()) {
-            return render(view: '/validationerror', model: [bean: u])
+    def changes(NodeParam p) {
+        if (!p.validate()) {
+            return render(view: '/validationerror', model: [bean: p])
         }
-
-        [uri: u.uri]
-
     }
 }
