@@ -418,6 +418,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
     $scope.revertState = {
         busy: false,
         verifyResult: null,
+        revertResult: null,
         mutex: null
     };
 
@@ -448,6 +449,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
         $scope.revertState = {
             busy: false,
             verifyResult: null,
+            revertResult: null,
             mutex: null
         };
 
@@ -523,6 +525,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
 
         $scope.revertState.busy = true;
         $scope.revertState.verifyResult = null;
+        $scope.revertState.revertResult = null;
 
         var mutex = ++mutexSerial;
 
@@ -550,7 +553,45 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
                 });
 
 
-    }
+    };
+    
+    $scope.performRevert = function() {
+        if (!$scope.nodeUris) return;
+
+        $scope.revertState.busy = true;
+        $scope.revertState.verifyResult = null;
+        $scope.revertState.revertResult = null;
+
+        var mutex = ++mutexSerial;
+
+        $scope.revertState.mutex = mutex;
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + "/TreeJsonEdit/performRevert",
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
+            params: {uri: $scope.nodeUris.nodeUri}
+        })
+            .then(
+                function (response) {
+                    if ($scope.revertState.mutex != mutex) return;
+                    $scope.revertState.revertResult = response.data;
+                    $scope.revertState.busy = false;
+                    $scope.checklist_scope.branchCache = {};
+                    $scope.checklist_scope.node = response.data.revertedNodeId;
+                    $scope.checklist_scope.cursorNode = response.data.revertedNodeId;
+                    $scope.checklist_scope.reloadNodePath(response.data.revertedNodeId);
+                },
+                function (response) {
+                    if ($scope.revertState.mutex != mutex) return;
+                    $scope.revertState.busy = false;
+                    putErrorOnPage($rootScope, response);
+                });
+        
+    };
 
 }];
 

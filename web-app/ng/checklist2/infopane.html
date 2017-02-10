@@ -84,7 +84,7 @@ position: absolute;
             </div>
 
             <div style="margin-bottom: 1em;" ng-if="editable()">
-                <div style="margin-bottom: 1em;" ng-if="!revertState.verifyResult">
+                <div style="margin-bottom: 1em;" ng-if="!revertState.verifyResult && !revertState.revertResult">
                     <button class="btn btn-danger" ng-class="revertState.busy ? 'disabled' : ''" ng-click="verifyRevert()">Revert</button>
                     <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
                 </div>
@@ -92,11 +92,19 @@ position: absolute;
                     <div ng-repeat="m in revertState.verifyResult.msg" nested-message usemessage="m"></div>
 
                     <div style="margin-top: 1em;">
-                        <button class="btn btn-danger" ng-class="revertState.verifyResult.success && !revertState.busy ? '' : 'disabled'">Proceed</button>
+                        <button class="btn btn-danger" ng-click="performRevert()" ng-class="revertState.verifyResult.success && !revertState.busy ? '' : 'disabled'">Proceed</button>
                         <button class="btn btn-default" ng-click="revertState.verifyResult=null">Cancel</button>
                         <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
                     </div>
+                </div>
+                <div style="margin-bottom: 1em;" ng-if="revertState.revertResult" class="well">
+                    <div ng-repeat="m in revertState.revertResult.msg" nested-message usemessage="m"></div>
 
+                    <div style="margin-top: 1em;">
+                        <button class="btn btn-success" ng-if="revertState.revertResult.success" ng-click="revertState.revertResult=null">Ok</button>
+                        <button class="btn btn-default" ng-if="!revertState.revertResult.success" ng-click="revertState.revertResult=null">Cancel</button>
+                        <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+                    </div>
                 </div>
             </div>
 
