@@ -55,23 +55,23 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
 
     $scope.clickPathToFocus = function (index) {
         var p = $scope.pathToFocus.concat($scope.pathToSelection.slice(1));
-        $scope.pathToFocus = p.slice(0, index+1)
+        $scope.pathToFocus = p.slice(0, index + 1)
         $scope.pathToSelection = p.slice(index)
         $scope.focusJson = p[index]
         $scope.focusNode = p[index].node;
     };
 
     $scope.clickPathToSelection = function (index) {
-        index += $scope.pathToFocus.length -1;
+        index += $scope.pathToFocus.length - 1;
         var p = $scope.pathToFocus.concat($scope.pathToSelection.slice(1));
-        $scope.pathToFocus = p.slice(0, index+1)
+        $scope.pathToFocus = p.slice(0, index + 1)
         $scope.pathToSelection = p.slice(index)
         $scope.focusJson = p[index]
         $scope.focusNode = p[index].node;
     };
 
 
-    $scope.reloadNodePath =  function(node) {
+    $scope.reloadNodePath = function (node) {
         console.log("LOADING NODE PATH");
 
         $scope.pathToFocus = null;
@@ -85,43 +85,43 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
             url: $rootScope.servicesUrl + "/TreeJsonView/nodePath",
             params: {arrangement: $scope.arrangementUri, node: node}
         })
-        .then(function (response) {
-            console.log("GET PATH SUCCESS");
-            console.log(response);
-            $scope.pathState.loading = false;
-            $scope.pathState.loaded = true;
-            $scope.pathToFocus = response.data.result;
+            .then(function (response) {
+                console.log("GET PATH SUCCESS");
+                console.log(response);
+                $scope.pathState.loading = false;
+                $scope.pathState.loaded = true;
+                $scope.pathToFocus = response.data.result;
 
-            $scope.focusJson = $scope.pathToFocus[$scope.pathToFocus.length - 1];
-            $scope.focusNode = $scope.focusJson.node;
+                $scope.focusJson = $scope.pathToFocus[$scope.pathToFocus.length - 1];
+                $scope.focusNode = $scope.focusJson.node;
 
-            $scope.pathToSelection = [$scope.focusJson];
-
-            if (!$scope.cursorNode) {
-                $scope.cursorNode = $scope.focusJson.node;
                 $scope.pathToSelection = [$scope.focusJson];
-            }
 
-            for (i in $scope.pathToFocus) {
-                $scope.getNodeUI($scope.pathToFocus[i].node).open = true;
-            }
+                if (!$scope.cursorNode) {
+                    $scope.cursorNode = $scope.focusJson.node;
+                    $scope.pathToSelection = [$scope.focusJson];
+                }
 
-        }, function (response) {
-            console.log("GET PATH FAIL");
-            console.log(response);
-            $scope.pathState.loading = false;
-            putErrorOnPage($rootScope, response);
-        });
+                for (i in $scope.pathToFocus) {
+                    $scope.getNodeUI($scope.pathToFocus[i].node).open = true;
+                }
+
+            }, function (response) {
+                console.log("GET PATH FAIL");
+                console.log(response);
+                $scope.pathState.loading = false;
+                putErrorOnPage($rootScope, response);
+            });
     };
 
 
-    if(!$scope.focusUri) {
-        console.log("no focus URI. Using node "+$scope.node)
+    if (!$scope.focusUri) {
+        console.log("no focus URI. Using node " + $scope.node)
         $scope.reloadNodePath($scope.node);
     }
     else {
-        console.log("focus URI is "+$scope.focusUri)
-            $scope.pathState = {loading: true, loaded: false};
+        console.log("focus URI is " + $scope.focusUri)
+        $scope.pathState = {loading: true, loaded: false};
         $http({
             method: 'GET',
             url: $rootScope.servicesUrl + "/TreeJsonView/focusUris",
@@ -145,20 +145,20 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         serial: 0
     };
 
-    $scope.quicksearch.onchange = function() {
+    $scope.quicksearch.onchange = function () {
         var myText = $scope.quicksearch.text;
-        var mySerial = ++ $scope.quicksearch.serial;
+        var mySerial = ++$scope.quicksearch.serial;
         $scope.quicksearch.open = false;
         $scope.quicksearch.hasResults = false;
         $scope.quicksearch.results = [];
         $scope.quicksearch.hasMore = false;
         $scope.quicksearch.noMatches = false;
 
-        if(myText.length >=3) {
-            window.setTimeout(function() {
-                if(mySerial == $scope.quicksearch.serial) {
+        if (myText.length >= 3) {
+            window.setTimeout(function () {
+                if (mySerial == $scope.quicksearch.serial) {
                     console.log("searching " + mySerial + " text " + myText);
-                    if(myText.indexOf('%')==-1 && myText.indexOf('_')==-1) {
+                    if (myText.indexOf('%') == -1 && myText.indexOf('_') == -1) {
                         myText = myText + '%';
                     }
                     $scope.doSearch(myText, mySerial);
@@ -171,23 +171,23 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
 
     };
 
-    $scope.quicksearch.onclickSearchResult = function(i) {
+    $scope.quicksearch.onclickSearchResult = function (i) {
         console.log("item " + i + " selected");
         console.log($scope.quicksearch.results[i]);
         $scope.quicksearch.open = false;
         $scope.reloadNodePath($scope.quicksearch.results[i].node);
     };
 
-    $scope.quicksearch.onclickDropdownbutton = function() {
-        if($scope.quicksearch.hasResults) {
+    $scope.quicksearch.onclickDropdownbutton = function () {
+        if ($scope.quicksearch.hasResults) {
             $scope.quicksearch.open = !$scope.quicksearch.open;
         }
     }
 
-    $scope.doSearch = function(myText, mySerial) {
+    $scope.doSearch = function (myText, mySerial) {
         $rootScope.msg = null;
 
-        if(!$scope.arrangementUri) return;
+        if (!$scope.arrangementUri) return;
 
         $scope.quicksearch.inProgress = mySerial;
         $scope.quicksearch.open = false;
@@ -208,20 +208,20 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
                 searchText: myText
             }
         }).then(function successCallback(response) {
-            if($scope.quicksearch.inProgress == mySerial) {
+            if ($scope.quicksearch.inProgress == mySerial) {
                 $scope.quicksearch.open = true;
                 $scope.quicksearch.hasResults = true;
 
                 $scope.quicksearch.inProgress = null;
                 $scope.quicksearch.results = response.data.results;
                 $scope.quicksearch.total = response.data.results;
-                $scope.quicksearch.hasMore =  response.data.total > response.data.results.length;
-                $scope.quicksearch.more =  response.data.total - response.data.results.length;
+                $scope.quicksearch.hasMore = response.data.total > response.data.results.length;
+                $scope.quicksearch.more = response.data.total - response.data.results.length;
                 $scope.quicksearch.noMatches = response.data.results.length == 0;
 
             }
         }, function errorCallback(response) {
-            if($scope.quicksearch.inProgress == mySerial) {
+            if ($scope.quicksearch.inProgress == mySerial) {
                 $scope.quicksearch.hasResults = false;
                 $scope.quicksearch.inProgress = null;
                 if (response.data && response.data.msg) {
@@ -309,11 +309,11 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
             return;
         }
 
-        if(!$scope.arrangementUri || !$scope.UI.open) {
+        if (!$scope.arrangementUri || !$scope.UI.open) {
             return;
         }
 
-        if($scope.checklist_scope.branchCache[node]) {
+        if ($scope.checklist_scope.branchCache[node]) {
             $scope.branchState.loading = null;
             $scope.branchState.loaded = node;
             $scope.branch = $scope.checklist_scope.branchCache[node];
@@ -366,7 +366,7 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
     }
 
     $scope.$watch("UI.open", $scope.fetchBranch);
-    $scope.$watch("json.node", function() {
+    $scope.$watch("json.node", function () {
         $scope.branchState = {loading: null, loaded: null};
         $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node);
         $scope.fetchBranch();
@@ -415,11 +415,47 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
     $scope.servicesUrl = servicesUrl;
     $scope.instanceEditorUrl = instanceEditorUrl;
 
+    $scope.revertState = {
+        busy: false,
+        verifyResult: null,
+        mutex: null
+    };
+
+
+    $scope.treePermisions = {};
+    get_uri_permissions($rootScope, $http, $scope.checklist_scope.arrangementUri, function (data, success) {
+        console.log("setting the tree permissions " + success);
+        console.log(data);
+        if (success)
+            $scope.treePermisions = data;
+    });
+
+
+    $scope.nodePermissions = {};
+    $scope.refreshPermissions = function () {
+        $scope.focusPermissions = {};
+        if ($scope.nodeUris && $scope.nodeUris.nodeUri)
+            get_uri_permissions($rootScope, $http, $scope.nodeUris.nodeUri, function (data, success) {
+                console.log("setting the focus permissions " + success);
+                console.log(data);
+                if (success)
+                    $scope.focusPermissions = data;
+            });
+    };
+
+
     $scope.$watch("node", function () {
+        $scope.revertState = {
+            busy: false,
+            verifyResult: null,
+            mutex: null
+        };
+
         if ($scope.node) {
             if ($scope.checklist_scope.nodeUriCache[$scope.node]) {
                 $scope.nodeUrisStatus = {fetching: false, fetched: true}
                 $scope.nodeUris = $scope.checklist_scope.nodeUriCache[$scope.node]
+                $scope.refreshPermissions()
                 $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
                 $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
                 $scope.instanceJson = jsonCache.needJson($scope.nodeUris.instanceUri)
@@ -427,6 +463,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
             else {
                 $scope.nodeUrisStatus = {fetching: true, fetched: false}
                 $scope.nodeUris = null
+                $scope.refreshPermissions()
 
                 $scope.nodeJson = null
                 $scope.nameJson = null
@@ -443,6 +480,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
                             $scope.nodeUrisStatus.fetching = false;
                             $scope.nodeUrisStatus.fetched = true;
                             $scope.nodeUris = response.data.result
+                            $scope.refreshPermissions()
                             $scope.checklist_scope.nodeUriCache[$scope.node] = $scope.nodeUris;
                             $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
                             $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
@@ -458,6 +496,61 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
         }
     });
 
+    $scope.editable = function () {
+        return $scope.nodeJson
+            && $scope.nodeJson.type == 'T'
+            && $scope.focusPermissions
+            && $scope.focusPermissions.uriPermissions
+            && $scope.focusPermissions.uriPermissions.isDraftNode
+            && $scope.focusPermissions.uriPermissions.isWorkspace
+            && $scope.focusPermissions.uriPermissions.canEdit
+            ;
+    };
+
+    $scope.modifiedDraft = function () {
+        return $scope.nodeJson
+            && $scope.nodeJson.type == 'T'
+            && $scope.focusPermissions
+            && $scope.focusPermissions.uriPermissions
+            && $scope.focusPermissions.uriPermissions.isDraftNode
+            ;
+    };
+
+    var mutexSerial = 0;
+
+    $scope.verifyRevert = function () {
+        if (!$scope.nodeUris) return;
+
+        $scope.revertState.busy = true;
+        $scope.revertState.verifyResult = null;
+
+        var mutex = ++mutexSerial;
+
+        $scope.revertState.mutex = mutex;
+
+        $http({
+            method: 'POST',
+            url: $rootScope.servicesUrl + "/TreeJsonEdit/verifyRevert",
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            },
+            params: {uri: $scope.nodeUris.nodeUri}
+        })
+            .then(
+                function (response) {
+                    if ($scope.revertState.mutex != mutex) return;
+                    $scope.revertState.verifyResult = response.data;
+                    $scope.revertState.busy = false;
+                },
+                function (response) {
+                    if ($scope.revertState.mutex != mutex) return;
+                    $scope.revertState.busy = false;
+                    putErrorOnPage($rootScope, response);
+                });
+
+
+    }
 
 }];
 

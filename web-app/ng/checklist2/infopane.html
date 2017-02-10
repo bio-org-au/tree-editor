@@ -65,24 +65,40 @@ position: absolute;
 
         </div>
         <div ng-class="checklist_scope.activeTab=='act'?'':'hidden'" class="tab-pane">
+            <h4><span uri="{{nodeUris.instanceUri}}" shortinsttext/></h4>
             <div style="margin-bottom: 1em;">
                 <a href="{{instanceEditorUrl}}/search?utf8=%E2%9C%93&query_string=id%3A+{{nodeUris.nameId}}+show-instances%3A&query_submit=Search&query_target=Names&old_ffox=false&focus_id={{nodeUris.instanceId}}"
                    target="NSL Instance Editor">
-                    <i class="fa fa-share"/> Open <span uri="{{nodeUris.nameUri}}" shortnametext/> in the NSL Instance
-                    Editor
+                    <i class="fa fa-share"/> NSL Instance Editor
                 </a>
             </div>
             <div style="margin-bottom: 1em;">
                 <a href="{{pagesUrl}}/verification/verify?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}" ng-if="!nodeJson.replacedAt">
-                    Verify <span uri="{{nodeUris.instanceUri}}" shortinsttext/>
+                    Verify<span ng-if="editable()">/Checkin</span>
                 </a>
             </div>
-            <div style="margin-bottom: 1em;" ng-if="nodeJson.prev && !nodeJson.checkedInAt">
+            <div style="margin-bottom: 1em;" ng-if="modifiedDraft()">
                 <a href="{{pagesUrl}}/verification/changes?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}">
                     Change list
                 </a>
             </div>
 
+            <div style="margin-bottom: 1em;" ng-if="editable()">
+                <div style="margin-bottom: 1em;" ng-if="!revertState.verifyResult">
+                    <button class="btn btn-danger" ng-class="revertState.busy ? 'disabled' : ''" ng-click="verifyRevert()">Revert</button>
+                    <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+                </div>
+                <div style="margin-bottom: 1em;" ng-if="revertState.verifyResult" class="well">
+                    <div ng-repeat="m in revertState.verifyResult.msg" nested-message usemessage="m"></div>
+
+                    <div style="margin-top: 1em;">
+                        <button class="btn btn-danger" ng-class="revertState.verifyResult.success && !revertState.busy ? '' : 'disabled'">Proceed</button>
+                        <button class="btn btn-default" ng-click="revertState.verifyResult=null">Cancel</button>
+                        <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+                    </div>
+
+                </div>
+            </div>
 
         </div>
     </div>
