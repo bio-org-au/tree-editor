@@ -17,6 +17,8 @@ var LoginlogoutController = ['$scope', '$rootScope', '$http', function ($scope, 
             url: $rootScope.servicesUrl + '/auth/signInJson',
             params: { username: $scope.form.name, password: $scope.form.password}
         }).then(function successCallback(response) {
+            $scope.form.name = '';
+            $scope.form.password = '';
             localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'Y');
             localStorage.setItem('nsl-tree-editor.loginlogout.principal', response.data.principal);
             localStorage.setItem('nsl-tree-editor.loginlogout.jwt', response.data.jwt);
