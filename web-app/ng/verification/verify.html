@@ -1,16 +1,39 @@
-<H1>Verifying</H1>
-<div ng-if="prevUri">
+
+<H1>{{verificationResults?"Verification Results":"Verifying"}}</H1>
+<div ng-if="prevUri && !verificationResults">
     <span shortnametext uri="{{json.name._uri}}"/> and names below it in <span shortarrangementtext uri="{{treeUri}}"/>
     will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{prevTreeUri}}"/>.
 </div>
-<div ng-if="!prevUri">
+<div ng-if="!prevUri && !verificationResults">
     <span shortnametext uri="{{json.name._uri}}"/> and names below it in <span shortarrangementtext uri="{{treeUri}}"/>
     will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{treeUri}}"/>.
 </div>
 
-<div ng-if="verifying">
+<div ng-if="verificationResults">
+    Verification of <span shortnametext uri="{{json.name._uri}}"/> in <span shortarrangementtext uri="{{treeUri}}"/> complete.
+</div>
+
+<div ng-if="checkingIn">
+    Checking in to <span shortarrangementtext uri="{{prevTreeUri}}"/>.
+</div>
+
+<div ng-if="verifying || checkingIn">
     (This may take some time <i class="fa fa-spinner fa-spin"></i>)
 </div>
+
+<div ng-if="!checkingIn && verificationResults && (!verificationResults.problems || verificationResults.problems.length == 0) && hasCheckinPermission()">
+
+    <div ng-if="!showAreYouSure">
+        <button class="btn btn-primary" ng-click="checkinInitial()">Check into <span shortarrangementtext uri="{{prevTreeUri}}"/></button>
+    </div>
+    <div ng-if="showAreYouSure">
+        Are you sure you want to proceed with this check-in into <span shortarrangementtext uri="{{prevTreeUri}}"/>?<br/>
+        <button class="btn btn-primary " ng-click="checkinConfirm()">Yes</button>
+        <button class="btn btn-default" ng-click="checkinCancel()">Cancel</button>
+    </div>
+
+</div>
+
 <div ng-if="verificationResults">
     <hr/>
     <div ng-if="(!verificationResults.problems || verificationResults.problems.length == 0)
