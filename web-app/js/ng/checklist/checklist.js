@@ -266,7 +266,7 @@ app.controller('Checklist', ChecklistController);
 
 var checklistDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/ng/checklist2/checklist.html",
+        templateUrl: pagesUrl + "/ng/checklist/checklist.html",
         controller: ChecklistController,
         scope: {
             arrangementUri: "@",
@@ -378,7 +378,7 @@ app.controller('Branch', BranchController);
 
 var branchDirective = ['RecursionHelper', function (RecursionHelper) {
     return {
-        templateUrl: pagesUrl + "/ng/checklist2/branch.html",
+        templateUrl: pagesUrl + "/ng/checklist/branch.html",
         controller: BranchController,
         scope: {
             arrangementUri: '@',
@@ -599,7 +599,7 @@ app.controller('InfoPane', InfoPaneController);
 
 var infoPaneDirective = [function () {
     return {
-        templateUrl: pagesUrl + "/ng/checklist2/infopane.html",
+        templateUrl: pagesUrl + "/ng/checklist/infopane.html",
         controller: InfoPaneController,
         scope: {
             arrangementUri: '@',

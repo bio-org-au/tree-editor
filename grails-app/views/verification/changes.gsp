@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<g:link controller="checklist2" action="checklist" params="${params}">Checklist</g:link>
+<g:link controller="checklist" action="checklist" params="${params}">Checklist</g:link>
 <g:link action="verify" params="${params}">Verify</g:link>
 
 <div changes uri="${params.focus}"/>

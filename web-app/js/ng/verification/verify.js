@@ -88,7 +88,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
 
             // the node will still be in the tree, but it will now be in the tree because
             // its from the base classification
-            window.location.href = $rootScope.pagesUrl + "/checklist2/checklist?tree=" + $scope.treeUri + "&focus=" + $scope.uri;
+            window.location.href = $rootScope.pagesUrl + "/checklist/checklist?tree=" + $scope.treeUri + "&focus=" + $scope.uri;
 
         }, function errorCallback(response) {
             $scope.checkingIn = true;
