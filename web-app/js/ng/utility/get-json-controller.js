@@ -63,10 +63,10 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
 
             var uri = getPreferredLink(o); // this will set _uri
 
-            // if this object is a marshalled object, then we should *not* go down into it to get the other obejcts,
+            // if this object is a marshalled object, then we should *not* go down into it to get the other objects,
             // because these other objects will be brief objects rather than full ones.
 
-            // if this object is not a marshalled object, then it's some sort of search reasult or something and will
+            // if this object is not a marshalled object, then it's some sort of search result or something and will
             // contain the whole thing
 
             if (uri) {

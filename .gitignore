@@ -36,4 +36,6 @@
 
 .idea
 *.iml
+
+#possibly n apple thing, possibly a grails thing
 .slcache
