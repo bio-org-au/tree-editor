@@ -32,11 +32,13 @@ function putErrorOnPage($rootScope, response) {
     }
 }
 
-var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
     $scope.checklist_scope = $scope;
 
-    $scope.arrangement = jsonCache.needJson($scope.arrangementUri);
-
+    $scope.$routeParams = $routeParams;
+    $scope.arrangementUri = $scope.$routeParams.tree;
+    $scope.arrangement = jsonCache.needJson($scope.$routeParams.tree);
+    
     $scope.nodeUriCache = {};
     $scope.branchCache = {};
 
@@ -55,18 +57,18 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
 
     $scope.clickPathToFocus = function (index) {
         var p = $scope.pathToFocus.concat($scope.pathToSelection.slice(1));
-        $scope.pathToFocus = p.slice(0, index + 1)
-        $scope.pathToSelection = p.slice(index)
-        $scope.focusJson = p[index]
+        $scope.pathToFocus = p.slice(0, index + 1);
+        $scope.pathToSelection = p.slice(index);
+        $scope.focusJson = p[index];
         $scope.focusNode = p[index].node;
     };
 
     $scope.clickPathToSelection = function (index) {
         index += $scope.pathToFocus.length - 1;
         var p = $scope.pathToFocus.concat($scope.pathToSelection.slice(1));
-        $scope.pathToFocus = p.slice(0, index + 1)
-        $scope.pathToSelection = p.slice(index)
-        $scope.focusJson = p[index]
+        $scope.pathToFocus = p.slice(0, index + 1);
+        $scope.pathToSelection = p.slice(index);
+        $scope.focusJson = p[index];
         $scope.focusNode = p[index].node;
     };
 
@@ -116,11 +118,11 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
 
 
     if (!$scope.focusUri) {
-        console.log("no focus URI. Using node " + $scope.node)
+        console.log("no focus URI. Using node " + $scope.node);
         $scope.reloadNodePath($scope.node);
     }
     else {
-        console.log("focus URI is " + $scope.focusUri)
+        console.log("focus URI is " + $scope.focusUri);
         $scope.pathState = {loading: true, loaded: false};
         $http({
             method: 'GET',
@@ -182,7 +184,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', functio
         if ($scope.quicksearch.hasResults) {
             $scope.quicksearch.open = !$scope.quicksearch.open;
         }
-    }
+    };
 
     $scope.doSearch = function (myText, mySerial) {
         $rootScope.msg = null;
@@ -340,12 +342,12 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
 
                     if (!$scope.json.node == node) {
                         // discard this load
-                        return;
+
                     }
                     else {
                         $scope.branchState.loading = null;
                         $scope.branchState.loaded = node;
-                        $scope.branch = response.data.result
+                        $scope.branch = response.data.result;
                         $scope.checklist_scope.branchCache[node] = $scope.branch;
                     }
                 },
@@ -354,7 +356,7 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
                     console.log(response);
                     if (!$scope.json.node == node) {
                         // discard this load
-                        return;
+
                     }
                     else {
                         $scope.branchState.loading = null;
@@ -363,7 +365,7 @@ var BranchController = ['$scope', '$rootScope', '$http', 'jsonCache', function (
                 });
 
 
-    }
+    };
 
     $scope.$watch("UI.open", $scope.fetchBranch);
     $scope.$watch("json.node", function () {
@@ -402,14 +404,14 @@ app.directive('branch', branchDirective);
 var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.checklist_scope = $scope.$parent.checklist_scope;
 
-    $scope.nodeUrisStatus = {fetching: false, fetched: false}
-    $scope.nodeUris = null
+    $scope.nodeUrisStatus = {fetching: false, fetched: false};
+    $scope.nodeUris = null;
 
-    $scope.nodeJson = null
-    $scope.nameJson = null
-    $scope.instanceJson = null
+    $scope.nodeJson = null;
+    $scope.nameJson = null;
+    $scope.instanceJson = null;
 
-    $scope.checklist_scope.activeTab = "syn"
+    $scope.checklist_scope.activeTab = "syn";
 
     $scope.pagesUrl = pagesUrl;
     $scope.servicesUrl = servicesUrl;
@@ -455,21 +457,21 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
 
         if ($scope.node) {
             if ($scope.checklist_scope.nodeUriCache[$scope.node]) {
-                $scope.nodeUrisStatus = {fetching: false, fetched: true}
-                $scope.nodeUris = $scope.checklist_scope.nodeUriCache[$scope.node]
-                $scope.refreshPermissions()
-                $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
-                $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
+                $scope.nodeUrisStatus = {fetching: false, fetched: true};
+                $scope.nodeUris = $scope.checklist_scope.nodeUriCache[$scope.node];
+                $scope.refreshPermissions();
+                $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri);
+                $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri);
                 $scope.instanceJson = jsonCache.needJson($scope.nodeUris.instanceUri)
             }
             else {
-                $scope.nodeUrisStatus = {fetching: true, fetched: false}
-                $scope.nodeUris = null
-                $scope.refreshPermissions()
+                $scope.nodeUrisStatus = {fetching: true, fetched: false};
+                $scope.nodeUris = null;
+                $scope.refreshPermissions();
 
-                $scope.nodeJson = null
-                $scope.nameJson = null
-                $scope.instanceJson = null
+                $scope.nodeJson = null;
+                $scope.nameJson = null;
+                $scope.instanceJson = null;
 
                 $http({
                     method: 'GET',
@@ -481,11 +483,11 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
                             console.log("GET BRANCH URI SUCCESS");
                             $scope.nodeUrisStatus.fetching = false;
                             $scope.nodeUrisStatus.fetched = true;
-                            $scope.nodeUris = response.data.result
-                            $scope.refreshPermissions()
+                            $scope.nodeUris = response.data.result;
+                            $scope.refreshPermissions();
                             $scope.checklist_scope.nodeUriCache[$scope.node] = $scope.nodeUris;
-                            $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri)
-                            $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri)
+                            $scope.nodeJson = jsonCache.needJson($scope.nodeUris.nodeUri);
+                            $scope.nameJson = jsonCache.needJson($scope.nodeUris.nameUri);
                             $scope.instanceJson = jsonCache.needJson($scope.nodeUris.instanceUri)
                         },
                         function (response) {

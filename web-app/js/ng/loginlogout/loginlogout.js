@@ -3,7 +3,7 @@
  */
 
 
-console.log("loading loginlogout.js")
+console.log("loading loginlogout.js");
 
 var LoginlogoutController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
     $scope.login = function() {
@@ -28,16 +28,36 @@ var LoginlogoutController = ['$scope', '$rootScope', '$http', function ($scope, 
     };
 
     $scope.logout = function() {
-        localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
-        localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
-        localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
-        $rootScope.$emit('nsl-tree-editor.loginlogout');
-
         $http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/auth/signOutJson',
+            headers: {
+                'Access-Control-Request-Headers': 'Authorization',
+                'Authorization': 'JWT ' + $rootScope.getJwt()
+            }
         }).then(function successCallback(response) {
+            localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
+            localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
+            localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
+            $rootScope.$emit('nsl-tree-editor.loginlogout');
         }, function errorCallback(response) {
+            if(response.status == 401) {
+                $rootScope.msg = [
+                    {
+                        msg: "Unauthorized:",
+                        body: "You need to log in to do this, or you don't have permission.",
+                        status: 'danger'
+                    }
+                ];
+            } else {
+                $rootScope.msg = [
+                    {
+                        msg: response.data.status,
+                        body: response.data.reason,
+                        status: 'danger'
+                    }
+                ];
+            }
         });
     };
 

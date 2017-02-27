@@ -147,13 +147,23 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 $rootScope.msg = response.data.msg;
             }
             else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
-                    }
-                ];
+                if(response.status == 401) {
+                    $rootScope.msg = [
+                        {
+                            msg: "Unauthorized:",
+                            body: "You need to log in to do this, or you don't have permission.",
+                            status: 'danger'
+                        }
+                    ];
+                } else {
+                    $rootScope.msg = [
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'
+                        }
+                    ];
+                }
             }
         });
     };

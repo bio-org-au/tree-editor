@@ -20,34 +20,36 @@
 
 <div style="position: fixed; top:2.5em;">
 
-<h4 class="nav">
+  <h4 class="nav">
     <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
     <span ng-if="arrangement.arrangementType.name=='U'">Workspace </span>
-    <span uri="{{arrangementUri}}" shortarrangementtext />
-    <span ng-if="arrangement.arrangementType.name=='U'"> (<span uri="{{arrangement.baseArrangement._uri}}" shortarrangementtext />)</span>
-</h4>
+    <span uri="{{arrangementUri}}" shortarrangementtext/>
+    <span ng-if="arrangement.arrangementType.name=='U'"> (<span uri="{{arrangement.baseArrangement._uri}}"
+                                                                shortarrangementtext/>)</span>
+  </h4>
 
-<div id="breadcrumbs">
-<i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
-<span class="crumb" ng-repeat="item in pathToFocus"  ng-click="clickPathToFocus($index)" ng-class="item.css">
+  <div id="breadcrumbs">
+    <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
+    <span class="crumb" ng-repeat="item in pathToFocus" ng-click="clickPathToFocus($index)" ng-class="item.css">
     <i ng-if="!$first" class="fa fa-angle-right"></i>
     <span ng-if="item.rank" class="smaller">{{item.rank}}</span>
     <span ng-if="item.label">{{item.label}}</span>
     <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>
 </span>
-<span class="crumb" ng-repeat="item in pathToSelection"  ng-if="!$first" ng-click="clickPathToSelection($index)" ng-class="item.css">
+    <span class="crumb" ng-repeat="item in pathToSelection" ng-if="!$first" ng-click="clickPathToSelection($index)"
+          ng-class="item.css">
     <i class="fa fa-angle-right"></i>
     <span ng-if="item.rank" class="smaller">{{item.rank}}</span>
     <span ng-if="item.label">{{item.label}}</span>
-    <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>
-</span>
-</div>
+      <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"></span>
+    </span>
+  </div>
 
 </div>
 
-<div style="position: fixed; left: 62%; top: 7em; bottom: 0px; right: 10px;" arrangement-uri="{{arrangementUri}}" node="{{cursorNode}}" info-pane> </div>
+<div style="position: fixed; left: 62%; top: 7em; bottom: 0px; right: 10px;" arrangement-uri="{{arrangementUri}}"
+     node="{{cursorNode}}" info-pane></div>
 
-<div  ng-if="arrangementUri && focusJson.node" arrangement-uri="{{arrangementUri}}" json="focusJson"
-      style="width: 62%; position:fixed; left: 0; top: 7em; bottom: 0; overflow: auto; border-top: 1px solid #ddd;"
-
-      branch/>
+<div ng-if="arrangementUri && focusJson.node" arrangement-uri="{{arrangementUri}}" json="focusJson"
+     style="width: 62%; position:fixed; left: 0; top: 7em; bottom: 0; overflow: auto; border-top: 1px solid #ddd;"
+     branch></div>

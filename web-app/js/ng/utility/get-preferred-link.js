@@ -46,7 +46,7 @@ function getPreferredLink(linkedThing) {
     if(!linkedThing._uri) {
         for (i in linkedThing._links.permalinks) {
             if (linkedThing._links.permalinks[i].link) {
-                linkedThing._uri = _links.permalinks[i].link;
+                linkedThing._uri = linkedThing._links.permalinks[i].link;
                 break;
             }
         }

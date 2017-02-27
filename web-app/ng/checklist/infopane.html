@@ -1,17 +1,18 @@
 <div class="container-fluid"
      style="position:absolute; width: 100%; height: 100%; margin: 0; padding: 0; font-size: 80%;">
-    <ul class="nav nav-tabs">
-        <li role="presentation" ng-class="checklist_scope.activeTab=='syn' ? 'active' : ''"><a
-                ng-click="checklist_scope.activeTab='syn'; $event.stopPropagation();">Synonymy</a></li>
-        <li role="presentation" ng-class="checklist_scope.activeTab=='prof' ? 'active' : ''"><a
-                ng-click="checklist_scope.activeTab='prof'; $event.stopPropagation();">Profile</a></li>
-        <li role="presentation" ng-class="checklist_scope.activeTab=='act' ? 'active' : ''"><a
-                ng-click="checklist_scope.activeTab='act'; $event.stopPropagation();">Actions</a></li>
-    </ul>
+  <ul class="nav nav-tabs">
+    <li role="presentation" ng-class="checklist_scope.activeTab=='syn' ? 'active' : ''"><a
+        ng-click="checklist_scope.activeTab='syn'; $event.stopPropagation();">Synonymy</a></li>
+    <li role="presentation" ng-class="checklist_scope.activeTab=='prof' ? 'active' : ''"><a
+        ng-click="checklist_scope.activeTab='prof'; $event.stopPropagation();">Profile</a></li>
+    <li role="presentation" ng-class="checklist_scope.activeTab=='act' ? 'active' : ''"><a
+        ng-click="checklist_scope.activeTab='act'; $event.stopPropagation();">Actions</a></li>
+  </ul>
 
-    <div style="border-left: 1px solid #ddd; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; position: absolute; bottom:1em; left: 0; right: 0; top:41px; ">
-        <div ng-class="checklist_scope.activeTab=='syn'?'':'hidden'" class="tab-pane-noscroll">
-            <div style="
+  <div
+      style="border-left: 1px solid #ddd; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd; position: absolute; bottom:1em; left: 0; right: 0; top:41px; ">
+    <div ng-class="checklist_scope.activeTab=='syn'?'':'hidden'" class="tab-pane-noscroll">
+      <div style="
                  top: 0;
                  height: 1.25em;
                  left: 0;
@@ -19,10 +20,14 @@
                  overflow: hidden;
                  position: absolute;
             ">
-            <a style="overflow: hidden;" href="{{servicesUrl}}/name/apni/{{nodeUris.nameId}}/api/apni-format" target=APNI" ><i class="fa fa-share"
-                /><span uri="{{nodeUris.nameUri}}" shortnametext/> in APNI</a>
-            </div>
-            <div style="
+        <a style="overflow: hidden;"
+           href="{{servicesUrl}}/name/apni/{{nodeUris.nameId}}/api/apni-format"
+           target=APNI">
+          <i class="fa fa-share"></i>
+          <span uri="{{nodeUris.nameUri}}" shortnametext></span> in APNI
+        </a>
+      </div>
+      <div style="
 top: 1.5em;
 bottom: 0;
 left: 0;
@@ -30,7 +35,7 @@ right: 0;
 overflow: auto;
 position: absolute;
             ">
-                <div ng-repeat="cited in instanceJson.instancesForCitedBy">
+        <div ng-repeat="cited in instanceJson.instancesForCitedBy">
                     <span ng-switch="cited.instanceType">
                         <b data-toggle="tooltip" title="has {{cited.instanceType}}" style="cursor: help;"
                            ng-switch-when="nomenclatural synonym">&equiv;</b>
@@ -43,71 +48,80 @@ position: absolute;
                         <small class="text-muted" ng-switch-default>has {{cited.instanceType}}</small>
                     </span>
 
-                    <span shortinstcitestext uri="{{cited._uri}}"></span>
-                </div>
-                <div ng-repeat="citation in instanceJson.instancesForCites">
-                    <small class="text-muted">{{citation.instanceType}} of</small>
-                    <span shortinstcitedbytext uri="{{citation._uri}}"></span>
-                </div>
-            </div>
+          <span shortinstcitestext uri="{{cited._uri}}"></span>
         </div>
-        <div ng-class="checklist_scope.activeTab=='prof'?'':'hidden'" class="tab-pane">
-
-            <div ng-repeat="lk in nodeJson.values" style="margin-bottom: 1em;">
-                <b><u>{{lk.title ? lk.title : (lk.linkTypeUri.nsPart+':'+lk.linkTypeUri.idPart) }}</u></b>
-                <div ng-if="lk.valueUri" style="padding-left: 2em;">
-                    <a href="{{lk.valueUri.uri}}">
-                        {{lk.valueUri.nsPart}}:{{lk.valueUri.idPart}}
-                    </a>
-                </div>
-                <div ng-if="lk.value" style="padding-left: 2em;" ng-bind-html="lk.value"/>
-            </div>
-
+        <div ng-repeat="citation in instanceJson.instancesForCites">
+          <small class="text-muted">{{citation.instanceType}} of</small>
+          <span shortinstcitedbytext uri="{{citation._uri}}"></span>
         </div>
-        <div ng-class="checklist_scope.activeTab=='act'?'':'hidden'" class="tab-pane">
-            <h4><span uri="{{nodeUris.instanceUri}}" shortinsttext/></h4>
-            <div style="margin-bottom: 1em;">
-                <a href="{{instanceEditorUrl}}/search?utf8=%E2%9C%93&query_string=id%3A+{{nodeUris.nameId}}+show-instances%3A&query_submit=Search&query_target=Names&old_ffox=false&focus_id={{nodeUris.instanceId}}"
-                   target="NSL Instance Editor">
-                    <i class="fa fa-share"/> NSL Instance Editor
-                </a>
-            </div>
-            <div style="margin-bottom: 1em;">
-                <a href="{{pagesUrl}}/verification/verify?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}" ng-if="!nodeJson.replacedAt">
-                    Verify<span ng-if="editable()">/Checkin</span>
-                </a>
-            </div>
-            <div style="margin-bottom: 1em;" ng-if="modifiedDraft()">
-                <a href="{{pagesUrl}}/verification/changes?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}">
-                    Change list
-                </a>
-            </div>
-
-            <div style="margin-bottom: 1em;" ng-if="editable()">
-                <div style="margin-bottom: 1em;" ng-if="!revertState.verifyResult && !revertState.revertResult">
-                    <button class="btn btn-danger" ng-class="revertState.busy ? 'disabled' : ''" ng-click="verifyRevert()">Revert</button>
-                    <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
-                </div>
-                <div style="margin-bottom: 1em;" ng-if="revertState.verifyResult" class="well">
-                    <div ng-repeat="m in revertState.verifyResult.msg" nested-message usemessage="m"></div>
-
-                    <div style="margin-top: 1em;">
-                        <button class="btn btn-danger" ng-click="performRevert()" ng-class="revertState.verifyResult.success && !revertState.busy ? '' : 'disabled'">Proceed</button>
-                        <button class="btn btn-default" ng-click="revertState.verifyResult=null">Cancel</button>
-                        <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
-                    </div>
-                </div>
-                <div style="margin-bottom: 1em;" ng-if="revertState.revertResult" class="well">
-                    <div ng-repeat="m in revertState.revertResult.msg" nested-message usemessage="m"></div>
-
-                    <div style="margin-top: 1em;">
-                        <button class="btn btn-success" ng-if="revertState.revertResult.success" ng-click="revertState.revertResult=null">Ok</button>
-                        <button class="btn btn-default" ng-if="!revertState.revertResult.success" ng-click="revertState.revertResult=null">Cancel</button>
-                        <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+      </div>
     </div>
+    <div ng-class="checklist_scope.activeTab=='prof'?'':'hidden'" class="tab-pane">
+
+      <div ng-repeat="lk in nodeJson.values" style="margin-bottom: 1em;">
+        <b><u>{{lk.title ? lk.title : (lk.linkTypeUri.nsPart+':'+lk.linkTypeUri.idPart) }}</u></b>
+        <div ng-if="lk.valueUri" style="padding-left: 2em;">
+          <a href="{{lk.valueUri.uri}}">
+            {{lk.valueUri.nsPart}}:{{lk.valueUri.idPart}}
+          </a>
+        </div>
+        <div ng-if="lk.value" style="padding-left: 2em;" ng-bind-html="lk.value"/>
+      </div>
+
+    </div>
+    <div ng-class="checklist_scope.activeTab=='act'?'':'hidden'" class="tab-pane">
+      <h4><span uri="{{nodeUris.instanceUri}}" shortinsttext/></h4>
+      <div style="margin-bottom: 1em;">
+        <a href="{{instanceEditorUrl}}/search?utf8=%E2%9C%93&query_string=id%3A+{{nodeUris.nameId}}+show-instances%3A&query_submit=Search&query_target=Names&old_ffox=false&focus_id={{nodeUris.instanceId}}"
+           target="NSL Instance Editor">
+          <i class="fa fa-share"/> NSL Instance Editor
+        </a>
+      </div>
+      <div style="margin-bottom: 1em;">
+        <a href="{{pagesUrl}}/verification/verify?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}"
+           ng-if="!nodeJson.replacedAt">
+          Verify<span ng-if="editable()">/Checkin</span>
+        </a>
+      </div>
+      <div style="margin-bottom: 1em;" ng-if="modifiedDraft()">
+        <a href="{{pagesUrl}}/verification/changes?tree={{checklist_scope.arrangementUri}}&focus={{nodeUris.nodeUri}}">
+          Change list
+        </a>
+      </div>
+
+      <div style="margin-bottom: 1em;" ng-if="editable()">
+        <div style="margin-bottom: 1em;" ng-if="!revertState.verifyResult && !revertState.revertResult">
+          <button class="btn btn-danger" ng-class="revertState.busy ? 'disabled' : ''" ng-click="verifyRevert()">
+            Revert
+          </button>
+          <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+        </div>
+        <div style="margin-bottom: 1em;" ng-if="revertState.verifyResult" class="well">
+          <div ng-repeat="m in revertState.verifyResult.msg" nested-message usemessage="m"></div>
+
+          <div style="margin-top: 1em;">
+            <button class="btn btn-danger" ng-click="performRevert()"
+                    ng-class="revertState.verifyResult.success && !revertState.busy ? '' : 'disabled'">Proceed
+            </button>
+            <button class="btn btn-default" ng-click="revertState.verifyResult=null">Cancel</button>
+            <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+          </div>
+        </div>
+        <div style="margin-bottom: 1em;" ng-if="revertState.revertResult" class="well">
+          <div ng-repeat="m in revertState.revertResult.msg" nested-message usemessage="m"></div>
+
+          <div style="margin-top: 1em;">
+            <button class="btn btn-success" ng-if="revertState.revertResult.success"
+                    ng-click="revertState.revertResult=null">Ok
+            </button>
+            <button class="btn btn-default" ng-if="!revertState.revertResult.success"
+                    ng-click="revertState.revertResult=null">Cancel
+            </button>
+            <i class="fa fa-spinner fa-spin" ng-if="revertState.busy"/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
