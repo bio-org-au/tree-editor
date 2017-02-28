@@ -32,9 +32,11 @@
   <g:javascript src="ng/loginlogout/loginlogout.js"/>
   <g:javascript src="ng/classifications/classifications.js"/>
   <g:javascript src="ng/checklist/checklist.js"/>
+  <g:javascript src="ng/apni/apni-format.js"/>
 
   <asset:stylesheet src="pages.css"/>
   <asset:stylesheet src="checklist.css"/>
+  <asset:stylesheet src="apni-format.css"/>
 
   <g:layoutHead/>
 </head>

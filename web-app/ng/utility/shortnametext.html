@@ -1,7 +1,7 @@
 <span ng-if="!json.fetched"><small class="text-muted">{{uri}}</small></span>
 <span ng-if="json.fetched"><span ng-bind-html="json.fullNameHtml"></span>
   <span ng-if="json.status && json.status.charAt(0)!='[' && json.status != 'legitimate'">
-    <small>{{json.status}}</small>
+    {{json.status}}
   </span>
 </span>
 <span ng-if="json.fetching"> <i class="fa fa-spinner fa-spin"></i></span>
