@@ -105,15 +105,8 @@
 }
 
 .tab-pane {
-    margin: 2px;
-    position:absolute;
-    top:0; left:0; bottom:0; right: 0;
+    padding: 1em;
+    border-left: lightgrey 1px solid;
+    border-bottom: lightgrey 1px solid;
     overflow: auto;
-}
-
-.tab-pane-noscroll {
-    margin: 2px;
-    position:absolute;
-    top:0; left:0; bottom:0; right: 0;
-    overflow: visible;
 }

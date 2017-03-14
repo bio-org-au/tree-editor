@@ -5,6 +5,8 @@ var ApniFormatController = ['$scope', '$rootScope', '$http', '$sce', function ($
     $scope.html = 'Select something on the left.';
 
     $scope.load = function () {
+        if (!$scope.uri) return;
+        $scope.html = '<i class="fa fa-spinner fa-spin"></i> loading.';
         $http({
             method: 'GET',
             url: $scope.uri + '/api/apni-format-embed'
@@ -22,13 +24,11 @@ var ApniFormatController = ['$scope', '$rootScope', '$http', '$sce', function ($
 
     $scope.$watch('uri', $scope.load);
 
-    $scope.trustedHtml = function() {
+    $scope.trustedHtml = function () {
         return $sce.trustAsHtml($scope.html);
     };
 
-    if ($scope.uri) {
-        $scope.load();
-    }
+    $scope.load();
 }];
 
 var apniFormatDirective = [function () {

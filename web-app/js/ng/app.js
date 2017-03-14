@@ -17,7 +17,16 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/checklist/', {
             templateUrl: 'ng/checklist/index.html',
             controller: 'Checklist'
-        });
+        })
+        .when('/workspaces/', {
+            templateUrl: 'ng/workspaces/index.html',
+            controller: 'Workspaceslist'
+        }).when('/verification/verify/', {
+        templateUrl: 'ng/verification/vindex.html',
+        controller: 'Verify'
+    }).when('/workspaces/edit', {
+        templateUrl: 'ng/workspaces/edit.html'
+    });
 
     // configure html5 to get links working on jsfiddle
     $locationProvider.html5Mode(true);

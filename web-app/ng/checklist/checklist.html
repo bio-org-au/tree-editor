@@ -1,7 +1,9 @@
-<span class="pull-right small"><a href="../search?tree={{arrangementUri}}">Full Search <i class="fa fa-search"></i></a></span>
+<div class="checklist">
+  <span class="pull-right small"><a href="../search?tree={{arrangementUri}}">Full Search <i
+      class="fa fa-search"></i></a></span>
 
-<span class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
-      style="width: 170px; margin-right: 1em;">
+  <span class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
+        style="width: 170px; margin-right: 1em;">
         <span class="input-group-addon"
               style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
             <i class="fa" ng-class="quicksearch.inProgress? 'fa-spin fa-spinner' : 'fa-search'"></i></span>
@@ -18,38 +20,41 @@
         </div>
     </span>
 
-<div style="position: fixed; top:2.5em;">
+  <div class="header">
 
-  <h4 class="nav">
-    <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
-    <span ng-if="arrangement.arrangementType.name=='U'">Workspace </span>
-    <span uri="{{arrangementUri}}" shortarrangementtext/>
-    <span ng-if="arrangement.arrangementType.name=='U'"> (<span uri="{{arrangement.baseArrangement._uri}}"
-                                                                shortarrangementtext/>)</span>
-  </h4>
+    <h4 class="nav">
+      <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
+      <span ng-if="arrangement.arrangementType.name=='U'">Workspace </span>
+      <span uri="{{arrangementUri}}" shortarrangementtext></span>
+      <span ng-if="arrangement.arrangementType.name=='U'">
+        (<span uri="{{arrangement.baseArrangement._uri}}" shortarrangementtext></span>)
+      </span>
+    </h4>
 
-  <div id="breadcrumbs">
-    <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
-    <span class="crumb" ng-repeat="item in pathToFocus" ng-click="clickPathToFocus($index)" ng-class="item.css">
+    <div id="breadcrumbs">
+      <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
+      <span class="crumb" ng-repeat="item in pathToFocus" ng-click="clickPathToFocus($index)" ng-class="item.css">
     <i ng-if="!$first" class="fa fa-angle-right"></i>
     <span ng-if="item.rank" class="smaller">{{item.rank}}</span>
     <span ng-if="item.label">{{item.label}}</span>
     <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>
 </span>
-    <span class="crumb" ng-repeat="item in pathToSelection" ng-if="!$first" ng-click="clickPathToSelection($index)"
-          ng-class="item.css">
+      <span class="crumb" ng-repeat="item in pathToSelection" ng-if="!$first" ng-click="clickPathToSelection($index)"
+            ng-class="item.css">
     <i class="fa fa-angle-right"></i>
     <span ng-if="item.rank" class="smaller">{{item.rank}}</span>
     <span ng-if="item.label">{{item.label}}</span>
       <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"></span>
     </span>
+    </div>
+
   </div>
-
+  <div class="row">
+    <div class="col-lg-8 col-md-7 col-sm-6 col-xs-6" ng-if="arrangementUri && focusJson.node">
+      <branch-checklist arrangement-uri="{{arrangementUri}}" json="focusJson"></branch-checklist>
+    </div>
+    <div class="col-lg-4 col-md-5 col-sm-6 col-xs-6">
+      <info-pane arrangement-uri="{{arrangementUri}}" node="{{cursorNode}}"></info-pane>
+    </div>
+  </div>
 </div>
-
-<div style="position: fixed; left: 62%; top: 7em; bottom: 0px; right: 10px;" arrangement-uri="{{arrangementUri}}"
-     node="{{cursorNode}}" info-pane></div>
-
-<div ng-if="arrangementUri && focusJson.node" arrangement-uri="{{arrangementUri}}" json="focusJson"
-     style="width: 62%; position:fixed; left: 0; top: 7em; bottom: 0; overflow: auto; border-top: 1px solid #ddd;"
-     branch></div>

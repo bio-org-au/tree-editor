@@ -24,7 +24,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             return;
         }
 
-        console.log("FETCHIONG classifications");
+        console.log("FETCHING classifications");
 
         $http({
             method: 'GET',
@@ -214,4 +214,9 @@ var workspaceformDirective = [function() {
 }];
 
 app.directive('workspaceform', workspaceformDirective);
+
+//todo I was up to here
+var WorkspaceController = ['$scope', '$rootScope', function ($scope, $rootScope) {
+    $scope.can_edit = false;
+}];
 

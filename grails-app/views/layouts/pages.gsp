@@ -33,10 +33,14 @@
   <g:javascript src="ng/classifications/classifications.js"/>
   <g:javascript src="ng/checklist/checklist.js"/>
   <g:javascript src="ng/apni/apni-format.js"/>
+  <g:javascript src="ng/workspaces/workspaces.js"/>
+  <g:javascript src="ng/verification/verify.js"/>
+  <g:javascript src="ng/workspaces/workspace.js"/>
 
   <asset:stylesheet src="pages.css"/>
   <asset:stylesheet src="checklist.css"/>
   <asset:stylesheet src="apni-format.css"/>
+  <asset:stylesheet src="checkinverify.css"/>
 
   <g:layoutHead/>
 </head>
@@ -52,7 +56,7 @@
     <span class="pull-right" loginlogout></span>
     <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>
     <li role="presentation"><a href="classification">Classifications</a></li>
-    <li role="presentation"><a href="${createLink(controller: 'Workspaces', action: 'index')}">Workspaces</a></li>
+    <li role="presentation"><a href="workspaces">Workspaces</a></li>
     <li><a href="login">Login</a></li>
   </ul>
 

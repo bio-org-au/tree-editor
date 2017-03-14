@@ -2,9 +2,18 @@
  * checkinverify.js
  */
 
-console.log("loading verify.js")
+console.log("loading verify.js");
 
-var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
+var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
+
+    if ($routeParams) {
+        if ($routeParams.focus) {
+            $scope.uri = $routeParams.focus;
+        }
+        if ($routeParams.tree) {
+            $scope.tree = $routeParams.tree;
+        }
+    }
 
     $scope.verifying = false;
     $scope.verificationResults = null;
@@ -38,7 +47,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
                 'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
-                'uri': $scope.uri,
+                'uri': $scope.uri
             }
         }).then(function successCallback(response) {
             $rootScope.msg = response.data.msg;
@@ -54,22 +63,22 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
                     {
                         msg: response.data.status,
                         body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'  // we use danger because we got no JSON back at all
                     }
                 ];
             }
         });
     };
 
-    $scope.checkinInitial = function() {
+    $scope.checkinInitial = function () {
         $scope.showAreYouSure = true;
     };
 
-    $scope.checkinCancel= function() {
+    $scope.checkinCancel = function () {
         $scope.showAreYouSure = false;
     };
 
-    $scope.checkinConfirm= function() {
+    $scope.checkinConfirm = function () {
         $scope.showAreYouSure = false;
         $scope.checkingIn = true;
         $http({
@@ -80,7 +89,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
                 'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
-                'uri': $scope.uri,
+                'uri': $scope.uri
             }
         }).then(function successCallback(response) {
             $rootScope.msg = response.data.msg;
@@ -100,13 +109,12 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
                     {
                         msg: response.data.status,
                         body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'  // we use danger because we got no JSON back at all
                     }
                 ];
             }
         });
     };
-
 
 
     var deregisterInitializationListener = [];
@@ -141,7 +149,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache'
             }
         }
 
-    }
+    };
 
     deregisterInitializationListener.push($scope.$watch("json", initializationListener));
     deregisterInitializationListener.push($scope.$watch("json.fetched", initializationListener));
@@ -163,7 +171,7 @@ var verifyDirective = [function () {
         controller: VerifyController,
         scope: {
             uri: '@'
-        },
+        }
     };
 }];
 

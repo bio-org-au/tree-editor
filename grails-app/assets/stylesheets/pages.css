@@ -36,15 +36,13 @@ div.card {
     margin: 2em;
     height: 20em;
 }
+
 div.card input {
     color: black;
 }
 
-
 div.actioncard {
     padding: 2em;
-    /*border: 1px solid lightblue;*/
-    /*border-radius: 2em;*/
     margin-top: 2em;
 }
 
@@ -52,3 +50,48 @@ div.actioncard div {
     display: inline-block;
     margin-right: 2em;
 }
+
+/*.branch-checklist {*/
+    /*width: 62%;*/
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*top: 7em;*/
+    /*bottom: 0;*/
+    /*overflow: auto;*/
+    /*border-top: 1px solid #ddd;*/
+/*}*/
+
+/*.info-pane {*/
+    /*position: fixed;*/
+    /*left: 62%;*/
+    /*top: 7em;*/
+    /*bottom: 0px;*/
+    /*right: 10px;*/
+/*}*/
+
+.infopane {
+    /*position: absolute;*/
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.profile {
+    margin-bottom: 1em;
+}
+
+.profile .value {
+    padding-left: 2em;
+}
+
+.checklist {
+
+}
+
+.checklist .header {
+    /*position: fixed;*/
+    /*top: 2.5em;*/
+    padding-bottom: 2em;
+}
+

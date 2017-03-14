@@ -36,7 +36,7 @@ var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scop
         }).then(function successCallback(response) {
             $scope.loading = false;
             $scope.loaded = true;
-            $scope.data = response.data;
+            $scope.data = (response.data ? response.data : null);
         }, function errorCallback(response) {
             console.log(response);
             $scope.loading = false;

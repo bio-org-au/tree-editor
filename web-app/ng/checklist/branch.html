@@ -22,7 +22,6 @@
         </span>
   </div>
   <div ng-if="json.subTaxa > 0 && UI.open && branchState.loaded" class="nodeitem-list">
-    <div ng-repeat="item in branch.subnodes" class="nodelist-item" arrangement-uri="{{arrangementUri}}" json="item"
-         branch></div>
+    <branch-checklist ng-repeat="item in branch.subnodes" class="nodelist-item" arrangement-uri="{{arrangementUri}}" json="item"></branch-checklist>
   </div>
 </div>

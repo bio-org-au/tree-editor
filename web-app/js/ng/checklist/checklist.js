@@ -380,6 +380,7 @@ app.controller('Branch', BranchController);
 
 var branchDirective = ['RecursionHelper', function (RecursionHelper) {
     return {
+        restrict: 'E',
         templateUrl: pagesUrl + "/ng/checklist/branch.html",
         controller: BranchController,
         scope: {
@@ -399,7 +400,7 @@ var branchDirective = ['RecursionHelper', function (RecursionHelper) {
     };
 }];
 
-app.directive('branch', branchDirective);
+app.directive('branchChecklist', branchDirective);
 
 var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
     $scope.checklist_scope = $scope.$parent.checklist_scope;
@@ -411,7 +412,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
     $scope.nameJson = null;
     $scope.instanceJson = null;
 
-    $scope.checklist_scope.activeTab = "syn";
+    $scope.checklist_scope.activeTab = "synonomy";
 
     $scope.pagesUrl = pagesUrl;
     $scope.servicesUrl = servicesUrl;
@@ -601,6 +602,7 @@ app.controller('InfoPane', InfoPaneController);
 
 var infoPaneDirective = [function () {
     return {
+        restrict: 'E',
         templateUrl: pagesUrl + "/ng/checklist/infopane.html",
         controller: InfoPaneController,
         scope: {

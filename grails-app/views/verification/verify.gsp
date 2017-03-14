@@ -10,8 +10,6 @@
 <g:link controller="checklist" action="checklist" params="${params}">Checklist</g:link>
 <g:link action="changes" params="${params}">Change list</g:link>
 
-<div verify uri="${params.focus}">
-
-</div>
+<div verify uri="${params.focus}"></div>
 </body>
 </html>
