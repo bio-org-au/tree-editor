@@ -1,39 +1,50 @@
-<H1>Finding changes</H1>
+<div class="row">
 
-Finding changes from
-<div style="margin-left: 2em;">
-    <span nameonlynodetext uri="{{json.prev._uri}}"/>
-    in <span shortarrangementtext  uri="{{prevJson.arrangement._uri}}"/>
+  <H1>Finding changes
+    <span class="small hint"><a href="checklist?tree={{tree}}&focus={{uri}}">Checklist <i class="fa fa-arrow-right"></i></a></span>
+    |
+    <span class="small hint"><a href="verification/verify?tree={{tree}}&focus={{uri}}">Verify <i class="fa fa-check"></i></a></span>
+  </H1>
+
+  Finding changes from
+  <div style="margin-left: 2em;">
+    <span nameonlynodetext uri="{{json.prev._uri}}"></span>
+    in <span shortarrangementtext uri="{{prevJson.arrangement._uri}}"></span>
     <span ng-if="prevJson && prevJson.fetched && !prevJson.checkedInAt">(draft placement)</span>
-    <div ng-if="prevJson && prevJson.fetched && prevJson.checkedInAt">last updated <span eventtext uri="{{prevJson.checkedInAt._uri}}"/></div>
-</div>
-to
-<div style="margin-left: 2em;">
-    <span nameonlynodetext uri="{{uri}}"/>
-    in <span shortarrangementtext uri="{{json.arrangement._uri}}"/>
+    <div ng-if="prevJson && prevJson.fetched && prevJson.checkedInAt">last updated <span eventtext
+                                                                                         uri="{{prevJson.checkedInAt._uri}}"></span>
+    </div>
+  </div>
+  to
+  <div style="margin-left: 2em;">
+    <span nameonlynodetext uri="{{uri}}"></span>
+    in <span shortarrangementtext uri="{{json.arrangement._uri}}"></span>
     <span ng-if="json && json.fetched && !json.checkedInAt">(draft placement)</span>
-    <div ng-if="json && json.fetched && json.checkedInAt">last updated <span eventtext uri="{{json.checkedInAt._uri}}"/></div>
-</div>
+    <div ng-if="json && json.fetched && json.checkedInAt">last updated <span eventtext
+                                                                             uri="{{json.checkedInAt._uri}}"></span>
+    </div>
+  </div>
 
-<div ng-if="findingChanges">
+  <div ng-if="findingChanges">
     (This may take some time <i class="fa fa-spinner fa-spin"></i>)
-</div>
+  </div>
 
 
-<div ng-if="changes">
+  <div ng-if="changes">
     <hr>
 
     <div ng-repeat="change in changes">
-        {{change.name}}
-        <ul>
-            <li ng-repeat="s in change.changes">
-                {{s}}
-            </li>
-        </ul>
+      {{change.name}}
+      <ul>
+        <li ng-repeat="s in change.changes">
+          {{s}}
+        </li>
+      </ul>
     </div>
-</div>
+  </div>
 
 
-<div ng-if="!findingChanges && !changes">
-No changes found.
+  <div ng-if="!findingChanges && !changes">
+    No changes found.
+  </div>
 </div>

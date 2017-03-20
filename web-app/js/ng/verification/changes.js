@@ -2,10 +2,12 @@
  * checkinverify.js
  */
 
-console.log("loading verify.js")
+console.log("loading verify.js");
 
-var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
+var ChangesController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
 
+    $scope.uri = $routeParams.focus;
+    $scope.tree = $routeParams.tree;
     $scope.findingChanges = false;
     $scope.changes = null;
 
@@ -20,7 +22,7 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
             //     'Authorization': 'JWT ' + $rootScope.getJwt()
             // },
             params: {
-                'uri': $scope.uri,
+                'uri': $scope.uri
             }
         }).then(function successCallback(response) {
             $rootScope.msg = response.data.msg;
@@ -38,7 +40,7 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
                         msg: response.status,
                         body: response.statusText,
                         html: response.data,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'  // we use danger because we got no JSON back at all
                     }
                 ];
             }
@@ -69,7 +71,7 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
             }
         }
 
-    }
+    };
 
     deregisterInitializationListener.push($scope.$watch("json", initializationListener));
     deregisterInitializationListener.push($scope.$watch("json.fetched", initializationListener));
@@ -93,15 +95,15 @@ var ChangesController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache
 
 app.controller('Changes', ChangesController);
 
-var changesDirective = [function() {
-    return {
-        templateUrl: pagesUrl + "/ng/verification/changes.html",
-        controller: ChangesController,
-        scope: {
-            uri: '@'
-        },
-    };
-}];
-
-app.directive('changes', changesDirective);
+// var changesDirective = [function() {
+//     return {
+//         templateUrl: pagesUrl + "/ng/verification/changes.html",
+//         controller: ChangesController,
+//         scope: {
+//             uri: '@'
+//         }
+//     };
+// }];
+//
+// app.directive('changes', changesDirective);
 

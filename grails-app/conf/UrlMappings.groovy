@@ -1,11 +1,15 @@
 class UrlMappings {
 
-	static mappings = {
-        "/$controller/$action?/$id?(.$format)?"{
-            constraints {
-                // apply constraints here
-            }
-        }
+    static excludes = ["/js/*"]
+
+    static mappings = {
+//        "/$controller/$action?/$id?(.$format)?"{
+//            constraints {
+//                // apply constraints here
+//            }
+//        }
+
+//        "/**"(controller: 'Home', action: "redir")
 
         "/"(controller: 'Home', action : "index")
         "500"(view:'/error')

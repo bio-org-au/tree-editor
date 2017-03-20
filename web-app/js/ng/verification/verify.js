@@ -165,15 +165,15 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
 
 app.controller('Verify', VerifyController);
 
-var verifyDirective = [function () {
-    return {
-        templateUrl: pagesUrl + "/ng/verification/verify.html",
-        controller: VerifyController,
-        scope: {
-            uri: '@'
-        }
-    };
-}];
-
-app.directive('verify', verifyDirective);
+// var verifyDirective = [function () {
+//     return {
+//         templateUrl: pagesUrl + "/ng/verification/verify.html",
+//         controller: VerifyController,
+//         scope: {
+//             uri: '@'
+//         }
+//     };
+// }];
+//
+// app.directive('verify', verifyDirective);
 

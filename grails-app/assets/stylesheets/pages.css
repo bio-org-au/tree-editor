@@ -30,15 +30,10 @@
 }
 
 div.card {
-    padding: 2em;
     border: 1px solid grey;
     border-radius: 5px;
     margin: 2em;
     height: 20em;
-}
-
-div.card input {
-    color: black;
 }
 
 div.actioncard {
@@ -50,24 +45,6 @@ div.actioncard div {
     display: inline-block;
     margin-right: 2em;
 }
-
-/*.branch-checklist {*/
-    /*width: 62%;*/
-    /*position: fixed;*/
-    /*left: 0;*/
-    /*top: 7em;*/
-    /*bottom: 0;*/
-    /*overflow: auto;*/
-    /*border-top: 1px solid #ddd;*/
-/*}*/
-
-/*.info-pane {*/
-    /*position: fixed;*/
-    /*left: 62%;*/
-    /*top: 7em;*/
-    /*bottom: 0px;*/
-    /*right: 10px;*/
-/*}*/
 
 .infopane {
     /*position: absolute;*/
@@ -95,3 +72,6 @@ div.actioncard div {
     padding-bottom: 2em;
 }
 
+.hint {
+    color: grey;
+}

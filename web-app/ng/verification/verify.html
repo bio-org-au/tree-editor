@@ -1,51 +1,67 @@
+<div class="row">
 
-<H1>{{verificationResults?"Verification Results":"Verifying"}}</H1>
-<div ng-if="prevUri && !verificationResults">
-    <span shortnametext uri="{{json.name._uri}}"></span> and names below it in <span shortarrangementtext uri="{{treeUri}}"></span>
-    will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{prevTreeUri}}"></span>.
-</div>
-<div ng-if="!prevUri && !verificationResults">
-    <span shortnametext uri="{{json.name._uri}}"></span> and names below it in <span shortarrangementtext uri="{{treeUri}}"></span>
-    will be checked against each other and against the rest of the names in <span shortarrangementtext uri="{{treeUri}}"></span>.
-</div>
+  <H1>{{verificationResults?"Verification Results":"Verifying"}}
+    <span class="small hint"><a href="checklist?tree={{tree}}&focus={{uri}}">Checklist <i class="fa fa-arrow-right"></i></a></span>
+    |
+    <span class="small hint"><a href="verification/changes?tree={{tree}}&focus={{uri}}">Changes <i
+        class="fa fa-question"></i></a></span>
+  </H1>
 
-<div ng-if="verificationResults">
-    Verification of <span shortnametext uri="{{json.name._uri}}"></span> in <span shortarrangementtext uri="{{treeUri}}"></span> complete.
-</div>
+  <div ng-if="prevUri && !verificationResults">
+    <span shortnametext uri="{{json.name._uri}}"></span> and names below it in <span shortarrangementtext
+                                                                                     uri="{{treeUri}}"></span>
+    will be checked against each other and against the rest of the names in <span shortarrangementtext
+                                                                                  uri="{{prevTreeUri}}"></span>.
+  </div>
+  <div ng-if="!prevUri && !verificationResults">
+    <span shortnametext uri="{{json.name._uri}}"></span> and names below it in <span shortarrangementtext
+                                                                                     uri="{{treeUri}}"></span>
+    will be checked against each other and against the rest of the names in <span shortarrangementtext
+                                                                                  uri="{{treeUri}}"></span>.
+  </div>
 
-<div ng-if="checkingIn">
+  <div ng-if="verificationResults">
+    Verification of <span shortnametext uri="{{json.name._uri}}"></span> in <span shortarrangementtext
+                                                                                  uri="{{treeUri}}"></span> complete.
+  </div>
+
+  <div ng-if="checkingIn">
     Checking in to <span shortarrangementtext uri="{{prevTreeUri}}"></span>.
-</div>
+  </div>
 
-<div ng-if="verifying || checkingIn">
+  <div ng-if="verifying || checkingIn">
     (This may take some time <i class="fa fa-spinner fa-spin"></i>)
-</div>
+  </div>
 
-<div ng-if="!checkingIn && verificationResults && (!verificationResults.problems || verificationResults.problems.length == 0) && hasCheckinPermission()">
+  <div
+      ng-if="!checkingIn && verificationResults && (!verificationResults.problems || verificationResults.problems.length == 0) && hasCheckinPermission()">
 
     <div ng-if="!showAreYouSure">
-        <button class="btn btn-primary" ng-click="checkinInitial()">Check into <span shortarrangementtext uri="{{prevTreeUri}}"></span></button>
+      <button class="btn btn-primary" ng-click="checkinInitial()">Check into <span shortarrangementtext
+                                                                                   uri="{{prevTreeUri}}"></span>
+      </button>
     </div>
     <div ng-if="showAreYouSure">
-        Are you sure you want to proceed with this check-in into <span shortarrangementtext uri="{{prevTreeUri}}"></span>?<br/>
-        <button class="btn btn-primary " ng-click="checkinConfirm()">Yes</button>
-        <button class="btn btn-default" ng-click="checkinCancel()">Cancel</button>
+      Are you sure you want to proceed with this check-in into <span shortarrangementtext uri="{{prevTreeUri}}"></span>?<br/>
+      <button class="btn btn-primary " ng-click="checkinConfirm()">Yes</button>
+      <button class="btn btn-default" ng-click="checkinCancel()">Cancel</button>
     </div>
 
-</div>
+  </div>
 
-<div ng-if="verificationResults">
+  <div ng-if="verificationResults">
     <hr/>
     <div ng-if="(!verificationResults.problems || verificationResults.problems.length == 0)
             && (!verificationResults.warnings || verificationResults.warnings.length == 0)">
-        No problems found.
+      No problems found.
     </div>
     <div ng-if="verificationResults.problems && verificationResults.problems.length != 0">
-        <h3>This check-in cannot be performed due to the following problems</h3>
-        <div ng-repeat="p in verificationResults.problems" nested-message usemessage="p"></div>
+      <h3>This check-in cannot be performed due to the following problems</h3>
+      <div ng-repeat="p in verificationResults.problems" nested-message usemessage="p"></div>
     </div>
     <div ng-if="verificationResults.warnings && verificationResults.warnings.length != 0">
-        <h3>Found the following issues</h3>
-        <div ng-repeat="p in verificationResults.warnings" nested-message usemessage="p"></div>
+      <h3>Found the following issues</h3>
+      <div ng-repeat="p in verificationResults.warnings" nested-message usemessage="p"></div>
     </div>
+  </div>
 </div>

@@ -29,13 +29,15 @@
   <g:javascript src="ng/utility/get-preferred-link.js"/>
   <g:javascript src="ng/utility/get-json-controller.js"/>
   <g:javascript src="ng/utility/get-uri-permissions.js"/>
-  <g:javascript src="ng/loginlogout/loginlogout.js"/>
+  <g:javascript src="ng/auth/authentication.js"/>
   <g:javascript src="ng/classifications/classifications.js"/>
   <g:javascript src="ng/checklist/checklist.js"/>
   <g:javascript src="ng/apni/apni-format.js"/>
   <g:javascript src="ng/workspaces/workspaces.js"/>
   <g:javascript src="ng/verification/verify.js"/>
   <g:javascript src="ng/workspaces/workspace.js"/>
+  <g:javascript src="ng/verification/changes.js"/>
+  <g:javascript src="ng/search/search.js"/>
 
   <asset:stylesheet src="pages.css"/>
   <asset:stylesheet src="checklist.css"/>
@@ -53,7 +55,7 @@
 
 <div class="container-fluid">
   <ul class="nav nav-pills">
-    <span class="pull-right" loginlogout></span>
+    <authenticate class="pull-right"></authenticate>
     <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>
     <li role="presentation"><a href="classification">Classifications</a></li>
     <li role="presentation"><a href="workspaces">Workspaces</a></li>
@@ -79,16 +81,7 @@
 
 
   <div ng-view></div>
-  %{--<g:layoutBody/> --}%
 
 </div>
-%{--<div class="debug">--}%
-  %{--<hr/>--}%
-  %{--<pre>$location.path() = {{$location.path()}}</pre>--}%
-  %{--<pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>--}%
-  %{--<pre>$route.current.params = {{$route.current.params}}</pre>--}%
-  %{--<pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>--}%
-  %{--<pre>$routeParams = {{$routeParams}}</pre>--}%
-%{--</div>--}%
 </body>
 </html>

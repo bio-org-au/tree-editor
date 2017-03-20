@@ -36,6 +36,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', '$route
     $scope.checklist_scope = $scope;
 
     $scope.$routeParams = $routeParams;
+    $scope.focusUri = $routeParams.focus;
     $scope.arrangementUri = $scope.$routeParams.tree;
     $scope.arrangement = jsonCache.needJson($scope.$routeParams.tree);
     

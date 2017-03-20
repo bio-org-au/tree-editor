@@ -1,8 +1,8 @@
 <div class="checklist">
-  <span class="pull-right small"><a href="../search?tree={{arrangementUri}}">Full Search <i
+  <span class="pull-right small"><a href="search?tree={{arrangementUri}}">Full Search <i
       class="fa fa-search"></i></a></span>
 
-  <span class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
+  <div class="input-group pull-right small " ng-class="quicksearch.open ? 'open' : ''"
         style="width: 170px; margin-right: 1em;">
         <span class="input-group-addon"
               style="padding: 2px; border-top-left-radius: 1em; border-bottom-left-radius: 1em;">
@@ -18,26 +18,23 @@
                  ng-click="quicksearch.onclickSearchResult($index)" ng-bind-html="r.simpleNameHtml"></div>
             <div ng-if="quicksearch.hasMore" class="text-muted small">&hellip; {{quicksearch.more}} more matches</div>
         </div>
-    </span>
+    </div>
 
   <div class="header">
 
     <h4 class="nav">
       <span ng-if="arrangement.arrangementType.name=='P'">Classification </span>
-      <span ng-if="arrangement.arrangementType.name=='U'">Workspace </span>
-      <span uri="{{arrangementUri}}" shortarrangementtext></span>
-      <span ng-if="arrangement.arrangementType.name=='U'">
-        (<span uri="{{arrangement.baseArrangement._uri}}" shortarrangementtext></span>)
-      </span>
+      <span ng-if="arrangement.arrangementType.name=='U'">Workspace: </span>
+      <b><shortarrangementtext uri="{{arrangementUri}}"></shortarrangementtext></b>
     </h4>
 
     <div id="breadcrumbs">
-      <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"/>
+      <i ng-if="pathState.loading" class="fa fa-spinner fa-spin"></i>
       <span class="crumb" ng-repeat="item in pathToFocus" ng-click="clickPathToFocus($index)" ng-class="item.css">
     <i ng-if="!$first" class="fa fa-angle-right"></i>
     <span ng-if="item.rank" class="smaller">{{item.rank}}</span>
     <span ng-if="item.label">{{item.label}}</span>
-    <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"/>
+    <span ng-if="item.simpleNameHtml" ng-bind-html="item.simpleNameHtml"></span>
 </span>
       <span class="crumb" ng-repeat="item in pathToSelection" ng-if="!$first" ng-click="clickPathToSelection($index)"
             ng-class="item.css">

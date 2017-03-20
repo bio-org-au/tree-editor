@@ -4,8 +4,10 @@
 
 console.log("loading search.js");
 
-var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
     // ok. deal with initialisation.
+
+    $scope.treeUri = $routeParams.tree;
 
     $scope.showLimitDropdown = false;
     $scope.pagesUrl = $rootScope.pagesUrl;

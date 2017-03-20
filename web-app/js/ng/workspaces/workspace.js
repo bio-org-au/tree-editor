@@ -4,9 +4,10 @@
 
 console.log("loading workspace.js");
 
-var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', function ($scope, $rootScope, $http, $element, jsonCache) {
+var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', '$location', function ($scope, $rootScope, $http, $element, jsonCache, $location) {
     $scope.can_edit = false;
     $scope.form = {};
+
 
     $scope.baseClassificationDropdown_toggle = function() {
         $scope.baseClassificationDropdown_visible = ! $scope.baseClassificationDropdown_visible;
@@ -56,7 +57,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             $scope.form.title = $scope.json.title;
             $scope.form.description = $scope.json.description;
             $scope.form.shared = $scope.json.shared;
-            $scope.form.baseClassification = $scope.json.root;
+            $scope.form.baseClassification = $scope.json.baseArrangement._uri;
             $element.find('#formDesc').html($scope.form.description);
         }
         else {
@@ -98,11 +99,13 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             params: {
                 'uri': $scope.uri,
                 'title': $scope.form.title,
-                'description': $element.find('#formDesc').html(),
-                'shared': $scope.form.shared,
+                'description': $scope.form.description,
+                'shared': $scope.form.shared
             }
         }).then(function successCallback(response) {
-            window.location = $rootScope.pagesUrl + "/workspaces/index";
+            $scope.json.fetched = false;
+            jsonCache.needJson($scope.uri);
+            $location.path("workspaces");
         }, function errorCallback(response) {
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
@@ -135,13 +138,14 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             params: {
                 'namespace': $rootScope.namespace,
                 'title': $scope.form.title,
-                'description': $element.find('#formDesc').html(),
+                'description': $scope.form.description,
                 'checkout': $scope.withTopNode,
                 'shared': $scope.form.shared,
                 'baseTree': $scope.form.baseClassification
             }
         }).then(function successCallback(response) {
-            window.location = $rootScope.pagesUrl + "/workspaces/checklist?tree=" + response.data.uri;
+            console.log("redirect to: checklist?tree=" + response.data.uri);
+            $location.path("checklist").search({tree: response.data.uri});
         }, function errorCallback(response) {
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
@@ -178,10 +182,10 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 'Authorization': 'JWT ' + $rootScope.getJwt()
             },
             params: {
-                'uri': $scope.uri,
+                'uri': $scope.uri
             }
         }).then(function successCallback(response) {
-            window.location = $rootScope.pagesUrl + "/workspaces/index";
+            $location.path("workspaces");
         }, function errorCallback(response) {
             if(response.data && response.data.msg) {
                 $rootScope.msg = response.data.msg;
@@ -191,7 +195,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                     {
                         msg: response.data.status,
                         body: response.data.reason,
-                        status: 'danger',  // we use danger because we got no JSON back at all
+                        status: 'danger'  // we use danger because we got no JSON back at all
                     }
                 ];
             }
@@ -209,14 +213,16 @@ var workspaceformDirective = [function() {
         scope: {
             uri: "@",
             withTopNode: "@"
-        },
+        }
     };
 }];
 
 app.directive('workspaceform', workspaceformDirective);
 
-//todo I was up to here
-var WorkspaceController = ['$scope', '$rootScope', function ($scope, $rootScope) {
-    $scope.can_edit = false;
+
+var WorkspaceController = ['$scope', '$rootScope', '$routeParams',function ($scope, $rootScope, $routeParams) {
+    $scope.tree = $routeParams.tree;
+    $scope.new = $scope.tree ? 'Edit' : 'New';
 }];
 
+app.controller('Workspace', WorkspaceController);

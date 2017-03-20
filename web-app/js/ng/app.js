@@ -7,8 +7,8 @@ var app = angular.module('tree-edit-app', ['Mark.Lagendijk.RecursionHelper', 'ng
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/login/', {
-            templateUrl: 'ng/loginlogout/login.html',
-            controller: 'Loginlogout'
+            templateUrl: 'ng/auth/login.html',
+            controller: 'Authentication'
         })
         .when('/classification/', {
             templateUrl: 'ng/classifications/index.html',
@@ -21,12 +21,23 @@ app.config(function ($routeProvider, $locationProvider) {
         .when('/workspaces/', {
             templateUrl: 'ng/workspaces/index.html',
             controller: 'Workspaceslist'
-        }).when('/verification/verify/', {
-        templateUrl: 'ng/verification/vindex.html',
-        controller: 'Verify'
-    }).when('/workspaces/edit', {
-        templateUrl: 'ng/workspaces/edit.html'
-    });
+        })
+        .when('/verification/verify/', {
+            templateUrl: 'ng/verification/verify.html',
+            controller: 'Verify'
+        })
+        .when('/verification/changes/', {
+            templateUrl: 'ng/verification/changes.html',
+            controller: 'Changes'
+        })
+        .when('/workspaces/edit', {
+            templateUrl: 'ng/workspaces/edit.html',
+            controller: 'Workspace'
+        })
+        .when('/search/', {
+            templateUrl: 'ng/search/search.html',
+            controller: 'Search'
+        });
 
     // configure html5 to get links working on jsfiddle
     $locationProvider.html5Mode(true);

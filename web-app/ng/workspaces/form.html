@@ -1,51 +1,56 @@
 <div ng-if="json && json.fetching">
-   <i class="fa fa-refresh fa-spin"></i> <small class="text-muted">{{uri}}</small>
+  <i class="fa fa-refresh fa-spin"></i>
+  <small class="text-muted">{{uri}}</small>
 </div>
 <form ng-if="!json || json.fetched">
 
-    <div class="form-group" ng-if="json">
-        <label for="topNode">Base classification</label>
-        <div class="form-control form-control-static" id="topNode" style="border-radius: 0;">
-            <span shortarrangementtext uri="{{baseClassification}}"></span>
+  <div class="form-group" ng-if="json">
+    <label for="topNode">Base classification <span class="hint">(you can't change this)</span></label>
+    <div class="form-control form-control-static disabled" id="topNode" style="border-radius: 0;">
+      <span shortarrangementtext uri="{{form.baseClassification}}">{{form.baseClassification}}</span>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="!json">
+    <label for="pickBaseClassification">Base classification <span class="hint">please pick from drop down list.</span>
+    </label>
+    <div class="input-group">
+      <div id="pickBaseClassification" class="form-control" ng-class="baseClassificationDropdown_visible ? 'open' : ''">
+            <span ng-click="baseClassificationDropdown_toggle()" style="cursor:pointer;">
+                <span shortarrangementtext uri="{{form.baseClassification}}"></span>
+                <span ng-if="!form.baseClassification" class="text-muted">required</span>
+            </span>
+        <div class="dropdown-menu" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">
+          <div style="cursor: pointer;" ng-repeat="i in classifications" ng-click="baseClassificationDropdown_click(i)">
+            <span shortarrangementtext uri="{{i}}"></span>
+          </div>
         </div>
+      </div>
+      <span style="cursor:pointer;" class="input-group-addon" id="basic-addon1"
+            ng-click="baseClassificationDropdown_toggle()"><i class="fa fa-caret-down"></i></span>
     </div>
+  </div>
 
-    <div class="form-group" ng-if="!json">
-        <label for="pickBaseClassification">Base classification</label>
-        <div class="input-group">
-        <div id="pickBaseClassification" class="form-control" ng-class="baseClassificationDropdown_visible ? 'open' : ''"
+  <div class="form-group">
+    <label for="formTitle">Title *</label>
+    <input required="true" type="text" class="form-control" id="formTitle" ng-model="form.title" placeholder="required">
+  </div>
+  <div class="form-group">
+    <label for="formShared">Shared </label>
+    <input required="true" type="checkbox" id="formShared" ng-model="form.shared">
+  </div>
+  <div class="form-group">
+    <label for="formDesc">Description</label>
+    <textarea ng-model="form.description" id="formDesc" class="form-control"></textarea>
+  </div>
+  <div class="form-group" ng-if="uri">
+    <button class="btn btn-default" ng-click="clickReset()">Reset</button>
+    <button class="btn btn-primary" ng-click="clickSave()" ng-enabled="form.title">Save</button>
+    <button class="btn btn-danger" ng-click="clickDelete()">Delete</button>
+  </div>
 
-           ><span ng-click="baseClassificationDropdown_toggle()" style="cursor:pointer;"><span shortarrangementtext uri="{{form.baseClassification}}"></span><span ng-if="!form.baseClassification" class="text-muted">required</span></span>
-            <div class="dropdown-menu" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">
-                <div style="cursor: pointer;" ng-repeat="i in classifications" ng-click="baseClassificationDropdown_click(i)">
-                     <span shortarrangementtext uri="{{i}}"></span>
-                </div>
-            </div>
-        </div>
-            <span style="cursor:pointer;" class="input-group-addon" id="basic-addon1" ng-click="baseClassificationDropdown_toggle()"><i class="fa fa-caret-down"></i></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="formTitle">Title *</label>
-        <input required="true" type="text" class="form-control" id="formTitle" ng-model="form.title" placeholder="required">
-    </div>
-    <div class="form-group">
-        <label for="formShared">Shared </label>
-        <input required="true" type="checkbox" id="formShared" ng-model="form.shared">
-    </div>
-    <div class="form-group">
-        <label for="formDesc">Description</label>
-        <div class="form-control" contenteditable="true" id="formDesc" style="height: 10em; overflow-y: scroll;" ng-bind-html="form.description"></div>
-    </div>
-    <div class="form-group" ng-if="uri">
-        <button class="btn btn-default" ng-click="clickReset()">Reset</button>
-        <button class="btn btn-primary" ng-click="clickSave()" ng-enabled="form.title">Save</button>
-        <button class="btn btn-danger" ng-click="clickDelete()">Delete</button>
-    </div>
-
-    <div class="form-group" ng-if="!uri">
-        <button class="btn btn-primary" ng-click="clickCreate()" ng-enabled="form.title">Save</button>
-    </div>
+  <div class="form-group" ng-if="!uri">
+    <button class="btn btn-primary" ng-click="clickCreate()" ng-enabled="form.title">Save</button>
+  </div>
 
 </form>
