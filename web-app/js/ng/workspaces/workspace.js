@@ -4,7 +4,7 @@
 
 console.log("loading workspace.js");
 
-var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', '$location', function ($scope, $rootScope, $http, $element, jsonCache, $location) {
+var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', '$location', 'auth', function ($scope, $rootScope, $http, $element, jsonCache, $location, auth) {
     $scope.can_edit = false;
     $scope.form = {};
 
@@ -32,7 +32,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             url: $rootScope.servicesUrl + '/TreeJsonView/listClassifications',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 namespace: $rootScope.namespace
@@ -94,7 +94,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             url: $rootScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 'uri': $scope.uri,
@@ -133,7 +133,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             url: $rootScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 'namespace': $rootScope.namespace,
@@ -179,7 +179,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
             url: $rootScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 'uri': $scope.uri

@@ -4,7 +4,7 @@
 
 console.log("loading workspaces.js")
 
-var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var WorkspaceslistController = ['$scope', '$rootScope', '$http', 'auth', function ($scope, $rootScope, $http, auth) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
@@ -28,7 +28,7 @@ var WorkspaceslistController = ['$scope', '$rootScope', '$http', function ($scop
             url: $rootScope.servicesUrl + '/TreeJsonView/listWorkspaces',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 namespace: $rootScope.namespace
@@ -63,7 +63,7 @@ var workspaceslistDirective = [function() {
 
 app.directive('workspaceslist', workspaceslistDirective);
 
-var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache', 'auth', function ($scope, $rootScope, $http, jsonCache, auth) {
     inheritJsonController($scope, jsonCache);
 
     $scope.afterUpdateJson = function(){
@@ -73,7 +73,7 @@ var WorkspaceslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache',
             url: $rootScope.servicesUrl + '/TreeJsonView/permissions',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 uri: $scope.uri

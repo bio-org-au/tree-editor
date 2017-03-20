@@ -4,7 +4,7 @@
 
 console.log("loading verify.js");
 
-var ChangesController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
+var ChangesController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, $http, jsonCache, $routeParams, auth) {
 
     $scope.uri = $routeParams.focus;
     $scope.tree = $routeParams.tree;
@@ -17,10 +17,9 @@ var ChangesController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePa
         $http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonView/listChanges',
-            // headers: {
-            //     'Access-Control-Request-Headers': 'Authorization',
-            //     'Authorization': 'JWT ' + $rootScope.getJwt()
-            // },
+            headers: {
+                'Authorization': 'JWT ' + auth.getJwt()
+            },
             params: {
                 'uri': $scope.uri
             }

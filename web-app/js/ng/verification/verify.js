@@ -44,7 +44,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
             url: $rootScope.servicesUrl + '/TreeJsonEdit/verifyCheckin',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 'uri': $scope.uri
@@ -86,7 +86,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
             url: $rootScope.servicesUrl + '/TreeJsonEdit/performCheckin',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {
                 'uri': $scope.uri

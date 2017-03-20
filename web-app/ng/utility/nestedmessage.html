@@ -1,23 +1,25 @@
 <div>
-    <strong ng-class="'text-' + msg.status">{{msg.msg}}</strong> {{msg.body}}
-    <span ng-if="msg.args">
-        <i class="fabutton fa fa-info" ng-click="toggleLinksDropdown()" ng-if="msg.args"></i>
-        <ul ng-if="linksDropdown">
-            <a ng-repeat=" a in msg.args" ng-if="a.uri" href="{{a.uri}}">
-                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Node'" shortnodetext uri="{{a.uri}}"/>
-                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Name'" shortnametext uri="{{a.uri}}"/>
-                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Instance'" shortinsttext uri="{{a.uri}}"/>
-                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Event'" eventtext uri="{{a.uri}}"/>
-                <li ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Arrangement'" arrangementtext uri="{{a.uri}}"/>
-            </a>
-        </ul>
-    </span>
+  <strong ng-class="'text-' + msg.status">{{msg.msg}}</strong> {{msg.body}}
+  <i class="fabutton fa fa-info" ng-click="toggleLinksDropdown()" ng-if="msg.args"></i>
 
-    <div ng-if="msg.nested" style="margin-left: 2em;">
-        <div ng-repeat="m in msg.nested" nested-message usemessage="m"></div>
-    </div>
-    <div class="well" ng-if="msg.stackTrace">
-        <div ng-repeat="s in msg.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
-    </div>
-    <div ng-if="msg.html" ng-bind-html="msg.html"/>
+  <ul ng-if="linksDropdown">
+    <li ng-repeat="a in msg.args" ng-if="a.uri">
+      <a href="{{a.uri}}">
+        <shortnodetext ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Node'" uri="{{a.uri}}"></shortnodetext>
+        <shortnametext ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Name'" uri="{{a.uri}}"></shortnametext>
+        <shortinsttext ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Instance'" uri="{{a.uri}}"></shortinsttext>
+        <eventtext ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Event'" uri="{{a.uri}}"></eventtext>
+        <arrangementtext ng-if="a.uri && a.class == 'au.org.biodiversity.nsl.Arrangement'"
+                         uri="{{a.uri}}"></arrangementtext>
+      </a>
+    </li>
+  </ul>
+
+  <div ng-if="msg.nested" style="margin-left: 2em;">
+    <div ng-repeat="m in msg.nested" nested-message usemessage="m"></div>
+  </div>
+  <div class="well" ng-if="msg.stackTrace">
+    <div ng-repeat="s in msg.stackTrace">{{s.file}}({{s.line}}): {{s.method}}</div>
+  </div>
+  <div ng-if="msg.html" ng-bind-html="msg.html"></div>
 </div>
