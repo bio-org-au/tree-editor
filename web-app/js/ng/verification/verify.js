@@ -4,7 +4,7 @@
 
 console.log("loading verify.js");
 
-var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
+var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, $http, jsonCache, $routeParams, auth) {
 
     if ($routeParams) {
         if ($routeParams.focus) {
@@ -21,7 +21,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
     $scope.permissions = {};
     $scope.prevTreePermissions = {};
 
-    get_uri_permissions($rootScope, $http, $scope.uri, function (data, success) {
+    auth.get_uri_permissions($scope.uri, function (data, success) {
         if (success)
             $scope.permissions = data;
     });
@@ -136,7 +136,7 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
             $scope.prevTreeUri = $scope.prevJson.arrangement._uri;
             $scope.prevTreeJson = jsonCache.needJson($scope.prevTreeUri);
 
-            get_uri_permissions($rootScope, $http, $scope.prevTreeUri, function (data, success) {
+            auth.get_uri_permissions($scope.prevTreeUri, function (data, success) {
                 if (success)
                     $scope.prevTreePermissions = data;
             });

@@ -32,7 +32,7 @@ function putErrorOnPage($rootScope, response) {
     }
 }
 
-var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
+var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams','auth', function ($scope, $rootScope, $http, jsonCache, $routeParams, auth) {
     $scope.checklist_scope = $scope;
 
     $scope.$routeParams = $routeParams;
@@ -203,8 +203,7 @@ var ChecklistController = ['$scope', '$rootScope', '$http', 'jsonCache', '$route
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonView/quickSearch',
             headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             data: {
                 arrangement: $scope.arrangementUri,
@@ -403,7 +402,7 @@ var branchDirective = ['RecursionHelper', function (RecursionHelper) {
 
 app.directive('branchChecklist', branchDirective);
 
-var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', 'auth', function ($scope, $rootScope, $http, jsonCache, auth) {
     $scope.checklist_scope = $scope.$parent.checklist_scope;
 
     $scope.nodeUrisStatus = {fetching: false, fetched: false};
@@ -428,7 +427,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
 
 
     $scope.treePermisions = {};
-    get_uri_permissions($rootScope, $http, $scope.checklist_scope.arrangementUri, function (data, success) {
+    auth.get_uri_permissions($scope.checklist_scope.arrangementUri, function (data, success) {
         console.log("setting the tree permissions " + success);
         console.log(data);
         if (success)
@@ -440,7 +439,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
     $scope.refreshPermissions = function () {
         $scope.focusPermissions = {};
         if ($scope.nodeUris && $scope.nodeUris.nodeUri)
-            get_uri_permissions($rootScope, $http, $scope.nodeUris.nodeUri, function (data, success) {
+            auth.get_uri_permissions($scope.nodeUris.nodeUri, function (data, success) {
                 console.log("setting the focus permissions " + success);
                 console.log(data);
                 if (success)
@@ -539,8 +538,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
             method: 'POST',
             url: $rootScope.servicesUrl + "/TreeJsonEdit/verifyRevert",
             headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {uri: $scope.nodeUris.nodeUri}
         })
@@ -574,8 +572,7 @@ var InfoPaneController = ['$scope', '$rootScope', '$http', 'jsonCache', function
             method: 'POST',
             url: $rootScope.servicesUrl + "/TreeJsonEdit/performRevert",
             headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             params: {uri: $scope.nodeUris.nodeUri}
         })

@@ -53,7 +53,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
         if($scope.json) {
             // TODO: we should be asking the service layer what permissions we have,
             // rather than figuring this out clientside
-            $scope.can_edit = $scope.json.owner == $rootScope.getUser();
+            $scope.can_edit = $scope.json.owner == $rootScope.principal();
             $scope.form.title = $scope.json.title;
             $scope.form.description = $scope.json.description;
             $scope.form.shared = $scope.json.shared;

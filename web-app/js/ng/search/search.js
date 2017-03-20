@@ -4,7 +4,7 @@
 
 console.log("loading search.js");
 
-var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', function ($scope, $rootScope, $http, jsonCache, $routeParams) {
+var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, $http, jsonCache, $routeParams, auth) {
     // ok. deal with initialisation.
 
     $scope.treeUri = $routeParams.tree;
@@ -42,7 +42,7 @@ var SearchController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
             url: $rootScope.servicesUrl + '/TreeJsonView/searchNamesInArrangement',
             headers: {
                 'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + $rootScope.getJwt()
+                'Authorization': 'JWT ' + auth.getJwt()
             },
             data: {
                 arrangement: $scope.treeUri,

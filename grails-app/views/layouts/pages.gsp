@@ -28,7 +28,6 @@
   <g:javascript src="ng/app.js"/>
   <g:javascript src="ng/utility/get-preferred-link.js"/>
   <g:javascript src="ng/utility/get-json-controller.js"/>
-  <g:javascript src="ng/utility/get-uri-permissions.js"/>
   <g:javascript src="ng/auth/authentication.js"/>
   <g:javascript src="ng/classifications/classifications.js"/>
   <g:javascript src="ng/checklist/checklist.js"/>

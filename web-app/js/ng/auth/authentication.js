@@ -7,75 +7,20 @@ console.log("loading loginlogout.js");
 
 var AuthenticationController = ['$scope', '$rootScope', '$http', '$location', 'auth', function ($scope, $rootScope, $http, $location, auth) {
     $scope.login = function () {
-        localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
-        localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
-        localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
-        $rootScope.$emit('nsl-tree-editor.loginlogout');
-
-        $http({
-            method: 'GET',
-            url: $rootScope.servicesUrl + '/auth/signInJson',
-            params: {username: $scope.form.name, password: $scope.form.password}
-        }).then(function successCallback(response) {
-            $scope.form.name = '';
-            $scope.form.password = '';
-            localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'Y');
-            localStorage.setItem('nsl-tree-editor.loginlogout.principal', response.data.principal);
-            localStorage.setItem('nsl-tree-editor.loginlogout.jwt', response.data.jwt);
-            $rootScope.$emit('nsl-tree-editor.loginlogout');
-            $location.path('/classification/');
-            $rootScope.msg = undefined;
-        }, function errorCallback(response) {
-            $rootScope.msg = [
-                {
-                    msg: "Nope.",
-                    body: "Sorry that didn't work. Try again?",
-                    status: 'warning'
-                }
-            ];
-        });
+        auth.login($scope.form.name, $scope.form.password);
+        $scope.form.name = '';
+        $scope.form.password = '';
     };
 
     $scope.logout = function () {
-        $http({
-            method: 'GET',
-            url: $rootScope.servicesUrl + '/auth/signOutJson',
-            headers: {
-                'Authorization': 'JWT ' + $rootScope.getJwt()
-            }
-        }).then(function successCallback(response) {
-            localStorage.setItem('nsl-tree-editor.loginlogout.loggedIn', 'N');
-            localStorage.setItem('nsl-tree-editor.loginlogout.principal', '');
-            localStorage.setItem('nsl-tree-editor.loginlogout.jwt', '');
-            $rootScope.$emit('nsl-tree-editor.loginlogout');
-            $location.path('/login/');
-            $rootScope.msg = undefined;
-        }, function errorCallback(response) {
-            if (response.status == 401) {
-                $rootScope.msg = [
-                    {
-                        msg: "Unauthorized:",
-                        body: "You need to log in to do this, or you don't have permission.",
-                        status: 'danger'
-                    }
-                ];
-            } else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger'
-                    }
-                ];
-            }
-        });
+        auth.logout();
     };
 
-    $scope.isLoggedIn = $rootScope.isLoggedIn;
-    $scope.getUser = $rootScope.getUser;
-    $scope.getJwt = $rootScope.getJwt;
+    $scope.isLoggedIn = auth.isLoggedIn;
+    $scope.principal = auth.principal;
+    $scope.getJwt = auth.getJwt;
 
-    $scope.form = {name: $scope.isLoggedIn() ? $scope.getUser() : '', password: ''};
+    $scope.form = {name: ($scope.isLoggedIn() ? $scope.principal() : ''), password: ''};
 }];
 
 app.controller('Authentication', AuthenticationController);
@@ -93,11 +38,12 @@ var AuthenticateDirective = [function () {
 
 app.directive('authenticate', AuthenticateDirective);
 
-app.factory('auth', ['$interval', '$http', '$log', '$rootScope', function ($interval, $http, $log, $rootScope) {
+app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', function ($interval, $http, $log, $rootScope, $location) {
 
     var STORE_LOGGEDIN = 'nsl-tree-editor.loginlogout.loggedIn';
     var STORE_PRINCIPAL = 'nsl-tree-editor.loginlogout.principal';
     var STORE_JWT = 'nsl-tree-editor.loginlogout.jwt';
+    var get_uri_permissions_cache = {};
 
     function clear() {
         localStorage.setItem(STORE_LOGGEDIN, 'N');
@@ -127,18 +73,16 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', function ($inte
         });
     }
 
-    $interval(checkLoggedIn(), 10000);
+    // $interval(checkLoggedIn(), 10000);
 
     return {
-        login: function () {
+        login: function (userName, password) {
             clear();
             $http({
                 method: 'GET',
                 url: $rootScope.servicesUrl + '/auth/signInJson',
-                params: {username: $scope.form.name, password: $scope.form.password}
+                params: {username: userName, password: password}
             }).then(function successCallback(response) {
-                $scope.form.name = '';
-                $scope.form.password = '';
                 localStorage.setItem(STORE_LOGGEDIN, 'Y');
                 localStorage.setItem(STORE_PRINCIPAL, response.data.principal);
                 localStorage.setItem(STORE_JWT, response.data.jwt);
@@ -159,7 +103,7 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', function ($inte
                 method: 'GET',
                 url: $rootScope.servicesUrl + '/auth/signOutJson',
                 headers: {
-                    'Authorization': 'JWT ' + $rootScope.getJwt()
+                    'Authorization': 'JWT ' + this.getJwt()
                 }
             }).then(function successCallback(response) {
                 clear();
@@ -188,11 +132,42 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', function ($inte
         isLoggedIn: function () {
             return localStorage.getItem(STORE_LOGGEDIN) == 'Y';
         },
-        getUser: function () {
+        principal: function () {
             return localStorage.getItem(STORE_PRINCIPAL);
         },
         getJwt: function () {
             return localStorage.getItem(STORE_JWT);
+        },
+        get_uri_permissions: function (uri, callback) {
+            if (get_uri_permissions_cache[uri]) {
+                var p = get_uri_permissions_cache[uri];
+                callback(p.data, p.success);
+            }
+            else {
+                console.log("fetch permission for " + uri);
+
+                $http({
+                    method: 'POST',
+                    url: $rootScope.servicesUrl + '/TreeJsonView/permissions',
+                    headers: {
+                        // 'Access-Control-Request-Headers': 'Authorization',
+                        'Authorization': 'JWT ' + this.getJwt()
+                    },
+                    params: {
+                        'uri': uri
+                    }
+                }).then(function successCallback(response) {
+                    $log.log("fetch permission for " + uri + " SUCCESS");
+                    $log.log(response);
+                    get_uri_permissions_cache[uri] = {data: response.data, success: true};
+                    callback(response.data, true);
+                }, function errorCallback(response) {
+                    $log.log("fetch permission for " + uri + " FAIL");
+                    $log.log(response);
+                    get_uri_permissions_cache[uri] = {data: response.data, success: false};
+                    callback(response.data, false);
+                });
+            }
         }
     };
 }]);

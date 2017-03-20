@@ -54,21 +54,8 @@ var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$locatio
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
     $rootScope.namespace = $element[0].getAttribute('data-namespace');
 
-    $rootScope.isLoggedIn = function () {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.loggedIn') == 'Y';
-    };
-
-    $rootScope.getUser = function () {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.principal');
-    };
-
-    $rootScope.getJwt = function () {
-        return localStorage.getItem('nsl-tree-editor.loginlogout.jwt');
-    };
-
     function bookmarks(category) {
         if (!category || !$rootScope.namespace) return {};
-
 
         var modified = false;
 
@@ -153,9 +140,9 @@ var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$locatio
 
         // i'm going to do this the easy way
         var newVec = [];
-        for (var vec_i in thebiz.vec) {
-            if (thebiz.vec[vec_i] != uri) {
-                newVec.push(thebiz.vec[vec_i]);
+        for (var vec_i1 in thebiz.vec) {
+            if (thebiz.vec[vec_i1] != uri) {
+                newVec.push(thebiz.vec[vec_i1]);
             }
         }
 
