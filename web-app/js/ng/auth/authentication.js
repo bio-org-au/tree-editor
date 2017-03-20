@@ -51,29 +51,43 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
         localStorage.setItem(STORE_JWT.jwt, '');
     }
 
-    function checkLoggedIn() {
-        $http({
-            method: 'GET',
-            url: $rootScope.servicesUrl + '/auth/check',
-            headers: {
-                'Authorization': 'JWT ' + localStorage.getItem(STORE_JWT)
-            }
-        }).then(function successCallback(response) {
-            clear();
-            $location.path('/login/');
-        }, function errorCallback(response) {
-            $log.log(response.data);
-            $rootScope.msg = [
-                {
-                    msg: "Sorry you're logged out.",
-                    body: "You need to log in again.",
-                    status: 'warning'
-                }
-            ];
-        });
+    function isLoggedIn() {
+        return localStorage.getItem(STORE_LOGGEDIN) == 'Y';
     }
 
-    // $interval(checkLoggedIn(), 10000);
+    function principal() {
+        return localStorage.getItem(STORE_PRINCIPAL);
+    }
+
+    function getJwt() {
+        return localStorage.getItem(STORE_JWT);
+    }
+
+    function http(params) {
+        if (isLoggedIn()) {
+            $http({
+                method: params.method,
+                url: params.url,
+                params: params.params,
+                data: params.data,
+                headers: {
+                    'Authorization': 'JWT ' + getJwt()
+                }
+            }).then(function successCallback(response) {
+                params.success(response);
+            }, function errorCallback(response) {
+                if (response.status == 401) {
+                    // re-authenticate if we can?
+                    $log.error("authentication error" + response);
+                    $location.path('/login/');
+                } else {
+                    params.fail(response);
+                }
+            });
+        } else {
+            $location.path('/login/');
+        }
+    }
 
     return {
         login: function (userName, password) {
@@ -111,13 +125,7 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
                 $rootScope.msg = undefined;
             }, function errorCallback(response) {
                 if (response.status == 401) {
-                    $rootScope.msg = [
-                        {
-                            msg: "Unauthorized:",
-                            body: "You need to log in to do this, or you don't have permission.",
-                            status: 'danger'
-                        }
-                    ];
+                    $location.path('/login/');
                 } else {
                     $rootScope.msg = [
                         {
@@ -129,38 +137,10 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
                 }
             });
         },
-        http: function (params) {
-            if (this.isLoggedIn()) {
-                $http({
-                    method: params.method,
-                    url: params.url,
-                    params: params.params,
-                    data: params.data,
-                    headers: {
-                        'Authorization': 'JWT ' + this.getJwt()
-                    }
-                }).then(function successCallback(response) {
-                    params.success(response);
-                }, function errorCallback(response) {
-                    if (response.status == 401) {
-                        // re-authenticate if we can?
-                    } else {
-                        params.fail(response);
-                    }
-                });
-            } else {
-                $location.path('/login/');
-            }
-        },
-        isLoggedIn: function () {
-            return localStorage.getItem(STORE_LOGGEDIN) == 'Y';
-        },
-        principal: function () {
-            return localStorage.getItem(STORE_PRINCIPAL);
-        },
-        getJwt: function () {
-            return localStorage.getItem(STORE_JWT);
-        },
+        http: http,
+        isLoggedIn: isLoggedIn,
+        principal: principal,
+        getJwt: getJwt,
         get_uri_permissions: function (uri, callback) {
             if (get_uri_permissions_cache[uri]) {
                 var p = get_uri_permissions_cache[uri];
@@ -169,26 +149,24 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
             else {
                 console.log("fetch permission for " + uri);
 
-                $http({
+                http({
                     method: 'POST',
                     url: $rootScope.servicesUrl + '/TreeJsonView/permissions',
-                    headers: {
-                        // 'Access-Control-Request-Headers': 'Authorization',
-                        'Authorization': 'JWT ' + this.getJwt()
-                    },
                     params: {
                         'uri': uri
+                    },
+                    success: function successCallback(response) {
+                        $log.log("fetch permission for " + uri + " SUCCESS");
+                        $log.log(response);
+                        get_uri_permissions_cache[uri] = {data: response.data, success: true};
+                        callback(response.data, true);
+                    },
+                    fail: function errorCallback(response) {
+                        $log.log("fetch permission for " + uri + " FAIL");
+                        $log.log(response);
+                        get_uri_permissions_cache[uri] = {data: response.data, success: false};
+                        callback(response.data, false);
                     }
-                }).then(function successCallback(response) {
-                    $log.log("fetch permission for " + uri + " SUCCESS");
-                    $log.log(response);
-                    get_uri_permissions_cache[uri] = {data: response.data, success: true};
-                    callback(response.data, true);
-                }, function errorCallback(response) {
-                    $log.log("fetch permission for " + uri + " FAIL");
-                    $log.log(response);
-                    get_uri_permissions_cache[uri] = {data: response.data, success: false};
-                    callback(response.data, false);
                 });
             }
         }
