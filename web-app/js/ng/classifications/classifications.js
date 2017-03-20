@@ -5,40 +5,42 @@
 console.log("loading classifications.js")
 
 
-var ClassificationslistController = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+var ClassificationslistController = ['$scope', '$rootScope', 'auth', function ($scope, $rootScope, auth) {
     $scope.loading = false;
     $scope.loaded = false;
     $scope.failedtoload = false;
     $scope.data = null;
     $scope.response = null;
 
-    $scope.reload = function() {
+    $scope.reload = function () {
         $scope.loading = false;
         $scope.loaded = false;
         $scope.failedtoload = false;
         $scope.data = null;
         $scope.response = null;
 
-        if(!$rootScope.namespace) {
+        if (!$rootScope.namespace) {
             $scope.loaded = true;
             return;
         }
 
-        $http({
+        auth.http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/TreeJsonView/listClassifications',
             params: {
                 namespace: $rootScope.namespace
+            },
+            success: function successCallback(response) {
+                $scope.loading = false;
+                $scope.loaded = true;
+                $scope.data = response.data;
+            },
+            fail: function errorCallback(response) {
+                console.log(response);
+                $scope.loading = false;
+                $scope.failedtoload = true;
+                $scope.response = response;
             }
-        }).then(function successCallback(response) {
-            $scope.loading = false;
-            $scope.loaded = true;
-            $scope.data = response.data;
-        }, function errorCallback(response) {
-            console.log(response);
-            $scope.loading = false;
-            $scope.failedtoload = true;
-            $scope.response = response;
         });
     };
 
@@ -49,23 +51,22 @@ var ClassificationslistController = ['$scope', '$rootScope', '$http', function (
 
 app.controller('Classificationslist', ClassificationslistController);
 
-app.directive('classificationslist', [ function() {
+app.directive('classificationslist', [function () {
     return {
         templateUrl: pagesUrl + "/ng/classifications/list.html",
         controller: ClassificationslistController,
-        scope: {
-        },
+        scope: {},
     };
 }]);
 
-var ClassificationslistrowController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var ClassificationslistrowController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
     inheritJsonController($scope, jsonCache);
 }];
 
 
 app.controller('Classificationslistrow', ClassificationslistrowController);
 
-var classificationslistrowDirective = [function() {
+var classificationslistrowDirective = [function () {
     return {
         templateUrl: pagesUrl + "/ng/classifications/row.html",
         controller: ClassificationslistrowController,

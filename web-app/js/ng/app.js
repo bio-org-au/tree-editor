@@ -185,7 +185,7 @@ var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$locatio
 
 app.controller('appbody', AppbodyController);
 
-var NestedMessageController = ['$scope', '$rootScope', '$http', 'jsonCache', function ($scope, $rootScope, $http, jsonCache) {
+var NestedMessageController = ['$scope', '$rootScope', 'jsonCache', function ($scope) {
     $scope.msg = $scope.usemessage();
 
     $scope.linksDropdown = false;

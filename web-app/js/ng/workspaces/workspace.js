@@ -4,7 +4,7 @@
 
 console.log("loading workspace.js");
 
-var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jsonCache', '$location', 'auth', function ($scope, $rootScope, $http, $element, jsonCache, $location, auth) {
+var WorkspaceformController = ['$scope', '$rootScope', '$element', 'jsonCache', '$location', 'auth', function ($scope, $rootScope, $element, jsonCache, $location, auth) {
     $scope.can_edit = false;
     $scope.form = {};
 
@@ -27,22 +27,20 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
 
         console.log("FETCHING classifications");
 
-        $http({
+        auth.http({
             method: 'GET',
             url: $rootScope.servicesUrl + '/TreeJsonView/listClassifications',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 namespace: $rootScope.namespace
+            },
+            success: function successCallback(response) {
+                console.log("GOT classifications");
+                console.log(response.data);
+                $scope.classifications = response.data;
+            },
+            fail: function errorCallback(response) {
+                console.log(response);
             }
-        }).then(function successCallback(response) {
-            console.log("GOT classifications");
-            console.log(response.data);
-            $scope.classifications = response.data;
-        }, function errorCallback(response) {
-            console.log(response);
         });
     };
 
@@ -53,7 +51,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
         if($scope.json) {
             // TODO: we should be asking the service layer what permissions we have,
             // rather than figuring this out clientside
-            $scope.can_edit = $scope.json.owner == $rootScope.principal();
+            $scope.can_edit = $scope.json.owner == auth.principal();
             $scope.form.title = $scope.json.title;
             $scope.form.description = $scope.json.description;
             $scope.form.shared = $scope.json.shared;
@@ -89,35 +87,33 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
 
     $scope.clickSave = function() {
         console.log("clickSave");
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/updateWorkspace',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 'uri': $scope.uri,
                 'title': $scope.form.title,
                 'description': $scope.form.description,
                 'shared': $scope.form.shared
-            }
-        }).then(function successCallback(response) {
-            $scope.json.fetched = false;
-            jsonCache.needJson($scope.uri);
-            $location.path("workspaces");
-        }, function errorCallback(response) {
-            if(response.data && response.data.msg) {
-                $rootScope.msg = response.data.msg;
-            }
-            else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger'  // we use danger because we got no JSON back at all
-                    }
-                ];
+            },
+            success: function successCallback(response) {
+                $scope.json.fetched = false;
+                jsonCache.needJson($scope.uri);
+                $location.path("workspaces");
+            },
+            fail: function errorCallback(response) {
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else {
+                    $rootScope.msg = [
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'  // we use danger because we got no JSON back at all
+                        }
+                    ];
+                }
             }
         });
 
@@ -128,13 +124,9 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
 
         console.log("clickCreate");
 
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/createWorkspace',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 'namespace': $rootScope.namespace,
                 'title': $scope.form.title,
@@ -142,31 +134,32 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
                 'checkout': $scope.withTopNode,
                 'shared': $scope.form.shared,
                 'baseTree': $scope.form.baseClassification
-            }
-        }).then(function successCallback(response) {
-            console.log("redirect to: checklist?tree=" + response.data.uri);
-            $location.path("checklist").search({tree: response.data.uri});
-        }, function errorCallback(response) {
-            if(response.data && response.data.msg) {
-                $rootScope.msg = response.data.msg;
-            }
-            else {
-                if(response.status == 401) {
-                    $rootScope.msg = [
-                        {
-                            msg: "Unauthorized:",
-                            body: "You need to log in to do this, or you don't have permission.",
-                            status: 'danger'
-                        }
-                    ];
-                } else {
-                    $rootScope.msg = [
-                        {
-                            msg: response.data.status,
-                            body: response.data.reason,
-                            status: 'danger'
-                        }
-                    ];
+            },
+            success: function successCallback(response) {
+                console.log("redirect to: checklist?tree=" + response.data.uri);
+                $location.path("checklist").search({tree: response.data.uri});
+            }, fail: function errorCallback(response) {
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else {
+                    if (response.status == 401) {
+                        $rootScope.msg = [
+                            {
+                                msg: "Unauthorized:",
+                                body: "You need to log in to do this, or you don't have permission.",
+                                status: 'danger'
+                            }
+                        ];
+                    } else {
+                        $rootScope.msg = [
+                            {
+                                msg: response.data.status,
+                                body: response.data.reason,
+                                status: 'danger'
+                            }
+                        ];
+                    }
                 }
             }
         });
@@ -174,30 +167,28 @@ var WorkspaceformController = ['$scope', '$rootScope', '$http', '$element', 'jso
 
     $scope.clickDelete = function() {
         if(!window.confirm("Delete workspace \"" + $scope.json.title + "\" ?")) return;
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/deleteWorkspace',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 'uri': $scope.uri
-            }
-        }).then(function successCallback(response) {
-            $location.path("workspaces");
-        }, function errorCallback(response) {
-            if(response.data && response.data.msg) {
-                $rootScope.msg = response.data.msg;
-            }
-            else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger'  // we use danger because we got no JSON back at all
-                    }
-                ];
+            },
+            success: function successCallback(response) {
+                $location.path("workspaces");
+            },
+            fail: function errorCallback(response) {
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else {
+                    $rootScope.msg = [
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'  // we use danger because we got no JSON back at all
+                        }
+                    ];
+                }
             }
         });
     };

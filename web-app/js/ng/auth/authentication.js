@@ -129,6 +129,29 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
                 }
             });
         },
+        http: function (params) {
+            if (this.isLoggedIn()) {
+                $http({
+                    method: params.method,
+                    url: params.url,
+                    params: params.params,
+                    data: params.data,
+                    headers: {
+                        'Authorization': 'JWT ' + this.getJwt()
+                    }
+                }).then(function successCallback(response) {
+                    params.success(response);
+                }, function errorCallback(response) {
+                    if (response.status == 401) {
+                        // re-authenticate if we can?
+                    } else {
+                        params.fail(response);
+                    }
+                });
+            } else {
+                $location.path('/login/');
+            }
+        },
         isLoggedIn: function () {
             return localStorage.getItem(STORE_LOGGEDIN) == 'Y';
         },

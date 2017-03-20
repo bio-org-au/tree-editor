@@ -4,7 +4,7 @@
 
 console.log("loading verify.js");
 
-var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, $http, jsonCache, $routeParams, auth) {
+var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, jsonCache, $routeParams, auth) {
 
     if ($routeParams) {
         if ($routeParams.focus) {
@@ -39,33 +39,31 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
     $scope.performVerification = function () {
         $scope.verifying = true;
         $scope.verificationResults = null;
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/verifyCheckin',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 'uri': $scope.uri
-            }
-        }).then(function successCallback(response) {
-            $rootScope.msg = response.data.msg;
-            $scope.verifying = false;
-            $scope.verificationResults = response.data.verificationResults;
-        }, function errorCallback(response) {
-            $scope.verifying = false;
-            if (response.data && response.data.msg) {
+            },
+            success: function successCallback(response) {
                 $rootScope.msg = response.data.msg;
-            }
-            else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger'  // we use danger because we got no JSON back at all
-                    }
-                ];
+                $scope.verifying = false;
+                $scope.verificationResults = response.data.verificationResults;
+            },
+            fail: function errorCallback(response) {
+                $scope.verifying = false;
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else {
+                    $rootScope.msg = [
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'  // we use danger because we got no JSON back at all
+                        }
+                    ];
+                }
             }
         });
     };
@@ -81,37 +79,35 @@ var VerifyController = ['$scope', '$rootScope', '$http', 'jsonCache', '$routePar
     $scope.checkinConfirm = function () {
         $scope.showAreYouSure = false;
         $scope.checkingIn = true;
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + '/TreeJsonEdit/performCheckin',
-            headers: {
-                'Access-Control-Request-Headers': 'Authorization',
-                'Authorization': 'JWT ' + auth.getJwt()
-            },
             params: {
                 'uri': $scope.uri
-            }
-        }).then(function successCallback(response) {
-            $rootScope.msg = response.data.msg;
-            $scope.checkingIn = false;
-
-            // the node will still be in the tree, but it will now be in the tree because
-            // its from the base classification
-            window.location.href = $rootScope.pagesUrl + "/checklist/checklist?tree=" + $scope.treeUri + "&focus=" + $scope.uri;
-
-        }, function errorCallback(response) {
-            $scope.checkingIn = true;
-            if (response.data && response.data.msg) {
+            },
+            success: function successCallback(response) {
                 $rootScope.msg = response.data.msg;
-            }
-            else {
-                $rootScope.msg = [
-                    {
-                        msg: response.data.status,
-                        body: response.data.reason,
-                        status: 'danger'  // we use danger because we got no JSON back at all
-                    }
-                ];
+                $scope.checkingIn = false;
+
+                // the node will still be in the tree, but it will now be in the tree because
+                // its from the base classification
+                window.location.href = $rootScope.pagesUrl + "/checklist/checklist?tree=" + $scope.treeUri + "&focus=" + $scope.uri;
+
+            },
+            fail: function errorCallback(response) {
+                $scope.checkingIn = true;
+                if (response.data && response.data.msg) {
+                    $rootScope.msg = response.data.msg;
+                }
+                else {
+                    $rootScope.msg = [
+                        {
+                            msg: response.data.status,
+                            body: response.data.reason,
+                            status: 'danger'  // we use danger because we got no JSON back at all
+                        }
+                    ];
+                }
             }
         });
     };

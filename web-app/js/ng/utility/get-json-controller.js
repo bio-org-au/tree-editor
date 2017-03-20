@@ -6,7 +6,7 @@ console.log("loading get-json-controller.js")
 
 // this should be an angular "service". Too busy to servicify it now.
 
-app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $rootScope, $interval) {
+app.factory('jsonCache', ['auth', '$rootScope', function (auth, $rootScope) {
     var jsonCache = {};
 
     function currentJson(uri) {
@@ -99,7 +99,7 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
         if (!uri) return null;
         var json = currentJson(uri);
 
-        if(!json.fetching && !json.queued_for_fetching) {
+        if (!json.fetching && !json.queued_for_fetching) {
             json.queued_for_fetching = true;
 
             bulkUrisPending.push(uri);
@@ -113,11 +113,11 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
 
     function manageBulkState() {
 
-        if(bulkUrisInProgress.length > 0) return;
-        if(bulkUrisPending.length == 0) return;
+        if (bulkUrisInProgress.length > 0) return;
+        if (bulkUrisPending.length == 0) return;
 
         // ok. time to push.
-        for(var i = 0; i<50; i++) if(bulkUrisPending.length > 0) {
+        for (var i = 0; i < 50; i++) if (bulkUrisPending.length > 0) {
             var json = currentJson(bulkUrisPending.shift());
             json.fetching = true;
             json.queued_for_fetching = false;
@@ -125,36 +125,38 @@ app.factory('jsonCache', ['$http', '$rootScope', '$interval', function ($http, $
             bulkUrisInProgress.push(json._uri);
         }
 
-        $http({
+        auth.http({
             method: 'POST',
             url: $rootScope.servicesUrl + "/api/bulk-fetch",
-            data: bulkUrisInProgress
-        }).then(function (response) {
-            console.log("BULK FETCH SUCCESS");
-            console.log(response);
+            data: bulkUrisInProgress,
+            success: function (response) {
+                console.log("BULK FETCH SUCCESS");
+                console.log(response);
 
-            stampJson(response.data);
-            scanJson(response.data);
+                stampJson(response.data);
+                scanJson(response.data);
 
-            while(bulkUrisInProgress.length > 0) {
-                var json = currentJson(bulkUrisInProgress.shift());
-                json.fetching = false;
-                json._fetchError = null;
+                while (bulkUrisInProgress.length > 0) {
+                    var json = currentJson(bulkUrisInProgress.shift());
+                    json.fetching = false;
+                    json._fetchError = null;
+                }
+
+                // re-fire immediately after the HTTP comes back
+                manageBulkState();
+            },
+            fail: function (response) {
+                console.log("BULK FETCH FAIL");
+                console.log(response);
+                while (bulkUrisInProgress.length > 0) {
+                    var json = currentJson(bulkUrisInProgress.shift());
+                    json.fetching = false;
+                    json._fetchError = response;
+                }
+
+                // re-fire immediately after the HTTP comes back
+                manageBulkState();
             }
-
-            // re-fire immediately after the HTTP comes back
-            manageBulkState();
-        }, function (response) {
-            console.log("BULK FETCH FAIL");
-            console.log(response);
-            while(bulkUrisInProgress.length > 0) {
-                var json = currentJson(bulkUrisInProgress.shift());
-                json.fetching = false;
-                json._fetchError = response;
-            }
-
-            // re-fire immediately after the HTTP comes back
-            manageBulkState();
         });
 
 
@@ -194,13 +196,13 @@ var GetJsonController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
             $scope.afterUpdateJson();
             if ($scope.json) {
                 var deregisterLoading = $scope.$watch(
-                        '(json.fetching?0:1) + (json.queued_for_fetching?0:2)',
+                    '(json.fetching?0:1) + (json.queued_for_fetching?0:2)',
                     function () {
-                    $scope.afterUpdateJson();
-                    if (!$scope.json || (!$scope.json.fetching && !$scope.json.queued_for_fetching)) {
-                        deregisterLoading();
-                    }
-                });
+                        $scope.afterUpdateJson();
+                        if (!$scope.json || (!$scope.json.fetching && !$scope.json.queued_for_fetching)) {
+                            deregisterLoading();
+                        }
+                    });
             }
         }
     });
@@ -313,8 +315,8 @@ app.directive('nameonlynodetext', nameonlynodetextDirective);
 var EventtextController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
     inheritJsonController($scope, jsonCache);
 
-    $scope.afterUpdateJson = function() {
-        if($scope.json && $scope.json.fetched && $scope.json.timeStamp) {
+    $scope.afterUpdateJson = function () {
+        if ($scope.json && $scope.json.fetched && $scope.json.timeStamp) {
             var d = new Date(Date.parse($scope.json.timeStamp))
             $scope.timestampString = d.toLocaleString();
         }
