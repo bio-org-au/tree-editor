@@ -11,15 +11,15 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: 'Authentication'
         })
         .when('/classification/', {
-            templateUrl: 'ng/classifications/index.html',
+            templateUrl: 'ng/classifications/list.html',
             controller: 'Classificationslist'
         })
         .when('/checklist/', {
-            templateUrl: 'ng/checklist/index.html',
+            templateUrl: 'ng/checklist/checklist.html',
             controller: 'Checklist'
         })
         .when('/workspaces/', {
-            templateUrl: 'ng/workspaces/index.html',
+            templateUrl: 'ng/workspaces/list.html',
             controller: 'Workspaceslist'
         })
         .when('/verification/verify/', {

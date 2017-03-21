@@ -51,14 +51,6 @@ var ClassificationslistController = ['$scope', '$rootScope', 'auth', function ($
 
 app.controller('Classificationslist', ClassificationslistController);
 
-app.directive('classificationslist', [function () {
-    return {
-        templateUrl: pagesUrl + "/ng/classifications/list.html",
-        controller: ClassificationslistController,
-        scope: {},
-    };
-}]);
-
 var ClassificationslistrowController = ['$scope', 'jsonCache', function ($scope, jsonCache) {
     inheritJsonController($scope, jsonCache);
 }];

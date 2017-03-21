@@ -50,17 +50,6 @@ var WorkspaceslistController = ['$scope', '$rootScope', 'auth', function ($scope
 
 app.controller('Workspaceslist', WorkspaceslistController);
 
-var workspaceslistDirective = [function() {
-    return {
-        templateUrl: pagesUrl + "/ng/workspaces/list.html",
-        controller: WorkspaceslistController,
-        scope: {
-        },
-    };
-}];
-
-app.directive('workspaceslist', workspaceslistDirective);
-
 var WorkspaceslistrowController = ['$scope', '$rootScope', 'jsonCache', 'auth', function ($scope, $rootScope, jsonCache, auth) {
     inheritJsonController($scope, jsonCache);
 

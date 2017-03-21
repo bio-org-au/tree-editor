@@ -267,22 +267,7 @@ var ChecklistController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 
 
 app.controller('Checklist', ChecklistController);
 
-var checklistDirective = [function () {
-    return {
-        templateUrl: pagesUrl + "/ng/checklist/checklist.html",
-        controller: ChecklistController,
-        scope: {
-            arrangementUri: "@",
-            focusUri: "@",
-            node: "@"
-        }
-    };
-}];
-
-app.directive('checklist', checklistDirective);
-
-
-var BranchController = ['$scope', '$rootScope', 'auth', function ($scope, $rootScope,auth) {
+var BranchController = ['$scope', '$rootScope', 'auth', '$log', function ($scope, $rootScope, auth, $log) {
     $scope.checklist_scope = $scope.$parent.checklist_scope;
     $scope.branchState = {loading: null, loaded: null};
     $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node);
@@ -328,20 +313,20 @@ var BranchController = ['$scope', '$rootScope', 'auth', function ($scope, $rootS
         $scope.branch = {};
 
 
-        console.log("EXECUTING BRANCH FETCH");
-        console.log("$scope.arrangementUri " + $scope.arrangementUri);
-        console.log("node " + node);
+        $log.info("EXECUTING BRANCH FETCH");
+        $log.info("$scope.arrangementUri " + $scope.arrangementUri);
+        $log.info("node " + node);
 
         auth.http({
             method: 'GET',
             url: $rootScope.servicesUrl + "/TreeJsonView/nodeBranch",
             params: {arrangement: $scope.arrangementUri, node: node},
             success: function (response) {
-                console.log("GET BRANCH SUCCESS");
+                $log.info("GET BRANCH SUCCESS");
 
                 if (!$scope.json.node == node) {
                     // discard this load
-
+                    $log.info("* Discarding load of " + node);
                 }
                 else {
                     $scope.branchState.loading = null;
@@ -351,11 +336,11 @@ var BranchController = ['$scope', '$rootScope', 'auth', function ($scope, $rootS
                 }
             },
             fail: function (response) {
-                console.log("GET BRANCH FAIL");
-                console.log(response);
+                $log.error("GET BRANCH FAIL");
+                $log.error(response);
                 if (!$scope.json.node == node) {
                     // discard this load
-
+                    $log.info("* Discarding load of " + node);
                 }
                 else {
                     $scope.branchState.loading = null;
@@ -368,10 +353,12 @@ var BranchController = ['$scope', '$rootScope', 'auth', function ($scope, $rootS
     };
 
     $scope.$watch("UI.open", $scope.fetchBranch);
-    $scope.$watch("json.node", function () {
-        $scope.branchState = {loading: null, loaded: null};
-        $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node);
-        $scope.fetchBranch();
+    $scope.$watch("json.node", function (prev, current) {
+        if (prev != current) {
+            $scope.branchState = {loading: null, loaded: null};
+            $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node);
+            $scope.fetchBranch();
+        }
     });
 
 }];
@@ -402,7 +389,7 @@ var branchDirective = ['RecursionHelper', function (RecursionHelper) {
 
 app.directive('branchChecklist', branchDirective);
 
-var InfoPaneController = ['$scope', '$rootScope', 'jsonCache', 'auth', function ($scope, $rootScope,jsonCache, auth) {
+var InfoPaneController = ['$scope', '$rootScope', 'jsonCache', 'auth', function ($scope, $rootScope, jsonCache, auth) {
     $scope.checklist_scope = $scope.$parent.checklist_scope;
 
     $scope.nodeUrisStatus = {fetching: false, fetched: false};

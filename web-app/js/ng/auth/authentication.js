@@ -43,12 +43,15 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
     var STORE_LOGGEDIN = 'nsl-tree-editor.loginlogout.loggedIn';
     var STORE_PRINCIPAL = 'nsl-tree-editor.loginlogout.principal';
     var STORE_JWT = 'nsl-tree-editor.loginlogout.jwt';
+    var STORE_REFRESH_JWT = 'nsl-tree-editor.loginlogout.refreshJwt';
+
     var get_uri_permissions_cache = {};
 
     function clear() {
         localStorage.setItem(STORE_LOGGEDIN, 'N');
-        localStorage.setItem(STORE_PRINCIPAL.principal, '');
-        localStorage.setItem(STORE_JWT.jwt, '');
+        localStorage.setItem(STORE_PRINCIPAL, '');
+        localStorage.setItem(STORE_JWT, '');
+        localStorage.setItem(STORE_REFRESH_JWT, '');
     }
 
     function isLoggedIn() {
@@ -61,6 +64,10 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
 
     function getJwt() {
         return localStorage.getItem(STORE_JWT);
+    }
+
+    function getRefreshToken() {
+        return localStorage.getItem(STORE_REFRESH_JWT);
     }
 
     function http(params) {
@@ -78,8 +85,10 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
             }, function errorCallback(response) {
                 if (response.status == 401) {
                     // re-authenticate if we can?
-                    $log.error("authentication error" + response);
-                    $location.path('/login/');
+                    $log.info("authentication error, trying re auth:" + response);
+                    reAuthenticate(function (){
+                        http(params);
+                    });
                 } else {
                     params.fail(response);
                 }
@@ -87,6 +96,31 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
         } else {
             $location.path('/login/');
         }
+    }
+
+    function reAuthenticate(success) {
+        $http({
+            method: 'GET',
+            url: $rootScope.servicesUrl + '/auth/reauth',
+            headers: {
+                'Authorization': 'JWT ' + getRefreshToken()
+            }
+        }).then(function successCallback(response) {
+            localStorage.setItem(STORE_LOGGEDIN, 'Y');
+            localStorage.setItem(STORE_PRINCIPAL, response.data.principal);
+            localStorage.setItem(STORE_JWT, response.data.jwt);
+            localStorage.setItem(STORE_REFRESH_JWT, response.data.refreshToken);
+            success();
+        }, function errorCallback(response) {
+            $rootScope.msg = [
+                {
+                    msg: "Sorry, your session timed out.",
+                    status: 'warning'
+                }
+            ];
+            $log.error("authentication error" + response);
+            $location.path('/login/');
+        });
     }
 
     return {
@@ -100,6 +134,7 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
                 localStorage.setItem(STORE_LOGGEDIN, 'Y');
                 localStorage.setItem(STORE_PRINCIPAL, response.data.principal);
                 localStorage.setItem(STORE_JWT, response.data.jwt);
+                localStorage.setItem(STORE_REFRESH_JWT, response.data.refreshToken);
                 $location.path('/classification/');
                 $rootScope.msg = undefined;
             }, function errorCallback(response) {
