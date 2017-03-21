@@ -19,7 +19,7 @@
       var instanceEditorUrl = "${grailsApplication.config.treeEditor.instanceEditorUrl}";
   </script>
 
-  <base href="/tree-editor/">
+  <base href="/nsl/tree-editor/">
   <asset:javascript src="jquery"/>
   <g:javascript src="ng/angular.js"/>
   <g:javascript src="ng/angular-route.js"/>
