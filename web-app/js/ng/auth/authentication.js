@@ -112,6 +112,7 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
             localStorage.setItem(STORE_REFRESH_JWT, response.data.refreshToken);
             success();
         }, function errorCallback(response) {
+            clear();
             $rootScope.msg = [
                 {
                     msg: "Sorry, your session timed out.",
