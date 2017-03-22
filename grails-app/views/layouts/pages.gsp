@@ -19,7 +19,7 @@
       var instanceEditorUrl = "${grailsApplication.config.treeEditor.instanceEditorUrl}";
   </script>
 
-  <base href="/nsl/tree-editor/">
+  <base href="${request.getContextPath()}/">
   <asset:javascript src="jquery"/>
   <g:javascript src="ng/angular.js"/>
   <g:javascript src="ng/angular-route.js"/>
@@ -53,13 +53,15 @@
       ng-controller="appbody">
 
 <div class="container-fluid">
-  <ul class="nav nav-pills">
+  <div class="banner"><span class="brand">NSL Tree editor</span>
     <authenticate class="pull-right"></authenticate>
-    <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}">Home</a></li>
-    <li role="presentation"><a href="classification">Classifications</a></li>
-    <li role="presentation"><a href="workspaces">Workspaces</a></li>
-    <li><a href="login">Login</a></li>
-  </ul>
+    <ul class="nav nav-pills" ng-if="isLoggedIn()">
+      <li role="presentation"><a href="${createLink(controller: 'Home', action: 'index')}"><i class="fa fa-home"></i>
+      </a></li>
+      <li role="presentation"><a href="classification">Classifications</a></li>
+      <li role="presentation"><a href="workspaces">Workspaces</a></li>
+    </ul>
+  </div>
 
   <div ng-if="taxanodes_bookmarks.vec.length > 0" style="font-size: smaller;">
     <span ng-repeat="uri in taxanodes_bookmarks.vec track by $index">
@@ -77,7 +79,6 @@
   <div ng-if="msg && msg[0]" ng-repeat="m in msg" class="alert" ng-class="'alert-' + m.status">
     <div nested-message usemessage="m"></div>
   </div>
-
 
   <div ng-view></div>
 

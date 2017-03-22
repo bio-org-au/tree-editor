@@ -160,6 +160,7 @@ app.factory('auth', ['$interval', '$http', '$log', '$rootScope', '$location', fu
                 $location.path('/login/');
                 $rootScope.msg = undefined;
             }, function errorCallback(response) {
+                clear();
                 if (response.status == 401) {
                     $location.path('/login/');
                 } else {

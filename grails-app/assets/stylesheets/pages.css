@@ -75,3 +75,29 @@ div.actioncard div {
 .hint {
     color: grey;
 }
+
+.banner {
+    border-bottom: solid 1px black;
+}
+
+.banner .brand {
+    font-size: 2em;
+}
+
+.banner UL {
+    display: inline-block;
+    margin-bottom: -16px;
+    font-size: 1.1em;
+}
+
+authenticate {
+    margin-top: 7px;
+}
+
+authenticate .fa {
+    vertical-align: sub;
+}
+
+authenticate strong {
+    font-size: 1.1em;
+}

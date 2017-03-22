@@ -43,16 +43,19 @@ app.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$location', '$routeParams', function ($route, $scope, $rootScope, $element, $location, $routeParams) {
-    // not using a directive to manage scope values - I'll just do this here
+var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$location', '$routeParams', 'auth',
+    function ($route, $scope, $rootScope, $element, $location, $routeParams, auth) {
 
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
 
+    // not using a directive to manage scope values - I'll just do this here
     $rootScope.servicesUrl = $element[0].getAttribute('data-services-url');
     $rootScope.pagesUrl = $element[0].getAttribute('data-pages-url');
     $rootScope.namespace = $element[0].getAttribute('data-namespace');
+
+    $scope.isLoggedIn = auth.isLoggedIn;
 
     function bookmarks(category) {
         if (!category || !$rootScope.namespace) return {};
@@ -165,21 +168,24 @@ var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$locatio
     $rootScope.clickTrashBookmark = function (uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);
     };
-    $rootScope.clickClearBookmarks = function (uri) {
+    $rootScope.clickClearBookmarks = function () {
         $rootScope.clearBookmarks('taxa-nodes');
     };
 
     // bookmark gear
     $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
-    $rootScope.$on('nsl-tree-edit.bookmark-changed', function (event, category, uri, status) {
+    $rootScope.$on('nsl-tree-edit.bookmark-changed', function (event, category) {
         if (category == 'taxa-nodes') {
             $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
         }
     });
-    $rootScope.$on('nsl-tree-edit.namespace-changed', function (event) {
+    $rootScope.$on('nsl-tree-edit.namespace-changed', function () {
         $rootScope.taxanodes_bookmarks = $rootScope.getBookmarks('taxa-nodes');
     });
 
+    if(!auth.isLoggedIn()) {
+        $location.path("/login/");
+    }
 
 }];
 
