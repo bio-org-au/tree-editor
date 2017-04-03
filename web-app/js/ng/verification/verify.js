@@ -4,7 +4,7 @@
 
 console.log("loading verify.js");
 
-var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'auth', function ($scope, $rootScope, jsonCache, $routeParams, auth) {
+var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'auth', '$location', function ($scope, $rootScope, jsonCache, $routeParams, auth, $location) {
 
     if ($routeParams) {
         if ($routeParams.focus) {
@@ -91,7 +91,7 @@ var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'au
 
                 // the node will still be in the tree, but it will now be in the tree because
                 // its from the base classification
-                window.location.href = $rootScope.pagesUrl + "/checklist/checklist?tree=" + $scope.treeUri + "&focus=" + $scope.uri;
+                $location.path("/checklist").params('tree', $scope.treeUri + "&focus=" + $scope.uri);
 
             },
             fail: function errorCallback(response) {
@@ -161,15 +161,4 @@ var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'au
 
 app.controller('Verify', VerifyController);
 
-// var verifyDirective = [function () {
-//     return {
-//         templateUrl: pagesUrl + "/ng/verification/verify.html",
-//         controller: VerifyController,
-//         scope: {
-//             uri: '@'
-//         }
-//     };
-// }];
-//
-// app.directive('verify', verifyDirective);
 

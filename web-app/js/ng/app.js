@@ -163,7 +163,7 @@ var AppbodyController = ['$route', '$scope', '$rootScope', '$element', '$locatio
 
 
     $rootScope.clickBookmark = function (uri) {
-        window.location = $rootScope.pagesUrl + "/checklist/checklist?focus=" + uri;
+        $location.path("/checklist").params('focus', uri);
     };
     $rootScope.clickTrashBookmark = function (uri) {
         $rootScope.removeBookmark('taxa-nodes', uri);
