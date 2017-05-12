@@ -8,16 +8,6 @@ var WorkspaceformController = ['$scope', '$rootScope', '$element', 'jsonCache', 
     $scope.can_edit = false;
     $scope.form = {};
 
-
-    $scope.baseClassificationDropdown_toggle = function() {
-        $scope.baseClassificationDropdown_visible = ! $scope.baseClassificationDropdown_visible;
-    };
-    $scope.baseClassificationDropdown_click = function(uri) {
-        $scope.form.baseClassification = uri;
-        $scope.baseClassificationDropdown_visible = false;
-    };
-    $scope.baseClassificationDropdown_visible = false;
-
     $scope.reloadWorkspaces = function() {
         $scope.classifications  = {};
 
