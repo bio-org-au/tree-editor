@@ -123,7 +123,11 @@ var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'au
 
         }
 
-        if ($scope.json && $scope.json.fetched && $scope.json.prev._uri && !$scope.prevUri) {
+        if ($scope.json
+            && $scope.json.fetched
+            && $scope.json.prev
+            && $scope.json.prev._uri
+            && !$scope.prevUri) {
             $scope.prevUri = $scope.json.prev._uri;
             $scope.prevJson = jsonCache.needJson($scope.prevUri);
         }
@@ -139,7 +143,8 @@ var VerifyController = ['$scope', '$rootScope', 'jsonCache', '$routeParams', 'au
 
         }
 
-        if ($scope.json.fetched && (!$scope.json.prev._uri || $scope.prevJson.fetched)) {
+        if ($scope.json.fetched
+            && (!($scope.json.prev && $scope.json.prev._uri) || $scope.prevJson.fetched)) {
             for (var i in deregisterInitializationListener) {
                 deregisterInitializationListener[i]();
             }

@@ -9,7 +9,7 @@ class UrlMappings {
             }
         }
 
-        "/(classification|workspaces|checklist|verification|search)"(controller: 'Home', action: "redir")
+        "/(classification|workspaces|checklist|verification|search)/**"(controller: 'Home', action: "redir")
 
         "/"(controller: 'Home', action : "index")
         "500"(view:'/error')
