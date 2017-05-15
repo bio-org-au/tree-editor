@@ -271,7 +271,8 @@ var BranchController = ['$scope', '$rootScope', 'auth', '$log', function ($scope
     $scope.checklist_scope = $scope.$parent.checklist_scope;
     $scope.branchState = {loading: null, loaded: null};
     $scope.UI = $scope.checklist_scope.getNodeUI($scope.json.node);
-
+    $scope.instanceEditorUrl = instanceEditorUrl;
+    
     $scope.selectMe = function () {
         $scope.checklist_scope.cursorNode = $scope.json.node;
         $scope.checklist_scope.pathToSelection = [];

@@ -13,15 +13,26 @@
     <span class="nodeitem-content"
           ng-class="json.css + ' ' + ( json.node == checklist_scope.cursorNode ? 'selected' : '')"
           ng-click="selectMe()">
+
             <i ng-if="json.draft" class="fa fa-asterisk"
                style="font-size: 50%; vertical-align: super; color: darkgreen;"></i>
+
       <span ng-if="json.label">{{json.label}}</span>
+
       <span ng-if="json.fullNameHtml" ng-bind-html="json.fullNameHtml" class="name"></span>
             <span ng-if="json.authYear" class="authYear">s. {{json.authYear}}</span>
             <span class="instance-type">{{json.instanceType}}</span>
-        </span>
+      <a href="{{instanceEditorUrl}}/search?utf8=%E2%9C%93&query_string=id%3A+{{json.nameId}}+show-instances%3A&query_submit=Search&query_target=Names&old_ffox=false&focus_id={{json.instanceId}}"
+         target="NSL Instance Editor">
+        <i class="fa fa-edit" title="Edit"></i>
+      </a>
+
+    </span>
+
+
   </div>
   <div ng-if="json.subTaxa > 0 && UI.open && branchState.loaded" class="nodeitem-list">
-    <branch-checklist ng-repeat="item in branch.subnodes" class="nodelist-item" arrangement-uri="{{arrangementUri}}" json="item"></branch-checklist>
+    <branch-checklist ng-repeat="item in branch.subnodes" class="nodelist-item" arrangement-uri="{{arrangementUri}}"
+                      json="item"></branch-checklist>
   </div>
 </div>
