@@ -1,9 +1,14 @@
-<h1>Classifications</h1>
+<div class="coll-sm-1 col-md-1 col-lg-1"></div>
+<div class="coll-sm-10 col-md-8 col-lg-6">
+  <h1>Classifications</h1>
 
-<div ng-if="failedtoload" class="alert alert-danger"><strong>{{response.status}}</strong> {{response.statusText}}</div>
+  <div ng-if="failedtoload" class="alert alert-danger"><strong>{{response.status}}</strong> {{response.statusText}}
+  </div>
 
-<div ng-if="loaded">
-  <table class="table">
-    <tr ng-repeat="tree in data" classificationslistrow uri="{{tree.uri}}"></tr>
-  </table>
+  <div ng-if="loaded">
+    <table class="table">
+      <tr ng-repeat="tree in data" classificationslistrow uri="{{tree.uri}}"></tr>
+    </table>
+  </div>
 </div>
+<div class="coll-sm-1 col-md-3 col-lg-5"></div>

@@ -1,8 +1,15 @@
-<h1>Workspaces</h1>
-<div ng-if="failedtoload" class="alert alert-danger"><strong>{{response.status}}</strong> {{response.statusText}}</div>
-<div ng-if="loaded">
-  <table class="table">
-    <tr ng-repeat="uri in data" workspaceslistrow uri="{{uri}}"></tr>
-  </table>
+<div class="coll-sm-1 col-md-1 col-lg-1"></div>
+<div class="coll-sm-10 col-md-8 col-lg-6">
+  <h1>Workspaces <a class="pull-right" href="workspaces/edit" title="Add a new workspace">
+    <i class="fa fa-plus-circle"></i></a></h1>
+
+  <div ng-if="failedtoload" class="alert alert-danger"><strong>{{response.status}}</strong> {{response.statusText}}
+  </div>
+
+  <div ng-if="loaded">
+    <table class="table">
+      <tr ng-repeat="uri in data" workspaceslistrow uri="{{uri}}"></tr>
+    </table>
+  </div>
 </div>
-<a class="pull-right" href="workspaces/edit">New Workspace</a>
+<div class="coll-sm-1 col-md-3 col-lg-5"></div>

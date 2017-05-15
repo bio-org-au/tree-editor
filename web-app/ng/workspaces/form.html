@@ -2,41 +2,25 @@
   <i class="fa fa-refresh fa-spin"></i>
   <small class="text-muted">{{uri}}</small>
 </div>
-<div class="col-md-4"></div>
-<div class="col-md-4">
+<div class="coll-sm-1 col-md-1 col-lg-1"></div>
+<div class="coll-sm-5 col-md-4 col-lg-3">
 <form ng-if="!json || json.fetched">
     <div class="form-group" ng-if="json">
-      <label for="topNode">Base classification <span class="hint">(you can't change this)</span></label>
-      <div class="form-control form-control-static disabled" id="topNode" style="border-radius: 0;">
+      <label for="topNode">Base classification</label>
+      <div id="topNode">
         <span shortarrangementtext uri="{{form.baseClassification}}">{{form.baseClassification}}</span>
       </div>
     </div>
 
     <div class="form-group" ng-if="!json">
-      <label for="pickBaseClassification">Base classification <span class="hint">please pick from drop down list.</span>
+      <label for="pickBaseClassification">Base classification
       </label>
-      <select id="pickBaseClassification" ng-model="form.baseClassification">
+      <select class="form-control" id="pickBaseClassification" ng-model="form.baseClassification">
+        <option style='display: none' value="">-- choose classification --</option>
         <option ng-repeat="tree in classifications" value="{{tree.uri}}">
           <span>{{tree.label}}</span>
         </option>
       </select>
-      <!--<div class="input-group">-->
-        <!--<div id="pickBaseClassification" class="form-control"-->
-             <!--ng-class="baseClassificationDropdown_visible ? 'open' : ''">-->
-            <!--<span ng-click="baseClassificationDropdown_toggle()" style="cursor:pointer;">-->
-                <span shortarrangementtext uri="{{form.baseClassification}}"></span>
-                <!--<span ng-if="!form.baseClassification" class="text-muted">required</span>-->
-            <!--</span>-->
-          <!--<div class="dropdown-menu" style="top: auto; left: auto; margin: 6px 0 0 0; padding: 5px 3px">-->
-            <div style="cursor: pointer;" ng-repeat="i in classifications"
-                 ng-click="baseClassificationDropdown_click(i)">
-              <!--<span shortarrangementtext uri="{{i}}"></span>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<span style="cursor:pointer;" class="input-group-addon" id="basic-addon1"-->
-              <!--ng-click="baseClassificationDropdown_toggle()"><i class="fa fa-caret-down"></i></span>-->
-      <!--</div>-->
     </div>
 
     <div class="form-group">
@@ -63,4 +47,4 @@
     </div>
 </form>
 </div>
-<div class="col-md-4"></div>
+<div class="coll-sm-6 col-md-7 col-lg-8"></div>
