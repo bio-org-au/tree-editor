@@ -13,12 +13,6 @@
   <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
   <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
 
-  <script type="application/javascript">
-      var servicesUrl = "${grailsApplication.config.treeEditor.servicesUrl}";
-      var pagesUrl = "${grailsApplication.config.treeEditor.pagesUrl}";
-      var instanceEditorUrl = "${grailsApplication.config.treeEditor.instanceEditorUrl}";
-  </script>
-
   <base href="${request.getContextPath()}/">
   <asset:javascript src="jquery"/>
   <g:javascript src="ng/angular.js"/>

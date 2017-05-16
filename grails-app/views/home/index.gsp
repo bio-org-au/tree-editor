@@ -1,6 +1,13 @@
 <html>
 <head>
   <meta name="layout" content="pages"/>
+
+  <script type="application/javascript">
+      var servicesUrl = "${servicesUrl}";
+      var pagesUrl = "${pagesUrl}";
+      var instanceEditorUrl = "${instanceEditorUrl}";
+  </script>
+
 </head>
 
 <body>
