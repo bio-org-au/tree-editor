@@ -9,7 +9,7 @@ class StringCategory {
 
     static String removeTrailing(String target, String tail) {
         if(target.endsWith(tail)) {
-            return target.substring(0, (target.length() - tail.length()) - 1)
+            return target.substring(0, (target.length() - tail.length()))
         } else {
             return target
         }
