@@ -2,7 +2,7 @@
   <i class="fa fa-refresh fa-spin"></i>
   <small class="text-muted">{{uri}}</small>
 </div>
-<div class="coll-sm-1 col-md-1 col-lg-1"></div>
+<div class="coll-sm-1 col-md-1 col-lg-1">argh</div>
 <div class="coll-sm-5 col-md-4 col-lg-3">
 <form ng-if="!json || json.fetched">
     <div class="form-group" ng-if="json">
@@ -38,12 +38,14 @@
     </div>
     <div class="form-group" ng-if="uri">
       <button class="btn btn-default" ng-click="clickReset()">Reset</button>
-      <button class="btn btn-primary" ng-click="clickSave()" ng-enabled="form.title">Save</button>
+      <button class="btn btn-primary" ng-click="clickSave()" ng-disabled="!form.title || busy">Save</button>
       <button class="btn btn-danger" ng-click="clickDelete()">Delete</button>
     </div>
 
     <div class="form-group" ng-if="!uri">
-      <button class="btn btn-primary" ng-click="clickCreate()" ng-enabled="form.title">Save</button>
+      <button class="btn btn-primary" ng-click="clickCreate()" ng-disabled="!form.title || busy">
+        <span ng-if="!busy">Save</span>
+        <i ng-if="busy" class="fa fa-recycle fa-spin"></i> </button>
     </div>
 </form>
 </div>

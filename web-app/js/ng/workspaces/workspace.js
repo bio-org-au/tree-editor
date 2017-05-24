@@ -7,6 +7,7 @@ console.log("loading workspace.js");
 var WorkspaceformController = ['$scope', '$rootScope', '$element', 'jsonCache', '$location', 'auth', function ($scope, $rootScope, $element, jsonCache, $location, auth) {
     $scope.can_edit = false;
     $scope.form = {};
+    $scope.busy = false;
 
     $scope.reloadWorkspaces = function() {
         $scope.classifications  = {};
@@ -111,7 +112,7 @@ var WorkspaceformController = ['$scope', '$rootScope', '$element', 'jsonCache', 
 
     $scope.clickCreate = function() {
         if(!$scope.form.title) return;
-
+        $scope.busy = true;
         console.log("clickCreate");
 
         auth.http({
@@ -128,7 +129,9 @@ var WorkspaceformController = ['$scope', '$rootScope', '$element', 'jsonCache', 
             success: function successCallback(response) {
                 console.log("redirect to: checklist?tree=" + response.data.uri);
                 $location.path("checklist").search({tree: response.data.uri});
+                $scope.busy = false;
             }, fail: function errorCallback(response) {
+                $scope.busy = false;
                 if (response.data && response.data.msg) {
                     $rootScope.msg = response.data.msg;
                 }
